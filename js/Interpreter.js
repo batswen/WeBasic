@@ -1,5 +1,15 @@
 class DataType {
     constructor() {
+        this.context = undefined
+        this.position = undefined
+    }
+    setPosition(position) {
+        this.position = position
+        return this
+    }
+    setContext(context) {
+        this.context = context
+        return this
     }
 }
 
@@ -115,17 +125,40 @@ class Interpreter {
     constructor(ast) {
         this.ast = ast
     }
-    visit_IntNode(node) {
-        return new IntNumber(node.value)
+    visit_StatementNode(node, ctx) {
+        this.visit(node.left, ctx)
+        this.visit(node.right, ctx)
     }
-    visit_FloatNode(node) {
-        return new FloatNumber(node.value)
+    visit_VariableNode(node, ctx) {
+        if (ctx.symbolTable.testVar(node.value)) {
+            return ctx.symbolTable.getVar(node.value)
+        } else {
+            throw {
+                msg: "Interpreter: undeclared variable: " + node.value
+            }
+        }
     }
-    visit_StringNode(node) {
-        return new DTString(node.value)
+    visit_IntNode(node, ctx) {
+        return new IntNumber(node.value).setContext(ctx)
     }
-    visit_UnOpNode(node) {
-        const left = this.visit(node.left)
+    visit_FloatNode(node, ctx) {
+        return new FloatNumber(node.value).setContext(ctx)
+    }
+    visit_StringNode(node, ctx) {
+        return new DTString(node.value).setContext(ctx)
+    }
+    visit_AssignNode(node, ctx) {
+        let value = this.visit(node.value, ctx)
+        if (value instanceof IntNumber) {
+            ctx.symbolTable.setVar(node.name, new IntNumber(value))
+        } else if (value instanceof FloatNumber) {
+            ctx.symbolTable.setVar(node.name, new FloatNumber(value))
+        } else {
+            ctx.symbolTable.setVar(node.name, new DTString(value))
+        }
+    }
+    visit_UnOpNode(node, ctx) {
+        const left = this.visit(node.left, ctx)
         let result = left
         if (node.operator.tokentype === TokenType.MINUS) {
             if (!left instanceof BaseNumber) {
@@ -134,25 +167,25 @@ class Interpreter {
                 }
             }
             if (left instanceof IntNumber) {
-                result = new IntNumber(-left.value)
+                result = new IntNumber(-left.value).setContext(ctx)
             } else if (left instanceof FloatNumber ) {
-                result = new FloatNumber(-left.value)
+                result = new FloatNumber(-left.value).setContext(ctx)
             }
         }
         return result
     }
-    visit_BinOpNode(node) {
-        const left = this.visit(node.left)
-        const right = this.visit(node.right)
+    visit_BinOpNode(node, ctx) {
+        const left = this.visit(node.left, ctx)
+        const right = this.visit(node.right, ctx)
 
         switch (node.operator.tokentype) {
             case TokenType.PLUS:
                 if (left instanceof IntNumber && right instanceof BaseNumber) {
-                    return new IntNumber(left).add(right)
+                    return new IntNumber(left).add(right).setContext(ctx)
                 } else if (left instanceof FloatNumber && right instanceof BaseNumber) {
-                    return new FloatNumber(left).add(right)
+                    return new FloatNumber(left).add(right).setContext(ctx)
                 } else if (left instanceof DTString && right instanceof DTString) {
-                    return new DTString(left).add(right)
+                    return new DTString(left).add(right).setContext(ctx)
                 } else {
                     throw {
                         msg: "Interpreter: Unknown datatype (+)"
@@ -161,9 +194,9 @@ class Interpreter {
                 break
             case TokenType.MINUS:
                 if (left instanceof IntNumber && right instanceof BaseNumber) {
-                    return new IntNumber(left).sub(right)
+                    return new IntNumber(left).sub(right).setContext(ctx)
                 } else if (left instanceof FloatNumber && right instanceof BaseNumber) {
-                    return new FloatNumber(left).sub(right)
+                    return new FloatNumber(left).sub(right).setContext(ctx)
                 } else {
                     throw {
                         msg: "Interpreter: Unknown datatype (-)"
@@ -172,11 +205,11 @@ class Interpreter {
                 break
             case TokenType.MUL:
                 if (left instanceof IntNumber && right instanceof BaseNumber) {
-                    return new IntNumber(left).mul(right)
+                    return new IntNumber(left).mul(right).setContext(ctx)
                 } else if (left instanceof FloatNumber && right instanceof BaseNumber) {
-                    return new FloatNumber(left).mul(right)
+                    return new FloatNumber(left).mul(right).setContext(ctx)
                 } else if (left instanceof DTString && right instanceof BaseNumber) {
-                    return new DTString(left).mul(right)
+                    return new DTString(left).mul(right).setContext(ctx)
                 } else {
                     throw {
                         msg: "Interpreter: Unknown datatype (*)"
@@ -185,9 +218,9 @@ class Interpreter {
                 break
             case TokenType.DIV:
                 if (left instanceof IntNumber && right instanceof BaseNumber) {
-                    return new IntNumber(left).div(right)
+                    return new IntNumber(left).div(right).setContext(ctx)
                 } else if (left instanceof FloatNumber && right instanceof BaseNumber) {
-                    return new FloatNumber(left).div(right)
+                    return new FloatNumber(left).div(right).setContext(ctx)
                 } else {
                     throw {
                         msg: "Interpreter: Unknown datatype (/)"
@@ -197,10 +230,14 @@ class Interpreter {
         }
 
     }
-    visit(node) {
-        return this[`visit_${node.constructor.name}`](node)
+    visit(node, ctx) {
+        return this[`visit_${node.constructor.name}`](node, ctx)
     }
     interpret() {
-        return this.visit(this.ast)
+        const ctx = new Context("main")
+        ctx.symbolTable.setVar("pi", new FloatNumber(3.14159))
+        let res = this.visit(this.ast, ctx)
+        ctx.symbolTable.showVars()
+        return res
     }
 }

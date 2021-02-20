@@ -30,8 +30,8 @@ class Lexer {
             identifier += this.char
         }
 
-        if (KEYWORDS.indexOf(identifier) > -1) {
-            return new Token(TokenType.KEYWORD, identifier, this.position)
+        if (KEYWORDS.indexOf(identifier.toUpperCase()) > -1) {
+            return new Token(TokenType.KEYWORD, identifier.toUpperCase(), this.position)
         } else {
             return new Token(TokenType.VARIABLE, identifier, this.position)
         }
@@ -71,7 +71,7 @@ class Lexer {
         const tokens = []
 
         while (this.char !== undefined) {
-            if (/\s/.test(this.char)) {
+            if (/ \t/.test(this.char)) {
                 this.nextChar()
                 continue
             }
@@ -92,6 +92,12 @@ class Lexer {
                 this.nextChar()
             } else if (this.char === ")") {
                 tokens.push(new Token(TokenType.RPAREN, null, this.position))
+                this.nextChar()
+            } else if (this.char === ",") {
+                tokens.push(new Token(TokenType.COMMA, null, this.position))
+                this.nextChar()
+            } else if (this.char === ":" || this.char === "\n") {
+                tokens.push(new Token(TokenType.COLON, null, this.position))
                 this.nextChar()
             } else if (this.char === "<") {
                 tokens.push(this.getTokOrTok("=", TokenType.LE, TokenType.LT))

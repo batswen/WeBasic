@@ -6,8 +6,11 @@ function go() {
         const ast = new Parser(tokens).parse()
         //console.log(ast)
         const result = new Interpreter(ast).interpret()
-        document.getElementById("result").value = result.value
+        if (result !== undefined) {
+            document.getElementById("result").value = result.value
+        }
+
     } catch (e) {
-        alert(e.msg)// + "\n" + "Line: " + e.position.line + "\n" + "Column: " + e.position.col)
+        alert(e)
     }
 }

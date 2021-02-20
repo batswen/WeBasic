@@ -36,8 +36,11 @@ class Parser {
                 this.advance()
                 return expr
             } else {
-                throw "Parser: ')' expected"+this.token.position
+                throw "Parser: ')' expected"
             }
+        } else if (token.tokentype === TokenType.VARIABLE) {
+            this.advance()
+            return new VariableNode(token.position, token.value)
         } else {
             throw "Parser: Number, '(', '+', or '-' expected"
         }
@@ -62,10 +65,34 @@ class Parser {
         }
         return left
     }
+    statement() {
+        const token = this.token
+        let result = undefined
+        if (this.token.tokentype === TokenType.VARIABLE) {
+            this.advance()
+            if (this.token.tokentype === TokenType.ASSIGN) {
+                this.advance()
+                result = new AssignNode(token.position, token.value, this.expr())
+            } else {
+                result = new VariableNode(token.position, token)
+            }
+        }
+        return result
+    }
+    program() {
+        let left = this.statement()
+        while (this.token.tokentype === TokenType.COLON) {
+            this.advance()
+            if (this.token.tokentype !== TokenType.EOF) {
+                left = new StatementNode(left.position, left, this.statement())
+            }
+        }
+        return left
+    }
     parse() {
-        let result = this.expr()
+        let result = this.program()
         if (this.token.tokentype !== TokenType.EOF) {
-            throw "Parser: EOF expected"
+            console.log("Parser: EOF expected"+this.token.tokentype)
         }
         return result
     }

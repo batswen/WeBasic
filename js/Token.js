@@ -10,6 +10,8 @@ const TokenType = {
     "LPAREN": "LPAREN",
     "RPAREN": "RPAREN",
     "ASSIGN": "ASSIGN",
+    "COMMA": "COMMA",
+    "COLON": "COLON",
     "EQ": "EQ",
     "NE": "NE",
     "LT": "LT",
@@ -21,7 +23,7 @@ const TokenType = {
 }
 
 const KEYWORDS = [
-    "AND", "OR", "NOT", "FOR", "TO", "STEP", "NEXT", "DO", "WHILE"
+    "VAR", "AND", "OR", "NOT", "FOR", "TO", "STEP", "NEXT", "DO", "WHILE"
 ]
 
 class Token {
