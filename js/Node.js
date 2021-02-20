@@ -55,6 +55,19 @@ class FloatNode extends Node {
     }
 }
 
+class PrintNode extends Node {
+    constructor(position, value) {
+        super(position)
+        this.value = value
+    }
+}
+
+class DumpNode extends Node {
+    constructor(position) {
+        super(position)
+    }
+}
+
 class BinOpNode extends Node {
     constructor(position, left, operator, right) {
         super(position)

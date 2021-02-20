@@ -133,6 +133,12 @@ class Parser {
                 } else {
                     throw "Parser: 'THEN' expected"
                 }
+            } else if (this.token.value === "PRINT") {
+                this.advance()
+                result = new PrintNode(token.position, this.orexpr())
+            } else if (this.token.value === "DUMP") {
+                this.advance()
+                result = new DumpNode(token.position)
             }
         }
         return result

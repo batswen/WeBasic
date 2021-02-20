@@ -1,7 +1,8 @@
 program:    statement (lf statement)*
 statement:  variable "=" orexpr
             if orexpr then statement (else statement)?
-
+            print orexpr
+            dump
 
 orexpr:     andexpr ("OR" andexpr)*
 andexpr:    eqexpr ("AND" eqexpr)*

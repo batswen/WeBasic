@@ -205,6 +205,12 @@ class Interpreter {
     constructor(ast) {
         this.ast = ast
     }
+    visit_DumpNode(node, ctx) {
+        ctx.symbolTable.showVars()
+    }
+    visit_PrintNode(node, ctx) {
+        console.log(this.visit(node.value, ctx).value)
+    }
     visit_IfNode(node, ctx) {
         if (this.visit(node.conditon, ctx).value !== 0) {
             this.visit(node.then, ctx)
@@ -430,8 +436,7 @@ class Interpreter {
     interpret() {
         const ctx = new Context("main")
         ctx.symbolTable.setVar("pi", new FloatNumber(Math.PI))
-        let res = this.visit(this.ast, ctx)
-        ctx.symbolTable.showVars()
-        return res
+
+        return this.visit(this.ast, ctx)
     }
 }
