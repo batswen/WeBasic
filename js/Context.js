@@ -23,7 +23,11 @@ class SymbolTable {
     }
     showVars() {
         for (let key in this.symtable) {
-            console.log(`<${this.context}>: ${key}:=${this.symtable[key].value}`)
+            if (this.symtable[key] instanceof DTString) {
+                console.log(`<${this.context}>: ${key}:="${this.symtable[key].value}"`)
+            } else {
+                console.log(`<${this.context}>: ${key}:=${this.symtable[key].value}`)
+            }
         }
     }
 }

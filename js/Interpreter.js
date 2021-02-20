@@ -40,27 +40,27 @@ class DTString extends DataType {
     }
     eq(other) {
         this.value = this.value === other.value ? 1 : 0
-        return this
+        return new IntNumber(this.value)
     }
     ne(other) {
         this.value = this.value !== other.value ? 1 : 0
-        return this
+        return new IntNumber(this.value)
     }
     lt(other) {
         this.value = this.value < other.value ? 1 : 0
-        return this
+        return new IntNumber(this.value)
     }
     le(other) {
         this.value = this.value <= other.value ? 1 : 0
-        return this
+        return new IntNumber(this.value)
     }
     gt(other) {
         this.value = this.value > other.value ? 1 : 0
-        return this
+        return new IntNumber(this.value)
     }
     ge(other) {
         this.value = this.value >= other.value ? 1 : 0
-        return this
+        return new IntNumber(this.value)
     }
 }
 
@@ -177,33 +177,39 @@ class FloatNumber extends BaseNumber {
     }
     eq(other) {
         this.value = this.value === other.value ? 1 : 0
-        return this
+        return new IntNumber(this.value)
     }
     ne(other) {
         this.value = this.value !== other.value ? 1 : 0
-        return this
+        return new IntNumber(this.value)
     }
     lt(other) {
         this.value = this.value < other.value ? 1 : 0
-        return this
+        return new IntNumber(this.value)
     }
     le(other) {
         this.value = this.value <= other.value ? 1 : 0
-        return this
+        return new IntNumber(this.value)
     }
     gt(other) {
         this.value = this.value > other.value ? 1 : 0
-        return this
+        return new IntNumber(this.value)
     }
     ge(other) {
         this.value = this.value >= other.value ? 1 : 0
-        return this
+        return new IntNumber(this.value)
     }
 }
 
 class Interpreter {
     constructor(ast) {
         this.ast = ast
+    }
+    visit_IfNode(node, ctx) {
+        const cond = this.visit(node.conditon, ctx)
+        if (cond !== 0) {
+            this.visit(node.then, ctx)
+        }
     }
     visit_StatementNode(node, ctx) {
         this.visit(node.left, ctx)

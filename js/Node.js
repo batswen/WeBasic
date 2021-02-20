@@ -39,9 +39,6 @@ class StringNode extends Node {
         super(position)
         this.value = value
     }
-    toString() {
-        return `${this.value}`
-    }
 }
 
 class IntNode extends Node {
@@ -49,18 +46,12 @@ class IntNode extends Node {
         super(position)
         this.value = value
     }
-    toString() {
-        return `${this.value}`
-    }
 }
 
 class FloatNode extends Node {
     constructor(position, value) {
         super(position)
         this.value = value
-    }
-    toString() {
-        return `${this.value}`
     }
 }
 
@@ -71,9 +62,6 @@ class BinOpNode extends Node {
         this.operator = operator
         this.right = right
     }
-    toString() {
-        return `(${this.left} ${this.operator} ${this.right})`
-    }
 }
 
 class UnOpNode extends Node {
@@ -82,7 +70,12 @@ class UnOpNode extends Node {
         this.left = left
         this.operator = operator
     }
-    toString() {
-        return `(${this.left} ${this.operator})`
+}
+
+class IfNode extends Node {
+    constructor(position, conditon, then) {
+        super(position)
+        this.conditon = conditon
+        this.then = then
     }
 }

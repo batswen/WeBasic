@@ -23,7 +23,12 @@ const TokenType = {
 }
 
 const KEYWORDS = [
-    "VAR", "AND", "OR", "NOT", "FOR", "TO", "STEP", "NEXT", "DO", "WHILE"
+    "AND", "OR", "NOT",
+    "IF", "THEN", "ELSE", "ENDIF",
+    "DO",
+    "FOR", "TO", "STEP", "NEXT",
+    "WHILE", "ENDWHILE",
+    "FUNCTION", "ENDFUNCTION"
 ]
 
 class Token {

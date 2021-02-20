@@ -116,6 +116,17 @@ class Parser {
             } else {
                 result = new VariableNode(token.position, token)
             }
+        } else if (this.token.tokentype === TokenType.KEYWORD) {
+            if (this.token.value === "IF") {
+                this.advance()
+                const condition = this.orexpr()
+                if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "THEN") {
+                    this.advance()
+                    result = new IfNode(token.position, condition, this.statement())
+                } else {
+                    throw "Parser: 'THEN' expected"
+                }
+            }
         }
         return result
     }
