@@ -2,9 +2,13 @@ class DataType {
 }
 
 class DTString extends DataType {
-    constructor(value) {
+    constructor(v) {
         super()
-        this.value = value
+        if (v instanceof DTString) {
+            this.value = v.value
+        } else {
+            this.value = v
+        }
     }
     add(other) {
         if (other instanceof DTString) {
