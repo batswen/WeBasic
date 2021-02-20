@@ -113,7 +113,6 @@ class IntNumber extends BaseNumber {
         return this
     }
     and(other) {
-        console.log(this.value,other.value)
         this.value = this.value & other.value
         return this
     }
@@ -261,7 +260,7 @@ class Interpreter {
     visit_BinOpNode(node, ctx) {
         const left = this.visit(node.left, ctx)
         const right = this.visit(node.right, ctx)
-console.log(node)
+
         switch (node.operator.tokentype) {
             case TokenType.PLUS:
                 if (left instanceof IntNumber && right instanceof BaseNumber) {

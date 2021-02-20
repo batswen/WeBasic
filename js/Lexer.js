@@ -65,7 +65,6 @@ class Lexer {
             }
             result += this.char
         }
-        console.log(result)
         return new Token(TokenType.STRING, result, this.position)
     }
     getNumber() {
