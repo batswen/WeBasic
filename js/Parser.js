@@ -87,7 +87,7 @@ class Parser {
     }
     andexpr() {
         let left = this.eqexpr()
-        if (this.token.tokentype === TokenType.AND) {
+        if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "AND") {
             let op = this.token
             this.advance()
             let right = this.eqexpr()
@@ -97,7 +97,7 @@ class Parser {
     }
     orexpr() {
         let left = this.andexpr()
-        if (this.token.tokentype === TokenType.OR) {
+        if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "OR") {
             let op = this.token
             this.advance()
             let right = this.andexpr()

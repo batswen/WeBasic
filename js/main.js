@@ -1,10 +1,12 @@
+const prog = document.getElementById("input")
+prog.value = `a=3<5-2\nb="a"=="a":c="a"*5+"xyz"\na0_A = 3 * -5\ncc = 15 and 7`
+
 function go() {
-    const prog = document.getElementById("input").value
     // try {
-        const tokens = new Lexer(prog).makeTokens()
-        console.log(tokens)
+        const tokens = new Lexer(prog.value).makeTokens()
+        //console.log(tokens)
         const ast = new Parser(tokens).parse()
-        console.log(ast)
+        //console.log(ast)
         const result = new Interpreter(ast).interpret()
         if (result !== undefined) {
             document.getElementById("result").value = result.value

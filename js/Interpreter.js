@@ -39,39 +39,27 @@ class DTString extends DataType {
         return this
     }
     eq(other) {
-        if (other instanceof DTString) {
-            this.value = this.value === other.value ? 1 : 0
-        }
+        this.value = this.value === other.value ? 1 : 0
         return this
     }
     ne(other) {
-        if (other instanceof DTString) {
-            this.value = this.value !== other.value ? 1 : 0
-        }
+        this.value = this.value !== other.value ? 1 : 0
         return this
     }
     lt(other) {
-        if (other instanceof DTString) {
-            this.value = this.value < other.value ? 1 : 0
-        }
+        this.value = this.value < other.value ? 1 : 0
         return this
     }
     le(other) {
-        if (other instanceof DTString) {
-            this.value = this.value <= other.value ? 1 : 0
-        }
+        this.value = this.value <= other.value ? 1 : 0
         return this
     }
     gt(other) {
-        if (other instanceof DTString) {
-            this.value = this.value > other.value ? 1 : 0
-        }
+        this.value = this.value > other.value ? 1 : 0
         return this
     }
     ge(other) {
-        if (other instanceof DTString) {
-            this.value = this.value >= other.value ? 1 : 0
-        }
+        this.value = this.value >= other.value ? 1 : 0
         return this
     }
 }
@@ -121,51 +109,36 @@ class IntNumber extends BaseNumber {
         return this
     }
     or(other) {
-        if (other instanceof IntNumber) {
-            this.value = this.value | other.value
-        }
+        this.value = this.value | other.value
         return this
     }
     and(other) {
-        if (other instanceof IntNumber) {
-            this.value = this.value & other.value
-        }
+        console.log(this.value,other.value)
+        this.value = this.value & other.value
         return this
     }
     eq(other) {
-        if (other instanceof IntNumber) {
-            this.value = this.value === other.value ? 1 : 0
-        }
+        this.value = this.value === other.value ? 1 : 0
         return this
     }
     ne(other) {
-        if (other instanceof IntNumber) {
-            this.value = this.value !== other.value ? 1 : 0
-        }
+        this.value = this.value !== other.value ? 1 : 0
         return this
     }
     lt(other) {
-        if (other instanceof IntNumber) {
-            this.value = this.value < other.value ? 1 : 0
-        }
+        this.value = this.value < other.value ? 1 : 0
         return this
     }
     le(other) {
-        if (other instanceof IntNumber) {
-            this.value = this.value <= other.value ? 1 : 0
-        }
+        this.value = this.value <= other.value ? 1 : 0
         return this
     }
     gt(other) {
-        if (other instanceof IntNumber) {
-            this.value = this.value > other.value ? 1 : 0
-        }
+        this.value = this.value > other.value ? 1 : 0
         return this
     }
     ge(other) {
-        if (other instanceof IntNumber) {
-            this.value = this.value >= other.value ? 1 : 0
-        }
+        this.value = this.value >= other.value ? 1 : 0
         return this
     }
 }
@@ -204,39 +177,27 @@ class FloatNumber extends BaseNumber {
         return this
     }
     eq(other) {
-        if (other instanceof FloatNumber) {
-            this.value = this.value === other.value ? 1 : 0
-        }
+        this.value = this.value === other.value ? 1 : 0
         return this
     }
     ne(other) {
-        if (other instanceof FloatNumber) {
-            this.value = this.value !== other.value ? 1 : 0
-        }
+        this.value = this.value !== other.value ? 1 : 0
         return this
     }
     lt(other) {
-        if (other instanceof FloatNumber) {
-            this.value = this.value < other.value ? 1 : 0
-        }
+        this.value = this.value < other.value ? 1 : 0
         return this
     }
     le(other) {
-        if (other instanceof FloatNumber) {
-            this.value = this.value <= other.value ? 1 : 0
-        }
+        this.value = this.value <= other.value ? 1 : 0
         return this
     }
     gt(other) {
-        if (other instanceof FloatNumber) {
-            this.value = this.value > other.value ? 1 : 0
-        }
+        this.value = this.value > other.value ? 1 : 0
         return this
     }
     ge(other) {
-        if (other instanceof FloatNumber) {
-            this.value = this.value >= other.value ? 1 : 0
-        }
+        this.value = this.value >= other.value ? 1 : 0
         return this
     }
 }
@@ -300,7 +261,7 @@ class Interpreter {
     visit_BinOpNode(node, ctx) {
         const left = this.visit(node.left, ctx)
         const right = this.visit(node.right, ctx)
-
+console.log(node)
         switch (node.operator.tokentype) {
             case TokenType.PLUS:
                 if (left instanceof IntNumber && right instanceof BaseNumber) {
@@ -350,26 +311,28 @@ class Interpreter {
                     }
                 }
                 break
-            case TokenType.OR:
-                if (left instanceof IntNumber && right instanceof IntNumber) {
-                    return new IntNumber(left).or(right).setContext(ctx)
-                } else {
-                    throw {
-                        msg: "Interpreter: Unknown datatype (or)"
-                    }
+            case TokenType.KEYWORD:
+                switch (node.operator.value) {
+                    case "OR":
+                        if (left instanceof IntNumber && right instanceof IntNumber) {
+                            return new IntNumber(left).or(right).setContext(ctx)
+                        } else {
+                            throw {
+                                msg: "Interpreter: Unknown datatype (or)"
+                            }
+                        }
+                        break
+                    case "AND":
+                        if (left instanceof IntNumber && right instanceof IntNumber) {
+                            return new IntNumber(left).and(right).setContext(ctx)
+                        } else {
+                            throw {
+                                msg: "Interpreter: Unknown datatype (and)"
+                            }
+                        }
+                        break
                 }
-                break
-            case TokenType.AND:
-                if (left instanceof IntNumber && right instanceof IntNumber) {
-                    return new IntNumber(left).and(right).setContext(ctx)
-                } else {
-                    throw {
-                        msg: "Interpreter: Unknown datatype (and)"
-                    }
-                }
-                break
             case TokenType.EQ:
-            console.log("eq")
                 if (left instanceof IntNumber && right instanceof IntNumber) {
                     return new IntNumber(left).eq(right).setContext(ctx)
                 } else if (left instanceof FloatNumber && right instanceof FloatNumber) {
@@ -455,7 +418,7 @@ class Interpreter {
     }
     interpret() {
         const ctx = new Context("main")
-        ctx.symbolTable.setVar("pi", new FloatNumber(3.14159))
+        ctx.symbolTable.setVar("pi", new FloatNumber(Math.PI))
         let res = this.visit(this.ast, ctx)
         ctx.symbolTable.showVars()
         return res

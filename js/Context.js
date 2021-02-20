@@ -1,12 +1,13 @@
 class Context {
     constructor(context) {
         this.context = context
-        this.symbolTable = new SymbolTable()
+        this.symbolTable = new SymbolTable(context)
     }
 }
 
 class SymbolTable {
-    constructor() {
+    constructor(context) {
+        this.context = context
         this.symtable = {}
     }
     setVar(name, value) {
@@ -15,8 +16,6 @@ class SymbolTable {
     getVar(name) {
         if (name in this.symtable) {
             return this.symtable[name]
-        } else {
-
         }
     }
     testVar(name) {
@@ -24,7 +23,7 @@ class SymbolTable {
     }
     showVars() {
         for (let key in this.symtable) {
-            console.log(`Var: ${key}:=${this.symtable[key].value}`)
+            console.log(`<${this.context}>: ${key}:=${this.symtable[key].value}`)
         }
     }
 }

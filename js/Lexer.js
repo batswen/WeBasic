@@ -71,7 +71,7 @@ class Lexer {
         const tokens = []
 
         while (this.char !== undefined) {
-            if (/ \t/.test(this.char)) {
+            if (/[ \t]/.test(this.char)) {
                 this.nextChar()
                 continue
             }
