@@ -25,6 +25,18 @@ class Lexer {
         }
         return this.char
     }
+    getVarOrKeyword() {
+        let identifier = this.char
+        while (this.nextChar() !== undefined && /[\$_0-9\p{L}]/u.test(this.char)) {
+            identifier += this.char
+        }
+
+        if (KEYWORDS.indexOf(identifier) > -1) {
+            return new Token(TokenType.KEYWORD, identifier, this.position)
+        } else {
+            return new Token(TokenType.VARIABLE, identifier, this.position)
+        }
+    }
     getTokOrTok(test, ifyes, ifnt) {
         if (this.peekNextChar() === test) {
             this.nextChar()
@@ -94,6 +106,8 @@ class Lexer {
             } else if (this.char === '"') {
                 tokens.push(this.getString())
                 this.nextChar()
+            } else if (/[a-zA-Z_\$]/.test(this.char)) {
+                tokens.push(this.getVarOrKeyword())
             } else if (/[0-9]/.test(this.char)) {
                 tokens.push(this.getNumber())
             } else {

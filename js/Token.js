@@ -16,17 +16,13 @@ const TokenType = {
     "LE": "LE",
     "GT": "GT",
     "GE": "GE",
-    "AND": "AND",
-    "OR": "OR",
-    "NOT": "NOT",
     "VARIABLE": "VARIABLE",
-    "FOR": "FOR",
-    "TO": "TO",
-    "STEP": "STEP",
-    "NEXT": "NEXT",
-    "DO": "DO",
-    "WHILE": "WHILE"
+    "KEYWORD": "KEYWORD"
 }
+
+const KEYWORDS = [
+    "AND", "OR", "NOT", "FOR", "TO", "STEP", "NEXT", "DO", "WHILE"
+]
 
 class Token {
     constructor(tokentype, value, position) {
