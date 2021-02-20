@@ -83,8 +83,10 @@ class Parser {
         let left = this.statement()
         while (this.token.tokentype === TokenType.COLON) {
             this.advance()
-            if (this.token.tokentype !== TokenType.EOF) {
+            if (this.token.tokentype !== TokenType.EOF && this.token.tokentype !== TokenType.COLON) {
                 left = new StatementNode(left.position, left, this.statement())
+            } else {
+                left = new UnStatementNode(left.position, left)
             }
         }
         return left

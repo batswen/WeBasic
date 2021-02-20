@@ -12,6 +12,13 @@ class StatementNode extends Node {
     }
 }
 
+class UnStatementNode extends Node {
+    constructor(position, left) {
+        super(position)
+        this.left = left
+    }
+}
+
 class VariableNode extends Node {
     constructor(position, value) {
         super(position)

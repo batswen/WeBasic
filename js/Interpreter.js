@@ -129,6 +129,9 @@ class Interpreter {
         this.visit(node.left, ctx)
         this.visit(node.right, ctx)
     }
+    visit_UnStatementNode(node, ctx) {
+        this.visit(node.left, ctx)
+    }
     visit_VariableNode(node, ctx) {
         if (ctx.symbolTable.testVar(node.value)) {
             return ctx.symbolTable.getVar(node.value)
