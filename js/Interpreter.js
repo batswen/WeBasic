@@ -38,6 +38,42 @@ class DTString extends DataType {
         this.value = result
         return this
     }
+    eq(other) {
+        if (other instanceof DTString) {
+            this.value = this.value === other.value ? 1 : 0
+        }
+        return this
+    }
+    ne(other) {
+        if (other instanceof DTString) {
+            this.value = this.value !== other.value ? 1 : 0
+        }
+        return this
+    }
+    lt(other) {
+        if (other instanceof DTString) {
+            this.value = this.value < other.value ? 1 : 0
+        }
+        return this
+    }
+    le(other) {
+        if (other instanceof DTString) {
+            this.value = this.value <= other.value ? 1 : 0
+        }
+        return this
+    }
+    gt(other) {
+        if (other instanceof DTString) {
+            this.value = this.value > other.value ? 1 : 0
+        }
+        return this
+    }
+    ge(other) {
+        if (other instanceof DTString) {
+            this.value = this.value >= other.value ? 1 : 0
+        }
+        return this
+    }
 }
 
 class BaseNumber extends DataType {
@@ -84,6 +120,54 @@ class IntNumber extends BaseNumber {
         }
         return this
     }
+    or(other) {
+        if (other instanceof IntNumber) {
+            this.value = this.value | other.value
+        }
+        return this
+    }
+    and(other) {
+        if (other instanceof IntNumber) {
+            this.value = this.value & other.value
+        }
+        return this
+    }
+    eq(other) {
+        if (other instanceof IntNumber) {
+            this.value = this.value === other.value ? 1 : 0
+        }
+        return this
+    }
+    ne(other) {
+        if (other instanceof IntNumber) {
+            this.value = this.value !== other.value ? 1 : 0
+        }
+        return this
+    }
+    lt(other) {
+        if (other instanceof IntNumber) {
+            this.value = this.value < other.value ? 1 : 0
+        }
+        return this
+    }
+    le(other) {
+        if (other instanceof IntNumber) {
+            this.value = this.value <= other.value ? 1 : 0
+        }
+        return this
+    }
+    gt(other) {
+        if (other instanceof IntNumber) {
+            this.value = this.value > other.value ? 1 : 0
+        }
+        return this
+    }
+    ge(other) {
+        if (other instanceof IntNumber) {
+            this.value = this.value >= other.value ? 1 : 0
+        }
+        return this
+    }
 }
 
 class FloatNumber extends BaseNumber {
@@ -116,6 +200,42 @@ class FloatNumber extends BaseNumber {
                 }
             }
             this.value = this.value / other.value
+        }
+        return this
+    }
+    eq(other) {
+        if (other instanceof FloatNumber) {
+            this.value = this.value === other.value ? 1 : 0
+        }
+        return this
+    }
+    ne(other) {
+        if (other instanceof FloatNumber) {
+            this.value = this.value !== other.value ? 1 : 0
+        }
+        return this
+    }
+    lt(other) {
+        if (other instanceof FloatNumber) {
+            this.value = this.value < other.value ? 1 : 0
+        }
+        return this
+    }
+    le(other) {
+        if (other instanceof FloatNumber) {
+            this.value = this.value <= other.value ? 1 : 0
+        }
+        return this
+    }
+    gt(other) {
+        if (other instanceof FloatNumber) {
+            this.value = this.value > other.value ? 1 : 0
+        }
+        return this
+    }
+    ge(other) {
+        if (other instanceof FloatNumber) {
+            this.value = this.value >= other.value ? 1 : 0
         }
         return this
     }
@@ -227,6 +347,64 @@ class Interpreter {
                 } else {
                     throw {
                         msg: "Interpreter: Unknown datatype (/)"
+                    }
+                }
+                break
+            case TokenType.OR:
+                if (left instanceof IntNumber && right instanceof IntNumber) {
+                    return new IntNumber(left).or(right).setContext(ctx)
+                } else {
+                    throw {
+                        msg: "Interpreter: Unknown datatype (or)"
+                    }
+                }
+                break
+            case TokenType.AND:
+                if (left instanceof IntNumber && right instanceof IntNumber) {
+                    return new IntNumber(left).and(right).setContext(ctx)
+                } else {
+                    throw {
+                        msg: "Interpreter: Unknown datatype (and)"
+                    }
+                }
+                break
+            case TokenType.EQ:
+            console.log("eq")
+                if (left instanceof IntNumber && right instanceof IntNumber) {
+                    return new IntNumber(left).eq(right).setContext(ctx)
+                } else if (left instanceof FloatNumber && right instanceof FloatNumber) {
+                    return new FloatNumber(left).eq(right).setContext(ctx)
+                } else if (left instanceof DTString && right instanceof DTString) {
+                    return new DTString(left).eq(right).setContext(ctx)
+                } else{
+                    throw {
+                        msg: "Interpreter: Unknown datatype (==)"
+                    }
+                }
+                break
+            case TokenType.NE:
+                if (left instanceof IntNumber && right instanceof IntNumber) {
+                    return new IntNumber(left).ne(right).setContext(ctx)
+                } else if (left instanceof FloatNumber && right instanceof FloatNumber) {
+                    return new FloatNumber(left).ne(right).setContext(ctx)
+                } else if (left instanceof DTString && right instanceof DTString) {
+                    return new DTString(left).ne(right).setContext(ctx)
+                } else {
+                    throw {
+                        msg: "Interpreter: Unknown datatype (!=)"
+                    }
+                }
+                break
+            case TokenType.LT:
+                if (left instanceof IntNumber && right instanceof IntNumber) {
+                    return new IntNumber(left).lt(right).setContext(ctx)
+                } else if (left instanceof FloatNumber && right instanceof FloatNumber) {
+                    return new FloatNumber(left).lt(right).setContext(ctx)
+                } else if (left instanceof DTString && right instanceof DTString) {
+                    return new DTString(left).lt(right).setContext(ctx)
+                } else {
+                    throw {
+                        msg: "Interpreter: Unknown datatype (<)"
                     }
                 }
                 break

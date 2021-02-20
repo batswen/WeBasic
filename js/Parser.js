@@ -65,6 +65,46 @@ class Parser {
         }
         return left
     }
+    glexpr() {
+        let left = this.expr()
+        while (this.token.tokentype === TokenType.LT || this.token.tokentype === TokenType.LE || this.token.tokentype === TokenType.GT || this.token.tokentype === TokenType.GE) {
+            let op = this.token
+            this.advance()
+            let right = this.expr()
+            left = new BinOpNode(this.token.position, left, op, right)
+        }
+        return left
+    }
+    eqexpr() {
+        let left = this.glexpr()
+        while (this.token.tokentype === TokenType.EQ || this.token.tokentype === TokenType.NE) {
+            let op = this.token
+            this.advance()
+            let right = this.glexpr()
+            left = new BinOpNode(this.token.position, left, op, right)
+        }
+        return left
+    }
+    andexpr() {
+        let left = this.eqexpr()
+        if (this.token.tokentype === TokenType.AND) {
+            let op = this.token
+            this.advance()
+            let right = this.eqexpr()
+            left = new BinOpNode(this.token.position, left, op, right)
+        }
+        return left
+    }
+    orexpr() {
+        let left = this.andexpr()
+        if (this.token.tokentype === TokenType.OR) {
+            let op = this.token
+            this.advance()
+            let right = this.andexpr()
+            left = new BinOpNode(this.token.position, left, op, right)
+        }
+        return left
+    }
     statement() {
         const token = this.token
         let result = undefined
@@ -72,7 +112,7 @@ class Parser {
             this.advance()
             if (this.token.tokentype === TokenType.ASSIGN) {
                 this.advance()
-                result = new AssignNode(token.position, token.value, this.expr())
+                result = new AssignNode(token.position, token.value, this.orexpr())
             } else {
                 result = new VariableNode(token.position, token)
             }

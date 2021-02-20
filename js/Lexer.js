@@ -105,6 +105,10 @@ class Lexer {
             } else if (this.char === ">") {
                 tokens.push(this.getTokOrTok("=", TokenType.GE, TokenType.GT))
                 this.nextChar()
+            } else if (this.char === "!" && this.peekNextChar() === "=") {
+                tokens.push(new Token(TokenType.NE, null, this.position))
+                this.nextChar()
+                this.nextChar()
             } else if (this.char === "=") {
                 tokens.push(this.getTokOrTok("=", TokenType.EQ, TokenType.ASSIGN))
                 this.nextChar()

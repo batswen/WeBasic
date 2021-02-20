@@ -1,6 +1,11 @@
 program:    statement (lf statement)*
-statement:  variable "=" expr
+statement:  variable "=" orexpr
 
+
+orexpr:     andexpr ("OR" andexpr)*
+andexpr:    eqexpr ("AND" eqexpr)*
+eqexpr:     glexpr (("=="|"!=") eqexpr)*
+glexpr:     expr (("<"|"<="|">"|">=") expr)*
 
 expr:       term (("+"|"-") term)*
 term:       factor (("*"|"/") factor)*
