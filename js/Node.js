@@ -73,9 +73,18 @@ class UnOpNode extends Node {
 }
 
 class IfNode extends Node {
-    constructor(position, conditon, then) {
+    constructor(position, condition, then) {
         super(position)
-        this.conditon = conditon
+        this.condition = condition
         this.then = then
+    }
+}
+
+class IfElseNode extends Node {
+    constructor(position, condition, ifthen, ifelse) {
+        super(position)
+        this.condition = condition
+        this.ifthen = ifthen
+        this.ifelse = ifelse
     }
 }

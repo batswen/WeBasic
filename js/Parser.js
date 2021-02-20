@@ -122,7 +122,14 @@ class Parser {
                 const condition = this.orexpr()
                 if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "THEN") {
                     this.advance()
-                    result = new IfNode(token.position, condition, this.statement())
+                    const stmt = this.statement()
+                    this.advance()
+                    if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "ELSE") {
+                        this.advance()
+                        result = new IfNode(token.position, condition, stmt)
+                    } else {
+                        result = new IfElseNode(token.position, condition, stmt, this.statement())
+                    }
                 } else {
                     throw "Parser: 'THEN' expected"
                 }
