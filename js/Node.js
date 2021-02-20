@@ -4,6 +4,16 @@ class Node {
     }
 }
 
+class StringNode extends Node {
+    constructor(position, value) {
+        super(position)
+        this.value = value
+    }
+    toString() {
+        return `${this.value}`
+    }
+}
+
 class IntNode extends Node {
     constructor(position, value) {
         super(position)

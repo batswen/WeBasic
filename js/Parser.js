@@ -16,7 +16,10 @@ class Parser {
     }
     factor() {
         const token = this.token
-        if (token.tokentype === TokenType.INT || token.tokentype === TokenType.FLOAT) {
+        if (token.tokentype === TokenType.STRING) {
+            this.advance()
+            return new StringNode(token.position, token.value)
+        } else if (token.tokentype === TokenType.INT || token.tokentype === TokenType.FLOAT) {
             this.advance()
             if (token.tokentype === TokenType.INT) {
                 return new IntNode(token.position, token.value)

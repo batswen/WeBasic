@@ -1,38 +1,103 @@
-class BaseNumber {
-
+class DataType {
 }
 
-class IntNumber extends BaseNumber {
+class DTString extends DataType {
     constructor(value) {
         super()
         this.value = value
     }
     add(other) {
-        if (other instanceof BaseNumber) {
-            return new IntNumber(this.value + other.value)
+        if (other instanceof DTString) {
+            this.value = this.value + other.value
         }
+        return this
+    }
+    mul(other) {
+        let result = ""
+        if (other instanceof BaseNumber) {
+            for (let i = 0; i < other.value; i++) {
+                result += this.value
+            }
+        }
+        this.value = result
+        return this
+    }
+}
+
+class BaseNumber extends DataType {
+    constructor(v) {
+        super()
+        if (v instanceof BaseNumber) {
+            this.value = v.value
+        } else {
+            this.value = v
+        }
+    }
+}
+
+class IntNumber extends BaseNumber {
+    constructor(value) {
+        super(value)
+    }
+    add(other) {
+        if (other instanceof BaseNumber) {
+            this.value = this.value + other.value
+        }
+        return this
     }
     sub(other) {
         if (other instanceof BaseNumber) {
-            return new IntNumber(this.value - other.value)
+            this.value = this.value - other.value
         }
+        return this
+    }
+    mul(other) {
+        if (other instanceof BaseNumber) {
+            this.value = this.value * other.value
+        }
+        return this
+    }
+    div(other) {
+        if (other instanceof BaseNumber) {
+            if (other.value === 0) {
+                throw "Interpreter: division by zero"
+            }
+            this.value = this.value / other.value
+        }
+        return this
     }
 }
 
 class FloatNumber extends BaseNumber {
     constructor(value) {
-        super()
-        this.value = value
+        super(value)
     }
     add(other) {
         if (other instanceof BaseNumber) {
-            return new FloatNumber(this.value + other.value)
+            this.value = this.value + other.value
         }
+        return this
     }
     sub(other) {
         if (other instanceof BaseNumber) {
-            return new FloatNumber(this.value - other.value)
+            this.value = this.value - other.value
         }
+        return this
+    }
+    mul(other) {
+        if (other instanceof BaseNumber) {
+            this.value = this.value * other.value
+        }
+        return this
+    }
+    div(other) {
+        if (other instanceof BaseNumber) {
+            if (other.value === 0) {
+                throw "Interpreter: division by zero"
+            }
+            this.value = this.value / other.value
+        }
+        return this
     }
 }
 
@@ -45,6 +110,9 @@ class Interpreter {
     }
     visit_FloatNode(node) {
         return new FloatNumber(node.value)
+    }
+    visit_StringNode(node) {
+        return new DTString(node.value)
     }
     visit_UnOpNode(node) {
         const left = this.visit(node.left)
@@ -67,21 +135,43 @@ class Interpreter {
 
         switch (node.operator.tokentype) {
             case TokenType.PLUS:
-                if (left instanceof IntNumber) {
-                    return new IntNumber(left.value).add(right)
-                } else if (left instanceof FloatNumber) {
-                    return new FloatNumber(left.value).add(right)
+                if (left instanceof IntNumber && right instanceof BaseNumber) {
+                    return new IntNumber(left).add(right)
+                } else if (left instanceof FloatNumber && right instanceof BaseNumber) {
+                    return new FloatNumber(left).add(right)
+                } else if (left instanceof DTString && right instanceof DTString) {
+                    return new DTString(left).add(right)
                 } else {
                     throw "Interpreter: Unknown datatype (+)"
                 }
                 break
             case TokenType.MINUS:
-                if (left instanceof IntNumber) {
-                    return new IntNumber(left.value).sub(right)
-                } else if (left instanceof FloatNumber ) {
-                    return new FloatNumber(left.value).add(right)
+                if (left instanceof IntNumber && right instanceof BaseNumber) {
+                    return new IntNumber(left).sub(right)
+                } else if (left instanceof FloatNumber && right instanceof BaseNumber) {
+                    return new FloatNumber(left).sub(right)
                 } else {
                     throw "Interpreter: Unknown datatype (-)"
+                }
+                break
+            case TokenType.MUL:
+                if (left instanceof IntNumber && right instanceof BaseNumber) {
+                    return new IntNumber(left).mul(right)
+                } else if (left instanceof FloatNumber && right instanceof BaseNumber) {
+                    return new FloatNumber(left).mul(right)
+                } else if (left instanceof DTString && right instanceof BaseNumber) {
+                    return new DTString(left).mul(right)
+                } else {
+                    throw "Interpreter: Unknown datatype (*)"
+                }
+                break
+            case TokenType.DIV:
+                if (left instanceof IntNumber && right instanceof BaseNumber) {
+                    return new IntNumber(left).div(right)
+                } else if (left instanceof FloatNumber && right instanceof BaseNumber) {
+                    return new FloatNumber(left).div(right)
+                } else {
+                    throw "Interpreter: Unknown datatype (/)"
                 }
                 break
         }
