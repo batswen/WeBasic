@@ -1,4 +1,13 @@
-expr:   term (("+"|"-") term)*
-term:   factor (("*"|"/") factor)*
-factor: ("+"|"-") number
-        "(" expr ")"
+program:    statement
+            "VAR" variable "=" expr
+
+
+expr:       term (("+"|"-") term)*
+term:       factor (("*"|"/") factor)*
+factor:      ("+"|"-") number
+            '"' chars '"'
+            "(" expr ")"
+            variable
+
+number:     [0-9] ("." [0-9]*)
+variable:   [a-zA-Z_\$][\$_0-9\p{L}]*

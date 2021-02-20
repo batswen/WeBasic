@@ -1,4 +1,6 @@
 class DataType {
+    constructor() {
+    }
 }
 
 class DTString extends DataType {
@@ -64,7 +66,9 @@ class IntNumber extends BaseNumber {
     div(other) {
         if (other instanceof BaseNumber) {
             if (other.value === 0) {
-                throw "Interpreter: division by zero"
+                throw {
+                    msg: "Interpreter: division by zero"
+                }
             }
             this.value = this.value / other.value
         }
@@ -97,7 +101,9 @@ class FloatNumber extends BaseNumber {
     div(other) {
         if (other instanceof BaseNumber) {
             if (other.value === 0) {
-                throw "Interpreter: division by zero"
+                throw {
+                    msg: "Interpreter: division by zero"
+                }
             }
             this.value = this.value / other.value
         }
@@ -123,7 +129,9 @@ class Interpreter {
         let result = left
         if (node.operator.tokentype === TokenType.MINUS) {
             if (!left instanceof BaseNumber) {
-                throw "Interpreter: Number expected"
+                throw {
+                    msg: "Interpreter: Number expected"
+                }
             }
             if (left instanceof IntNumber) {
                 result = new IntNumber(-left.value)
@@ -146,7 +154,9 @@ class Interpreter {
                 } else if (left instanceof DTString && right instanceof DTString) {
                     return new DTString(left).add(right)
                 } else {
-                    throw "Interpreter: Unknown datatype (+)"
+                    throw {
+                        msg: "Interpreter: Unknown datatype (+)"
+                    }
                 }
                 break
             case TokenType.MINUS:
@@ -155,7 +165,9 @@ class Interpreter {
                 } else if (left instanceof FloatNumber && right instanceof BaseNumber) {
                     return new FloatNumber(left).sub(right)
                 } else {
-                    throw "Interpreter: Unknown datatype (-)"
+                    throw {
+                        msg: "Interpreter: Unknown datatype (-)"
+                    }
                 }
                 break
             case TokenType.MUL:
@@ -166,7 +178,9 @@ class Interpreter {
                 } else if (left instanceof DTString && right instanceof BaseNumber) {
                     return new DTString(left).mul(right)
                 } else {
-                    throw "Interpreter: Unknown datatype (*)"
+                    throw {
+                        msg: "Interpreter: Unknown datatype (*)"
+                    }
                 }
                 break
             case TokenType.DIV:
@@ -175,7 +189,9 @@ class Interpreter {
                 } else if (left instanceof FloatNumber && right instanceof BaseNumber) {
                     return new FloatNumber(left).div(right)
                 } else {
-                    throw "Interpreter: Unknown datatype (/)"
+                    throw {
+                        msg: "Interpreter: Unknown datatype (/)"
+                    }
                 }
                 break
         }

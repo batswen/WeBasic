@@ -8,6 +8,6 @@ function go() {
         const result = new Interpreter(ast).interpret()
         document.getElementById("result").value = result.value
     } catch (e) {
-        alert(e)
+        alert(e.msg)// + "\n" + "Line: " + e.position.line + "\n" + "Column: " + e.position.col)
     }
 }
