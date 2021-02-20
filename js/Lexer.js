@@ -6,8 +6,7 @@ class Lexer {
         this.nextChar()
     }
     error(msg) {
-        alert(`Lexer: ${msg}, on line: ${this.position.line}, column: ${this.position.col}`)
-        throw 1
+        throw(`Lexer: ${msg}, on line: ${this.position.line}, column: ${this.position.col}`)
     }
     peekNextChar() {
         if (this.position.pos + 1 < this.source.length) {
