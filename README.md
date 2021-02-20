@@ -4,8 +4,13 @@ A BASIC interpreter for websites
 
 Very early stage
 
-Strings: "chars"
-    Escapes: \n -> newline
-    \\ -> \
-    \q -> "
-    \a -> '
+### Variable assignment
+
+#### Strings
+Must be in quotes.
+
+Escapes:
+* \n -> newline
+* \\\\ -> \
+* \q -> "
+* \a -> '
