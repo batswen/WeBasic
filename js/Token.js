@@ -8,7 +8,24 @@ const TokenType = {
     "MUL": "MUL",
     "DIV": "DIV",
     "LPAREN": "LPAREN",
-    "RPAREN": "RPAREN"
+    "RPAREN": "RPAREN",
+    "ASSIGN": "ASSIGN",
+    "EQ": "EQ",
+    "NE": "NE",
+    "LT": "LT",
+    "LE": "LE",
+    "GT": "GT",
+    "GE": "GE",
+    "AND": "AND",
+    "OR": "OR",
+    "NOT": "NOT",
+    "VARIABLE": "VARIABLE",
+    "FOR": "FOR",
+    "TO": "TO",
+    "STEP": "STEP",
+    "NEXT": "NEXT",
+    "DO": "DO",
+    "WHILE": "WHILE"
 }
 
 class Token {

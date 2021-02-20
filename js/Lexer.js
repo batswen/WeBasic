@@ -6,8 +6,15 @@ class Lexer {
         this.nextChar()
     }
     error(msg) {
-        alert(`Lexer: ${msg}, on line: ${this.line}, column: ${this.col}`)
+        alert(`Lexer: ${msg}, on line: ${this.position.line}, column: ${this.position.col}`)
         throw 1
+    }
+    peekNextChar() {
+        if (this.position.pos + 1 < this.source.length) {
+            return this.source[this.position.pos + 1]
+        } else {
+            return undefined
+        }
     }
     nextChar() {
         this.position.advance(this.char)
@@ -17,6 +24,14 @@ class Lexer {
             this.char = undefined
         }
         return this.char
+    }
+    getTokOrTok(test, ifyes, ifnt) {
+        if (this.peekNextChar() === test) {
+            this.nextChar()
+            return new Token(ifyes, null, this.position)
+        } else {
+            return new Token(ifnt, null, this.position)
+        }
     }
     getString() {
         let result = ""
@@ -66,6 +81,15 @@ class Lexer {
                 this.nextChar()
             } else if (this.char === ")") {
                 tokens.push(new Token(TokenType.RPAREN, null, this.position))
+                this.nextChar()
+            } else if (this.char === "<") {
+                tokens.push(this.getTokOrTok("=", TokenType.LE, TokenType.LT))
+                this.nextChar()
+            } else if (this.char === ">") {
+                tokens.push(this.getTokOrTok("=", TokenType.GE, TokenType.GT))
+                this.nextChar()
+            } else if (this.char === "=") {
+                tokens.push(this.getTokOrTok("=", TokenType.EQ, TokenType.ASSIGN))
                 this.nextChar()
             } else if (this.char === '"') {
                 tokens.push(this.getString())
