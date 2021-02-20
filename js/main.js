@@ -4,6 +4,10 @@ prog.value += `x_if = 1:if x_if == 0 then result = "true" else result = "false"\
 prog.value += `print "\\aabc\\a" * 3 + "\\qxyz\\q":print ---a_0 * 2.5\n`
 prog.value += `dump\n`
 prog.value += `a=10:while a>5 do a=a-1:print a\n`
+prog.value += `a=10:while a>5\n`
+prog.value += `print a\n`
+prog.value += `a = a - 0.5\n`
+prog.value += `endwhile\n`
 
 function go() {
     // try {

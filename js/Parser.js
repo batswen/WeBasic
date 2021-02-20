@@ -114,7 +114,7 @@ class Parser {
                 this.advance()
                 result = new AssignNode(token.position, token.value, this.orexpr())
             } else {
-                result = new VariableNode(token.position, token)
+                throw "Parser: '=' expected"
             }
         } else if (this.token.tokentype === TokenType.KEYWORD) {
             if (this.token.value === "IF") {
@@ -145,6 +145,15 @@ class Parser {
                 if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "DO") {
                     this.advance()
                     result = new WhileNode(token.position, condition, this.statement())
+                } else if (this.token.tokentype === TokenType.COLON) {
+                    this.advance()
+                    result = this.program()
+                    if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "ENDWHILE") {
+                        this.advance()
+                        result = new WhileNode(token.position, condition, result)
+                    } else {
+                        throw "Parser: 'ENDWHILE' expected"
+                    }
                 } else {
                     throw "Parser: 'DO' expected"
                 }
@@ -157,7 +166,12 @@ class Parser {
         while (this.token.tokentype === TokenType.COLON) {
             this.advance()
             if (this.token.tokentype !== TokenType.EOF && this.token.tokentype !== TokenType.COLON) {
-                left = new StatementNode(left.position, left, this.statement())
+                const stmt = this.statement()
+                if (stmt !== undefined) {
+                    left = new StatementNode(left.position, left, stmt)
+                } else {
+                    left = new UnStatementNode(left.position, left)
+                }
             } else {
                 left = new UnStatementNode(left.position, left)
             }

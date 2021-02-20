@@ -217,7 +217,7 @@ class Interpreter {
         }
     }
     visit_IfNode(node, ctx) {
-        if (this.visit(node.conditon, ctx).value !== 0) {
+        if (this.visit(node.condition, ctx).value !== 0) {
             this.visit(node.then, ctx)
         }
     }
@@ -286,10 +286,10 @@ class Interpreter {
 
         switch (node.operator.tokentype) {
             case TokenType.PLUS:
-                if (left instanceof IntNumber && right instanceof BaseNumber) {
-                    return new IntNumber(left).add(right).setContext(ctx)
-                } else if (left instanceof FloatNumber && right instanceof BaseNumber) {
+                if (left instanceof FloatNumber || right instanceof FloatNumber) {
                     return new FloatNumber(left).add(right).setContext(ctx)
+                } else if (left instanceof IntNumber && right instanceof IntNumber) {
+                    return new IntNumber(left).add(right).setContext(ctx)
                 } else if (left instanceof DTString && right instanceof DTString) {
                     return new DTString(left).add(right).setContext(ctx)
                 } else {
@@ -299,10 +299,10 @@ class Interpreter {
                 }
                 break
             case TokenType.MINUS:
-                if (left instanceof IntNumber && right instanceof BaseNumber) {
-                    return new IntNumber(left).sub(right).setContext(ctx)
-                } else if (left instanceof FloatNumber && right instanceof BaseNumber) {
+                if (left instanceof FloatNumber || right instanceof FloatNumber) {
                     return new FloatNumber(left).sub(right).setContext(ctx)
+                } else if (left instanceof IntNumber && right instanceof IntNumber) {
+                    return new IntNumber(left).sub(right).setContext(ctx)
                 } else {
                     throw {
                         msg: "Interpreter: Unknown datatype (-)"
@@ -310,10 +310,10 @@ class Interpreter {
                 }
                 break
             case TokenType.MUL:
-                if (left instanceof IntNumber && right instanceof BaseNumber) {
-                    return new IntNumber(left).mul(right).setContext(ctx)
-                } else if (left instanceof FloatNumber && right instanceof BaseNumber) {
+                if (left instanceof FloatNumber || right instanceof FloatNumber) {
                     return new FloatNumber(left).mul(right).setContext(ctx)
+                } else if (left instanceof IntNumber && right instanceof IntNumber) {
+                    return new IntNumber(left).mul(right).setContext(ctx)
                 } else if (left instanceof DTString && right instanceof BaseNumber) {
                     return new DTString(left).mul(right).setContext(ctx)
                 } else {
@@ -323,10 +323,10 @@ class Interpreter {
                 }
                 break
             case TokenType.DIV:
-                if (left instanceof IntNumber && right instanceof BaseNumber) {
-                    return new IntNumber(left).div(right).setContext(ctx)
-                } else if (left instanceof FloatNumber && right instanceof BaseNumber) {
+                if (left instanceof FloatNumber || right instanceof FloatNumber) {
                     return new FloatNumber(left).div(right).setContext(ctx)
+                } else if (left instanceof IntNumber && right instanceof IntNumber) {
+                    return new IntNumber(left).div(right).setContext(ctx)
                 } else {
                     throw {
                         msg: "Interpreter: Unknown datatype (/)"
@@ -355,10 +355,10 @@ class Interpreter {
                         break
                 }
             case TokenType.EQ:
-                if (left instanceof IntNumber && right instanceof IntNumber) {
-                    return new IntNumber(left).eq(right).setContext(ctx)
-                } else if (left instanceof FloatNumber && right instanceof FloatNumber) {
+                if (left instanceof FloatNumber || right instanceof FloatNumber) {
                     return new FloatNumber(left).eq(right).setContext(ctx)
+                } else if (left instanceof IntNumber && right instanceof IntNumber) {
+                    return new IntNumber(left).eq(right).setContext(ctx)
                 } else if (left instanceof DTString && right instanceof DTString) {
                     return new DTString(left).eq(right).setContext(ctx)
                 } else{
@@ -368,10 +368,10 @@ class Interpreter {
                 }
                 break
             case TokenType.NE:
-                if (left instanceof IntNumber && right instanceof IntNumber) {
-                    return new IntNumber(left).ne(right).setContext(ctx)
-                } else if (left instanceof FloatNumber && right instanceof FloatNumber) {
+                if (left instanceof FloatNumber || right instanceof FloatNumber) {
                     return new FloatNumber(left).ne(right).setContext(ctx)
+                } else if (left instanceof IntNumber && right instanceof IntNumber) {
+                    return new IntNumber(left).ne(right).setContext(ctx)
                 } else if (left instanceof DTString && right instanceof DTString) {
                     return new DTString(left).ne(right).setContext(ctx)
                 } else {
@@ -381,10 +381,10 @@ class Interpreter {
                 }
                 break
             case TokenType.LT:
-                if (left instanceof IntNumber && right instanceof IntNumber) {
-                    return new IntNumber(left).lt(right).setContext(ctx)
-                } else if (left instanceof FloatNumber && right instanceof FloatNumber) {
+                if (left instanceof FloatNumber || right instanceof FloatNumber) {
                     return new FloatNumber(left).lt(right).setContext(ctx)
+                } else if (left instanceof IntNumber && right instanceof IntNumber) {
+                    return new IntNumber(left).lt(right).setContext(ctx)
                 } else if (left instanceof DTString && right instanceof DTString) {
                     return new DTString(left).lt(right).setContext(ctx)
                 } else {
@@ -394,10 +394,10 @@ class Interpreter {
                 }
                 break
             case TokenType.LE:
-                if (left instanceof IntNumber && right instanceof IntNumber) {
-                    return new IntNumber(left).le(right).setContext(ctx)
-                } else if (left instanceof FloatNumber && right instanceof FloatNumber) {
+                if (left instanceof FloatNumber || right instanceof FloatNumber) {
                     return new FloatNumber(left).le(right).setContext(ctx)
+                } else if (left instanceof IntNumber && right instanceof IntNumber) {
+                    return new IntNumber(left).le(right).setContext(ctx)
                 } else if (left instanceof DTString && right instanceof DTString) {
                     return new DTString(left).le(right).setContext(ctx)
                 } else {
@@ -407,10 +407,10 @@ class Interpreter {
                 }
                 break
             case TokenType.GT:
-                if (left instanceof IntNumber && right instanceof IntNumber) {
-                    return new IntNumber(left).gt(right).setContext(ctx)
-                } else if (left instanceof FloatNumber && right instanceof FloatNumber) {
+                if (left instanceof FloatNumber || right instanceof FloatNumber) {
                     return new FloatNumber(left).gt(right).setContext(ctx)
+                } else if (left instanceof IntNumber && right instanceof IntNumber) {
+                    return new IntNumber(left).gt(right).setContext(ctx)
                 } else if (left instanceof DTString && right instanceof DTString) {
                     return new DTString(left).gt(right).setContext(ctx)
                 } else {
@@ -420,10 +420,10 @@ class Interpreter {
                 }
                 break
             case TokenType.GE:
-                if (left instanceof IntNumber && right instanceof IntNumber) {
-                    return new IntNumber(left).ge(right).setContext(ctx)
-                } else if (left instanceof FloatNumber && right instanceof FloatNumber) {
+                if (left instanceof FloatNumber || right instanceof FloatNumber) {
                     return new FloatNumber(left).ge(right).setContext(ctx)
+                } else if (left instanceof IntNumber && right instanceof IntNumber) {
+                    return new IntNumber(left).ge(right).setContext(ctx)
                 } else if (left instanceof DTString && right instanceof DTString) {
                     return new DTString(left).ge(right).setContext(ctx)
                 } else {
