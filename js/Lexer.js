@@ -1,10 +1,8 @@
 class Lexer {
     constructor(source) {
         this.source = source
-        this.pos = -1
-        this.line = 1
-        this.col = 0
-        this.char = ""
+        this.position = new Position(-1, 1, 0)
+        this.char = undefined
         this.nextChar()
     }
     error(msg) {
@@ -12,16 +10,11 @@ class Lexer {
         throw 1
     }
     nextChar() {
-        if (this.pos < this.source.length) {
-            this.pos++
-            this.col++
-            this.char = this.source[this.pos]
+        this.position.advance(this.char)
+        if (this.position.pos < this.source.length) {
+            this.char = this.source[this.position.pos]
         } else {
             this.char = undefined
-        }
-        if (this.char === "\n") {
-            this.line++
-            this.col = 0
         }
         return this.char
     }
@@ -30,7 +23,7 @@ class Lexer {
         while (this.nextChar() !== undefined && this.char !== '"') {
             result += this.char
         }
-        return new Token(TokenType.STRING, result, new Position(this.line, this.col))
+        return new Token(TokenType.STRING, result, this.position)
     }
     getNumber() {
         let number = this.char, dots = 0
@@ -41,9 +34,9 @@ class Lexer {
             }
         }
         if (dots === 0) {
-            return new Token(TokenType.INT, parseInt(number), new Position(this.line, this.col))
+            return new Token(TokenType.INT, parseInt(number), this.position)
         } else if (dots === 1) {
-            return new Token(TokenType.FLOAT, parseFloat(number), new Position(this.line, this.col))
+            return new Token(TokenType.FLOAT, parseFloat(number), this.position)
         } else {
             this.error("Not a number")
         }
@@ -57,22 +50,22 @@ class Lexer {
                 continue
             }
             if (this.char === "+") {
-                tokens.push(new Token(TokenType.PLUS, null, new Position(this.line, this.col)))
+                tokens.push(new Token(TokenType.PLUS, null, this.position))
                 this.nextChar()
             } else if (this.char === "-") {
-                tokens.push(new Token(TokenType.MINUS, null, new Position(this.line, this.col)))
+                tokens.push(new Token(TokenType.MINUS, null, this.position))
                 this.nextChar()
             } else if (this.char === "*") {
-                tokens.push(new Token(TokenType.MUL, null, new Position(this.line, this.col)))
+                tokens.push(new Token(TokenType.MUL, null, this.position))
                 this.nextChar()
             } else if (this.char === "/") {
-                tokens.push(new Token(TokenType.DIV, null, new Position(this.line, this.col)))
+                tokens.push(new Token(TokenType.DIV, null, this.position))
                 this.nextChar()
             } else if (this.char === "(") {
-                tokens.push(new Token(TokenType.LPAREN, null, new Position(this.line, this.col)))
+                tokens.push(new Token(TokenType.LPAREN, null, this.position))
                 this.nextChar()
             } else if (this.char === ")") {
-                tokens.push(new Token(TokenType.RPAREN, null, new Position(this.line, this.col)))
+                tokens.push(new Token(TokenType.RPAREN, null, this.position))
                 this.nextChar()
             } else if (this.char === '"') {
                 tokens.push(this.getString())
@@ -84,7 +77,7 @@ class Lexer {
             }
         }
 
-        tokens.push(new Token(TokenType.EOF, null, new Position(this.line, this.col)))
+        tokens.push(new Token(TokenType.EOF, null, this.position))
         return tokens
     }
 }
