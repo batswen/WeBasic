@@ -85,6 +85,14 @@ class UnOpNode extends Node {
     }
 }
 
+class WhileNode extends Node {
+    constructor(position, condition, whiledo) {
+        super(position)
+        this.condition = condition
+        this.whiledo = whiledo
+    }
+}
+
 class IfNode extends Node {
     constructor(position, condition, then) {
         super(position)

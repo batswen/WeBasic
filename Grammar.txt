@@ -1,6 +1,7 @@
 program:    statement (lf statement)*
 statement:  variable "=" orexpr
             if orexpr then statement (else statement)?
+            while orexpr do statement
             print orexpr
             dump
 

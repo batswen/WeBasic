@@ -139,6 +139,15 @@ class Parser {
             } else if (this.token.value === "DUMP") {
                 this.advance()
                 result = new DumpNode(token.position)
+            } if (this.token.value === "WHILE") {
+                this.advance()
+                const condition = this.orexpr()
+                if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "DO") {
+                    this.advance()
+                    result = new WhileNode(token.position, condition, this.statement())
+                } else {
+                    throw "Parser: 'DO' expected"
+                }
             }
         }
         return result

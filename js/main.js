@@ -3,6 +3,7 @@ prog.value = `a=3<5-2\nb="a"=="a":a0_A = 3 * -5\ncc = 15 and 7:xcv = "\\q\\\\\\a
 prog.value += `x_if = 1:if x_if == 0 then result = "true" else result = "false"\n`
 prog.value += `print "\\aabc\\a" * 3 + "\\qxyz\\q":print ---a_0 * 2.5\n`
 prog.value += `dump\n`
+prog.value += `a=10:while a>5 do a=a-1:print a\n`
 
 function go() {
     // try {

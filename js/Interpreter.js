@@ -211,6 +211,11 @@ class Interpreter {
     visit_PrintNode(node, ctx) {
         console.log(this.visit(node.value, ctx).value)
     }
+    visit_WhileNode(node, ctx) {
+        while (this.visit(node.condition, ctx).value !== 0) {
+            this.visit(node.whiledo, ctx)
+        }
+    }
     visit_IfNode(node, ctx) {
         if (this.visit(node.conditon, ctx).value !== 0) {
             this.visit(node.then, ctx)
