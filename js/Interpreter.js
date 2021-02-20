@@ -408,6 +408,45 @@ class Interpreter {
                     }
                 }
                 break
+            case TokenType.LE:
+                if (left instanceof IntNumber && right instanceof IntNumber) {
+                    return new IntNumber(left).le(right).setContext(ctx)
+                } else if (left instanceof FloatNumber && right instanceof FloatNumber) {
+                    return new FloatNumber(left).le(right).setContext(ctx)
+                } else if (left instanceof DTString && right instanceof DTString) {
+                    return new DTString(left).le(right).setContext(ctx)
+                } else {
+                    throw {
+                        msg: "Interpreter: Unknown datatype (<=)"
+                    }
+                }
+                break
+            case TokenType.GT:
+                if (left instanceof IntNumber && right instanceof IntNumber) {
+                    return new IntNumber(left).gt(right).setContext(ctx)
+                } else if (left instanceof FloatNumber && right instanceof FloatNumber) {
+                    return new FloatNumber(left).gt(right).setContext(ctx)
+                } else if (left instanceof DTString && right instanceof DTString) {
+                    return new DTString(left).gt(right).setContext(ctx)
+                } else {
+                    throw {
+                        msg: "Interpreter: Unknown datatype (>)"
+                    }
+                }
+                break
+            case TokenType.GE:
+                if (left instanceof IntNumber && right instanceof IntNumber) {
+                    return new IntNumber(left).ge(right).setContext(ctx)
+                } else if (left instanceof FloatNumber && right instanceof FloatNumber) {
+                    return new FloatNumber(left).ge(right).setContext(ctx)
+                } else if (left instanceof DTString && right instanceof DTString) {
+                    return new DTString(left).ge(right).setContext(ctx)
+                } else {
+                    throw {
+                        msg: "Interpreter: Unknown datatype (>=)"
+                    }
+                }
+                break
         }
 
     }
