@@ -1,5 +1,5 @@
 const prog = document.getElementById("input")
-prog.value = `a=3<5-2\nb="a"=="a":c="a"*5+"xyz"\na0_A = 3 * -5\ncc = 15 and 7`
+prog.value = `a=3<5-2\nb="a"=="a":c="a"*5+"xyz"\na0_A = 3 * -5\ncc = 15 and 7:xcv = "\\q\\\\\\a"`
 
 function go() {
     // try {

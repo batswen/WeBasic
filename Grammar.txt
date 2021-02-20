@@ -9,11 +9,13 @@ glexpr:     expr (("<"|"<="|">"|">=") expr)*
 
 expr:       term (("+"|"-") term)*
 term:       factor (("*"|"/") factor)*
-factor:      ("+"|"-") number
-            '"' chars '"'
+factor:      ("+"|"-") int|float
+            string
             "(" expr ")"
             variable
 
-number:     [0-9] ("." [0-9]*)
+string:     """ ([^"]|\\")* """
+int:        [0-9]
+float:      [0-9] ("." [0-9]*)
 variable:   [a-zA-Z_\$][\$_0-9\p{L}]*
 lf:         (":"|"\n")

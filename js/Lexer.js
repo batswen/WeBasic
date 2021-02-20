@@ -45,10 +45,27 @@ class Lexer {
         }
     }
     getString() {
-        let result = ""
+        let result = "", currentChar
         while (this.nextChar() !== undefined && this.char !== '"') {
+            if (this.char === "\\" && this.peekNextChar() !== undefined) {
+                switch (this.nextChar()) {
+                    case "n":
+                        this.char = "\n"
+                        break
+                    case "\\":
+                        this.char = "\\"
+                        break
+                    case "q":
+                        this.char = '"'
+                        break
+                    case "a":
+                        this.char = "'"
+                        break
+                }
+            }
             result += this.char
         }
+        console.log(result)
         return new Token(TokenType.STRING, result, this.position)
     }
     getNumber() {
