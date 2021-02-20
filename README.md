@@ -21,6 +21,6 @@ Escapes:
 |Esc|Replaced with|
 |-|-|
 |\\n|newline|
-|\\\\|\\|
+|`\\\\`|\\|
 |\\q|"|
 |\\a|'|
