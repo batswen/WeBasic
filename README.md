@@ -20,7 +20,7 @@ Escapes:
 
 |Esc|Replaced with|
 |-|-|
-|\\n|newline|
-|\\\\|\\|
-|\\q|"|
-|\\a|'|
+|`\n`|`newline`|
+|`\\`|`\`|
+|`\q`|`"`|
+|`\a`|`'`|
