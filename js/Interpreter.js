@@ -31,14 +31,11 @@ class Interpreter {
     }
     visit_IfNode(node, ctx) {
         if (this.visit(node.condition, ctx).value !== 0) {
-            this.visit(node.then, ctx)
-        }
-    }
-    visit_IfElseNode(node, ctx) {
-        if (this.visit(node.condition, ctx).value !== 0) {
             this.visit(node.ifthen, ctx)
         } else {
-            this.visit(node.ifelse, ctx)
+            if (node.ifelse !== undefined) {
+                this.visit(node.ifelse, ctx)
+            }
         }
     }
     visit_StatementNode(node, ctx) {

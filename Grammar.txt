@@ -4,7 +4,7 @@ statement:  variable "=" orexpr
             if orexpr lf program lf (else program)? endif
             while orexpr do statement
             while orexpr lf program lf endwhile
-            print orexpr?
+            print (orexpr ("," orexpr)*)?
             println orexpr?
             cprint orexpr
             dump

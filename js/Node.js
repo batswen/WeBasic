@@ -107,14 +107,6 @@ class WhileNode extends Node {
 }
 
 class IfNode extends Node {
-    constructor(position, condition, then) {
-        super(position)
-        this.condition = condition
-        this.then = then
-    }
-}
-
-class IfElseNode extends Node {
     constructor(position, condition, ifthen, ifelse) {
         super(position)
         this.condition = condition

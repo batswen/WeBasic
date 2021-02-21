@@ -136,9 +136,9 @@ class Parser {
                         const stmt = this.statement()
                         if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "ELSE") {
                             this.advance()
-                            return new IfElseNode(token.position, condition, stmt, this.statement())
+                            return new IfNode(token.position, condition, stmt, this.statement())
                         } else {
-                            return new IfNode(token.position, condition, stmt)
+                            return new IfNode(token.position, condition, stmt, undefined)
                         }
                     } else if (this.token.tokentype === TokenType.COLON) {
                         this.advance()
@@ -150,9 +150,9 @@ class Parser {
                         if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "ENDIF") {
                             this.advance()
                             if (elseprog !== undefined) {
-                                return new IfElseNode(token.position, condition, prog, elseprog)
+                                return new IfNode(token.position, condition, prog, elseprog)
                             } else {
-                                return new IfNode(token.position, condition, prog)
+                                return new IfNode(token.position, condition, prog, undefined)
                             }
                         } else {
                             throw {
