@@ -6,7 +6,10 @@ class Lexer {
         this.nextChar()
     }
     error(msg) {
-        throw(`Lexer: ${msg}, on line: ${this.position.line}, column: ${this.position.col}`)
+        throw {
+            msg,
+            position: this.position
+        }
     }
     peekNextChar() {
         if (this.position.pos + 1 < this.source.length) {
@@ -46,7 +49,7 @@ class Lexer {
     }
     getString() {
         let result = "", currentChar
-        while (this.nextChar() !== undefined && this.char !== '"') {
+        while (this.nextChar() !== undefined && this.char !== '"' && this.char !== "\n") {
             if (this.char === "\\" && this.peekNextChar() !== undefined) {
                 switch (this.nextChar()) {
                     case "n":
@@ -64,6 +67,9 @@ class Lexer {
                 }
             }
             result += this.char
+        }
+        if (this.char !== '"') {
+            this.error(`" expected"`)
         }
         return new Token(TokenType.STRING, result, this.position.copy())
     }

@@ -11,15 +11,18 @@ class Interpreter {
     }
     visit_PrintNode(node, ctx) {
         if (node.value !== undefined) {
-            this.output.value += this.visit(node.value, ctx).value
+            for (let e of node.value) {
+                this.output.value += this.visit(e, ctx).value
+            }
         }
     }
     visit_PrintLNNode(node, ctx) {
         if (node.value !== undefined) {
-            this.output.value += this.visit(node.value, ctx).value + "\n"
-        } else {
-            this.output.value += "\n"
+            for (let e of node.value) {
+                this.output.value += this.visit(e, ctx).value
+            }
         }
+        this.output.value += "\n"
     }
     visit_CDumpNode(node, ctx) {
         console.log(ctx.symbolTable.getAllVars())

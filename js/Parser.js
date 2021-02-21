@@ -212,19 +212,23 @@ class Parser {
                     }
                     break
                 case "PRINT":
+                case "PRINTLN":
+                    const lf = this.token.value === "PRINTLN"
                     this.advance()
                     if (this.token.tokentype === TokenType.COLON) {
                         return new PrintNode(token.position, undefined)
                     } else {
-                        return new PrintNode(token.position, this.orexpr())
-                    }
-                    break
-                case "PRINTLN":
-                    this.advance()
-                    if (this.token.tokentype === TokenType.COLON) {
-                        return new PrintLNNode(token.position, undefined)
-                    } else {
-                        return new PrintLNNode(token.position, this.orexpr())
+                        let result = []
+                        result.push(this.orexpr())
+                        while (this.token.tokentype === TokenType.COMMA) {
+                            this.advance()
+                            result.push(this.orexpr())
+                        }
+                        if (lf) {
+                            return new PrintLNNode(token.position, result)
+                        } else {
+                            return new PrintNode(token.position, result)
+                        }
                     }
                     break
                 case "DUMP":
