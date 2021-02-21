@@ -175,7 +175,7 @@ class Parser {
                         return new WhileNode(token.position, condition, this.statement())
                     } else if (this.token.tokentype === TokenType.COLON) {
                         this.advance()
-                        result = this.program()
+                        const result = this.program()
                         if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "ENDWHILE") {
                             this.advance()
                             return new WhileNode(token.position, condition, result)
