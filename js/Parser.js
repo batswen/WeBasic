@@ -213,10 +213,16 @@ class Parser {
                     break
                 case "PRINT":
                 case "PRINTLN":
+                case "CPRINT":
                     const lf = this.token.value === "PRINTLN"
+                    const con = this.token.value === "CPRINT"
                     this.advance()
                     if (this.token.tokentype === TokenType.COLON) {
-                        return new PrintNode(token.position, undefined)
+                        if (lf) {
+                            return new PrintLNNode(token.position, undefined)
+                        } else {
+                            return new PrintNode(token.position, undefined)
+                        }
                     } else {
                         let result = []
                         result.push(this.orexpr())
@@ -226,6 +232,8 @@ class Parser {
                         }
                         if (lf) {
                             return new PrintLNNode(token.position, result)
+                        } else if (con) {
+                            return new CPrintNode(token.position, result)
                         } else {
                             return new PrintNode(token.position, result)
                         }
@@ -238,10 +246,6 @@ class Parser {
                 case "CLS":
                     this.advance()
                     return new ClsNode(token.position)
-                    break
-                case "CPRINT":
-                    this.advance()
-                    return new CPrintNode(token.position, this.orexpr())
                     break
                 case "CDUMP":
                     this.advance()

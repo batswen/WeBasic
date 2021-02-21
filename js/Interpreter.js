@@ -28,7 +28,11 @@ class Interpreter {
         console.log(ctx.symbolTable.getAllVars())
     }
     visit_CPrintNode(node, ctx) {
-        console.log(this.visit(node.value, ctx).value)
+        if (node.value !== undefined) {
+            for (let e of node.value) {
+                console.log(this.visit(e, ctx).value)
+            }
+        }
     }
     visit_WhileNode(node, ctx) {
         while (this.visit(node.condition, ctx).value !== 0) {
