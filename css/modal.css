@@ -1,0 +1,49 @@
+button, input, select {
+    background-color: #88f;
+    border: 1px solid #44a;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    margin: 0;
+}
+
+button#modal-close {
+    background-color: #f88;
+    border: 1px solid #a44;
+}
+
+button:hover, select:hover {
+    filter: brightness(150%);
+    color: black;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.3);
+}
+
+.modal-content {
+    background-color: #eee;
+    margin: 15% auto;
+    border: 1px solid #888;
+    width: 60%;
+}
+
+.modal-header {
+    background-color: #ddd;
+    padding: 0.25rem 0.75rem;
+}
+.modal-body {
+    padding: 0.25rem 0.75rem;
+}
+.modal-footer {
+    background-color: #ddd;
+    padding: 0.25rem 0.75rem;
+    text-align: center;
+}

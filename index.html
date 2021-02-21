@@ -4,12 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/modal.css">
     <title>WeBasic</title>
 </head>
 <body>
     <textarea id="input" rows="8" cols="80"></textarea>
     <button onclick="go()">Go</button>
     <select id="select"></select>
+
+    <div id="alert" class="modal">
+        <div class="modal-content">
+            <div id="modal-header" class="modal-header"></div>
+            <div class="modal-body">
+                <div id="modal-message" class="modal-message">
+
+                </div>
+                <div class="modal-line">
+                    Line
+                    <span id="modal-line"></span>
+                </div>
+                <div class="modal-column">
+                    Column
+                    <span id="modal-column"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="modal-close">Close</button>
+            </div>
+        </div>
+    </div>
 
     <script src="js/Examples.js"></script>
     <script src="js/Datatype.js"></script>

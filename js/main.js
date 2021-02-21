@@ -1,5 +1,10 @@
 const prog = document.getElementById("input")
 const select = document.getElementById("select")
+const modal = document.querySelector(".modal")
+const modalHeader = document.getElementById("modal-header")
+const modalMessage = document.getElementById("modal-message")
+const modalLine = document.getElementById("modal-line")
+const modalColumn = document.getElementById("modal-column")
 
 for (let e in examples) {
     const opt = document.createElement("option")
@@ -23,10 +28,16 @@ function go() {
         if (e.details) {
             console.log(e.details)
         }
-        alert(`${e.msg}\nLine: ${e.position.line}\nColumn: ${e.position.col}`)
+        modalHeader.textContent = e.title ? e.title : "Error"
+        modalMessage.textContent = e.msg
+        modalLine.textContent = e.position.line
+        modalColumn.textContent = e.position.col
+        modal.style.display = "block"
     }
 }
 
 select.addEventListener("change", e =>
     prog.value = examples[select.value]
 )
+
+document.getElementById("modal-close").addEventListener("click", e => modal.style.display = "none")
