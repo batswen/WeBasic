@@ -113,12 +113,12 @@ class Parser {
     }
     statement() {
         const token = this.token
-        let result = undefined
+        let condition, elseprog = undefined
         if (this.token.tokentype === TokenType.VARIABLE) {
             this.advance()
             if (this.token.tokentype === TokenType.ASSIGN) {
                 this.advance()
-                result = new AssignNode(token.position, token.value, this.orexpr())
+                return new AssignNode(token.position, token.value, this.orexpr())
             } else {
                 throw {
                     msg: "Parser: '=' expected",
@@ -127,77 +127,100 @@ class Parser {
                 }
             }
         } else if (this.token.tokentype === TokenType.KEYWORD) {
-            if (this.token.value === "IF") {
-                this.advance()
-                const condition = this.orexpr()
-                if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "THEN") {
+            switch (this.token.value) {
+                case "IF":
                     this.advance()
-                    const stmt = this.statement()
-                    this.advance()
-                    if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "ELSE") {
+                    condition = this.orexpr()
+                    if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "THEN") {
                         this.advance()
-                        result = new IfNode(token.position, condition, stmt)
-                    } else {
-                        result = new IfElseNode(token.position, condition, stmt, this.statement())
-                    }
-                } else {
-                    throw {
-                        msg: "Parser: 'THEN' expected",
-                        position: token.position
-                    }
-                }
-            } else if (this.token.value === "PRINT") {
-                this.advance()
-                result = new PrintNode(token.position, this.orexpr())
-            } else if (this.token.value === "DUMP") {
-                this.advance()
-                result = new DumpNode(token.position)
-            } if (this.token.value === "WHILE") {
-                this.advance()
-                const condition = this.orexpr()
-                if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "DO") {
-                    this.advance()
-                    result = new WhileNode(token.position, condition, this.statement())
-                } else if (this.token.tokentype === TokenType.COLON) {
-                    this.advance()
-                    result = this.program()
-                    if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "ENDWHILE") {
+                        const stmt = this.statement()
+                        if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "ELSE") {
+                            this.advance()
+                            return new IfElseNode(token.position, condition, stmt, this.statement())
+                        } else {
+                            return new IfNode(token.position, condition, stmt)
+                        }
+                    } else if (this.token.tokentype === TokenType.COLON) {
                         this.advance()
-                        result = new WhileNode(token.position, condition, result)
+                        const prog = this.program()
+                        if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "ELSE") {
+                            this.advance()
+                            elseprog = this.program()
+                        }
+                        if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "ENDIF") {
+                            this.advance()
+                            if (elseprog !== undefined) {
+                                return new IfElseNode(token.position, condition, prog, elseprog)
+                            } else {
+                                return new IfNode(token.position, condition, prog)
+                            }
+                        } else {
+                            throw {
+                                msg: "Parser: 'ENDIF' expected",
+                                position: token.position
+                            }
+                        }
                     } else {
                         throw {
-                            msg: "Parser: 'ENDWHILE' expected",
+                            msg: "Parser: 'THEN' expected",
                             position: token.position
                         }
                     }
-                } else {
-                    throw {
-                        msg: "Parser: 'DO' expected",
-                        position: token.position
+                    break
+                case "WHILE":
+                    this.advance()
+                    condition = this.orexpr()
+                    if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "DO") {
+                        this.advance()
+                        return new WhileNode(token.position, condition, this.statement())
+                    } else if (this.token.tokentype === TokenType.COLON) {
+                        this.advance()
+                        result = this.program()
+                        if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "ENDWHILE") {
+                            this.advance()
+                            return new WhileNode(token.position, condition, result)
+                        } else {
+                            throw {
+                                msg: "Parser: 'ENDWHILE' expected",
+                                position: token.position
+                            }
+                        }
+                    } else {
+                        throw {
+                            msg: "Parser: 'DO' expected",
+                            position: token.position
+                        }
                     }
-                }
-            }
-        }
-        return result
-    }
+                    break
+                case "PRINT":
+                    this.advance()
+                    return new PrintNode(token.position, this.orexpr())
+                    break
+                case "DUMP":
+                    this.advance()
+                    return new DumpNode(token.position)
+                    break
+                default:
+            }//switch
+        }//else if keyword
+    }//fn
     program() {
-        let left = this.statement()
         while (this.token.tokentype === TokenType.COLON) {
             this.advance()
-            if (this.token.tokentype !== TokenType.EOF && this.token.tokentype !== TokenType.COLON) {
-                const stmt = this.statement()
-                left = new StatementNode(left.position, left, stmt)
-            } else {
-                left = new StatementNode(left.position, left, undefined)
-            }
         }
-        return left
+        let result = this.statement()
+        while (this.token.tokentype === TokenType.COLON) {
+            this.advance()
+            const stmt = this.statement()
+            result = new StatementNode(result.position, result, stmt)
+        }
+        return result
     }
     parse() {
         let result = this.program()
         if (this.token.tokentype !== TokenType.EOF) {
             throw {
-                msg: `Parser: EOF expected (${this.token.tokentype})`,
+                msg: `Parser: EOF expected (${this.token.tokentype}, ${this.token.value})`,
                 position: this.token.position,
                 details: this.tokens
             }

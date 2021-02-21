@@ -14,26 +14,25 @@ for (let e in examples) {
 }
 
 function go() {
-    try {
+    // try {
         const tokens = new Lexer(prog.value).makeTokens()
         //console.log(tokens)
         const ast = new Parser(tokens).parse()
-        //console.log(ast)
-        const result = new Interpreter(ast).interpret()
-        if (result !== undefined) {
-            document.getElementById("result").value = result.value
+        console.log(ast)
+        if (ast) {
+            new Interpreter(ast).interpret()
         }
 
-    } catch (e) {
-        if (e.details) {
-            console.log(e.details)
-        }
-        modalHeader.textContent = e.title ? e.title : "Error"
-        modalMessage.textContent = e.msg
-        modalLine.textContent = e.position.line
-        modalColumn.textContent = e.position.col
-        modal.style.display = "block"
-    }
+    // } catch (e) {
+    //     if (e.details) {
+    //         console.log(e.details)
+    //     }
+    //     modalHeader.textContent = e.title ? e.title : "Error"
+    //     modalMessage.textContent = e.msg
+    //     modalLine.textContent = e.position.line
+    //     modalColumn.textContent = e.position.col
+    //     modal.style.display = "block"
+    // }
 }
 
 select.addEventListener("change", e =>

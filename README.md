@@ -7,6 +7,8 @@ Very early stage
 ### Variable assignment
 var = value
 
+#### Variables
+Fisrt character must be $_a-zA_Z, then $_0-9\p{L}
 
 
 #### Integer

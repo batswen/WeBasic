@@ -38,6 +38,5 @@ class Token {
         this.tokentype = tokentype
         this.value = value
         this.position = position
-        //console.log(tokentype, value, position)
     }
 }

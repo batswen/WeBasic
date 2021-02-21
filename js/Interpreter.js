@@ -239,7 +239,8 @@ class Interpreter {
     interpret() {
         const ctx = new Context("main")
         ctx.symbolTable.setVar("pi", new FloatNumber(Math.PI))
-
-        return this.visit(this.ast, ctx)
+        let r =this.visit(this.ast, ctx)
+ctx.symbolTable.showVars()
+        return r
     }
 }
