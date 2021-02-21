@@ -83,6 +83,10 @@ class Lexer {
             this.error("Not a number")
         }
     }
+    eatComment() {
+        while (this.nextChar() !== undefined && this.char !== "\n") {
+        }
+    }
     makeTokens() {
         const tokens = []
 
@@ -96,6 +100,9 @@ class Lexer {
                 this.nextChar()
             } else if (this.char === "-") {
                 tokens.push(new Token(TokenType.MINUS, null, this.position.copy()))
+                this.nextChar()
+            } else if (this.char === ";") {
+                this.eatComment()
                 this.nextChar()
             } else if (this.char === "*") {
                 tokens.push(new Token(TokenType.MUL, null, this.position.copy()))

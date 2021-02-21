@@ -13,16 +13,17 @@ for (let e in examples) {
     select.appendChild(opt)
 }
 
+prog.value = "; Type your program here"
+
 function go() {
     // try {
         const tokens = new Lexer(prog.value).makeTokens()
         //console.log(tokens)
         const ast = new Parser(tokens).parse()
-        console.log(ast)
+        //console.log(ast)
         if (ast) {
             new Interpreter(ast).interpret()
         }
-
     // } catch (e) {
     //     if (e.details) {
     //         console.log(e.details)
