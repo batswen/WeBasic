@@ -198,7 +198,8 @@ class Parser {
         if (this.token.tokentype !== TokenType.EOF) {
             throw {
                 msg: `Parser: EOF expected (${this.token.tokentype})`,
-                position: token.position
+                position: this.token.position,
+                details: this.tokens
             }
         }
         return result
