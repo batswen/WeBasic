@@ -55,7 +55,27 @@ class PrintNode extends Node {
     }
 }
 
+class PrintLNNode extends Node {
+    constructor(position, value) {
+        super(position)
+        this.value = value
+    }
+}
+
 class DumpNode extends Node {
+    constructor(position) {
+        super(position)
+    }
+}
+
+class CPrintNode extends Node {
+    constructor(position, value) {
+        super(position)
+        this.value = value
+    }
+}
+
+class CDumpNode extends Node {
     constructor(position) {
         super(position)
     }

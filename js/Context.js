@@ -24,13 +24,15 @@ class SymbolTable {
     testVar(name) {
         return name in this.symtable
     }
-    showVars() {
+    getAllVars() {
+        const result = []
         for (let key in this.symtable) {
             if (this.symtable[key] instanceof DTString) {
-                console.log(`${this.context} ${key}:="${this.symtable[key].value}"`)
+                result.push(`${this.context} ${key}:="${this.symtable[key].value}"`)
             } else {
-                console.log(`${this.context} ${key}:=${this.symtable[key].value}`)
+                result.push(`${this.context} ${key}:=${this.symtable[key].value}`)
             }
         }
+        return result
     }
 }

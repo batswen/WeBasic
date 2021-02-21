@@ -194,11 +194,31 @@ class Parser {
                     break
                 case "PRINT":
                     this.advance()
-                    return new PrintNode(token.position, this.orexpr())
+                    if (this.token.tokentype === TokenType.COLON) {
+                        return new PrintNode(token.position, undefined)
+                    } else {
+                        return new PrintNode(token.position, this.orexpr())
+                    }
+                    break
+                case "PRINTLN":
+                    this.advance()
+                    if (this.token.tokentype === TokenType.COLON) {
+                        return new PrintLNNode(token.position, undefined)
+                    } else {
+                        return new PrintLNNode(token.position, this.orexpr())
+                    }
                     break
                 case "DUMP":
                     this.advance()
                     return new DumpNode(token.position)
+                    break
+                case "CPRINT":
+                    this.advance()
+                    return new CPrintNode(token.position, this.orexpr())
+                    break
+                case "CDUMP":
+                    this.advance()
+                    return new CDumpNode(token.position)
                     break
                 default:
             }//switch

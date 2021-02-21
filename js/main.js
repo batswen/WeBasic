@@ -14,6 +14,7 @@ for (let e in examples) {
 }
 
 prog.value = "; Type your program here"
+document.getElementById("output").value = ""
 
 function go() {
     // try {

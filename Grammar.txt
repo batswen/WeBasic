@@ -4,8 +4,11 @@ statement:  variable "=" orexpr
             if orexpr lf program lf (else program)? endif
             while orexpr do statement
             while orexpr lf program lf endwhile
-            print orexpr
+            print orexpr?
+            println orexpr?
+            cprint orexpr
             dump
+            cdump
 
 orexpr:     andexpr ("OR" andexpr)*
 andexpr:    eqexpr ("AND" eqexpr)*

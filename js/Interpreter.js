@@ -1,11 +1,27 @@
 class Interpreter {
     constructor(ast) {
         this.ast = ast
+        this.output = document.getElementById("output")
     }
     visit_DumpNode(node, ctx) {
-        ctx.symbolTable.showVars()
+        this.output.value += ctx.symbolTable.getAllVars().join("\n") + "\n"
     }
     visit_PrintNode(node, ctx) {
+        if (node.value !== undefined) {
+            this.output.value += this.visit(node.value, ctx).value
+        }
+    }
+    visit_PrintLNNode(node, ctx) {
+        if (node.value !== undefined) {
+            this.output.value += this.visit(node.value, ctx).value + "\n"
+        } else {
+            this.output.value += "\n"
+        }
+    }
+    visit_CDumpNode(node, ctx) {
+        console.log(ctx.symbolTable.getAllVars())
+    }
+    visit_CPrintNode(node, ctx) {
         console.log(this.visit(node.value, ctx).value)
     }
     visit_WhileNode(node, ctx) {

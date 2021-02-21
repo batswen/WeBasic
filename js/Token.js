@@ -29,8 +29,8 @@ const KEYWORDS = [
     "FOR", "TO", "STEP", "NEXT",
     "WHILE", "ENDWHILE",
     "FUNCTION", "ENDFUNCTION",
-    "PRINT",
-    "DUMP"
+    "PRINT", "PRINTLN", "CPRINT",
+    "DUMP", "CDUMP"
 ]
 
 class Token {

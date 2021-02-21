@@ -1,21 +1,7 @@
-button, input, select {
-    background-color: #88f;
-    border: 1px solid #44a;
-    color: white;
-    padding: 0.25rem 0.75rem;
-    margin: 0;
+#output {
+    height: 100%;
+    overflow-y: scroll;
 }
-
-button#modal-close {
-    background-color: #f88;
-    border: 1px solid #a44;
-}
-
-button:hover, select:hover {
-    filter: brightness(150%);
-    color: black;
-}
-
 .modal {
     display: none;
     position: fixed;
