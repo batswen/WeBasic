@@ -54,7 +54,8 @@ class Interpreter {
             return ctx.symbolTable.getVar(node.value)
         } else {
             throw {
-                msg: "Interpreter: undeclared variable: " + node.value
+                msg: "Interpreter: undeclared variable: " + node.value,
+                position: node.position
             }
         }
     }
@@ -83,7 +84,8 @@ class Interpreter {
         if (node.operator.tokentype === TokenType.MINUS) {
             if (!left instanceof BaseNumber) {
                 throw {
-                    msg: "Interpreter: Number expected"
+                    msg: "Interpreter: Number expected",
+                    position: left.position
                 }
             }
             if (left instanceof IntNumber) {
@@ -108,7 +110,8 @@ class Interpreter {
                     return new DTString(left).add(right).setContext(ctx)
                 } else {
                     throw {
-                        msg: "Interpreter: Unknown datatype (+)"
+                        msg: "Interpreter: Type mismatch (+)",
+                        position: node.position
                     }
                 }
                 break
@@ -119,7 +122,8 @@ class Interpreter {
                     return new IntNumber(left).sub(right).setContext(ctx)
                 } else {
                     throw {
-                        msg: "Interpreter: Unknown datatype (-)"
+                        msg: "Interpreter: Type mismatch (-)",
+                        position: node.position
                     }
                 }
                 break
@@ -132,7 +136,8 @@ class Interpreter {
                     return new DTString(left).mul(right).setContext(ctx)
                 } else {
                     throw {
-                        msg: "Interpreter: Unknown datatype (*)"
+                        msg: "Interpreter: Type mismatch (*)",
+                        position: node.position
                     }
                 }
                 break
@@ -143,7 +148,8 @@ class Interpreter {
                     return new IntNumber(left).div(right).setContext(ctx)
                 } else {
                     throw {
-                        msg: "Interpreter: Unknown datatype (/)"
+                        msg: "Interpreter: Type mismatch (/)",
+                        position: node.position
                     }
                 }
                 break
@@ -154,7 +160,8 @@ class Interpreter {
                             return new IntNumber(left).or(right).setContext(ctx)
                         } else {
                             throw {
-                                msg: "Interpreter: Unknown datatype (or)"
+                                msg: "Interpreter: Type mismatch (or)",
+                                position: node.position
                             }
                         }
                         break
@@ -163,7 +170,8 @@ class Interpreter {
                             return new IntNumber(left).and(right).setContext(ctx)
                         } else {
                             throw {
-                                msg: "Interpreter: Unknown datatype (and)"
+                                msg: "Interpreter: Type mismatch (and)",
+                                position: node.position
                             }
                         }
                         break
@@ -177,7 +185,8 @@ class Interpreter {
                     return new DTString(left).eq(right).setContext(ctx)
                 } else{
                     throw {
-                        msg: "Interpreter: Unknown datatype (==)"
+                        msg: "Interpreter: Type mismatch (==)",
+                        position: node.position
                     }
                 }
                 break
@@ -190,7 +199,8 @@ class Interpreter {
                     return new DTString(left).ne(right).setContext(ctx)
                 } else {
                     throw {
-                        msg: "Interpreter: Unknown datatype (!=)"
+                        msg: "Interpreter: Type mismatch (!=)",
+                        position: node.position
                     }
                 }
                 break
@@ -203,7 +213,8 @@ class Interpreter {
                     return new DTString(left).lt(right).setContext(ctx)
                 } else {
                     throw {
-                        msg: "Interpreter: Unknown datatype (<)"
+                        msg: "Interpreter: Type mismatch (<)",
+                        position: node.position
                     }
                 }
                 break
@@ -216,7 +227,8 @@ class Interpreter {
                     return new DTString(left).le(right).setContext(ctx)
                 } else {
                     throw {
-                        msg: "Interpreter: Unknown datatype (<=)"
+                        msg: "Interpreter: Type mismatch (<=)",
+                        position: node.position
                     }
                 }
                 break
@@ -229,7 +241,8 @@ class Interpreter {
                     return new DTString(left).gt(right).setContext(ctx)
                 } else {
                     throw {
-                        msg: "Interpreter: Unknown datatype (>)"
+                        msg: "Interpreter: Type mismatch (>)",
+                        position: node.position
                     }
                 }
                 break
@@ -242,7 +255,8 @@ class Interpreter {
                     return new DTString(left).ge(right).setContext(ctx)
                 } else {
                     throw {
-                        msg: "Interpreter: Unknown datatype (>=)"
+                        msg: "Interpreter: Type mismatch (>=)",
+                        position: node.position
                     }
                 }
                 break
