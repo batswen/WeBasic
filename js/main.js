@@ -9,7 +9,7 @@ for (let e in examples) {
 }
 
 function go() {
-    // try {
+    try {
         const tokens = new Lexer(prog.value).makeTokens()
         //console.log(tokens)
         const ast = new Parser(tokens).parse()
@@ -19,9 +19,12 @@ function go() {
             document.getElementById("result").value = result.value
         }
 
-    // } catch (e) {
-    //     alert(e)
-    // }
+    } catch (e) {
+        if (e.details) {
+            console.log(e.details)
+        }
+        alert(`${e.msg}\nLine: ${e.position.line}\nColumn: ${e.position.col}`)
+    }
 }
 
 select.addEventListener("change", e =>

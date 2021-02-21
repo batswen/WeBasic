@@ -13,6 +13,9 @@ class Position {
             this.line++
         }
     }
+    copy() {
+        return new Position(this.pos, this.line, this.col)
+    }
     toString() {
         return `source position: ${this.pos}, column: ${this.col}, line: ${this.line}`
     }

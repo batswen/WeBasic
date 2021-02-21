@@ -122,7 +122,8 @@ class Parser {
             } else {
                 throw {
                     msg: "Parser: '=' expected",
-                    position: token.position
+                    position: token.position,
+                    details: token
                 }
             }
         } else if (this.token.tokentype === TokenType.KEYWORD) {
