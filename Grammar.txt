@@ -13,7 +13,7 @@ glexpr:     expr (("<"|"<="|">"|">=") expr)*
 
 expr:       term (("+"|"-") term)*
 term:       factor (("*"|"/") factor)*
-factor:      ("+"|"-") int|float
+factor:     ("+"|"-") int|float
             string
             "(" expr ")"
             variable

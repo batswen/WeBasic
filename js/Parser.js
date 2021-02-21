@@ -36,13 +36,19 @@ class Parser {
                 this.advance()
                 return expr
             } else {
-                throw "Parser: ')' expected"
+                throw {
+                    msg: "Parser: ')' expected",
+                    position: token.position
+                }
             }
         } else if (token.tokentype === TokenType.VARIABLE) {
             this.advance()
             return new VariableNode(token.position, token.value)
         } else {
-            throw "Parser: Number, '(', '+', or '-' expected"
+            throw {
+                msg: "Parser: Number, '(', '+', or '-' expected",
+                position: token.position
+            }
         }
     }
     term() {
@@ -114,7 +120,10 @@ class Parser {
                 this.advance()
                 result = new AssignNode(token.position, token.value, this.orexpr())
             } else {
-                throw "Parser: '=' expected"
+                throw {
+                    msg: "Parser: '=' expected",
+                    position: token.position
+                }
             }
         } else if (this.token.tokentype === TokenType.KEYWORD) {
             if (this.token.value === "IF") {
@@ -131,7 +140,10 @@ class Parser {
                         result = new IfElseNode(token.position, condition, stmt, this.statement())
                     }
                 } else {
-                    throw "Parser: 'THEN' expected"
+                    throw {
+                        msg: "Parser: 'THEN' expected",
+                        position: token.position
+                    }
                 }
             } else if (this.token.value === "PRINT") {
                 this.advance()
@@ -152,10 +164,16 @@ class Parser {
                         this.advance()
                         result = new WhileNode(token.position, condition, result)
                     } else {
-                        throw "Parser: 'ENDWHILE' expected"
+                        throw {
+                            msg: "Parser: 'ENDWHILE' expected",
+                            position: token.position
+                        }
                     }
                 } else {
-                    throw "Parser: 'DO' expected"
+                    throw {
+                        msg: "Parser: 'DO' expected",
+                        position: token.position
+                    }
                 }
             }
         }
@@ -167,13 +185,9 @@ class Parser {
             this.advance()
             if (this.token.tokentype !== TokenType.EOF && this.token.tokentype !== TokenType.COLON) {
                 const stmt = this.statement()
-                if (stmt !== undefined) {
-                    left = new StatementNode(left.position, left, stmt)
-                } else {
-                    left = new UnStatementNode(left.position, left)
-                }
+                left = new StatementNode(left.position, left, stmt)
             } else {
-                left = new UnStatementNode(left.position, left)
+                left = new StatementNode(left.position, left, undefined)
             }
         }
         return left
@@ -181,7 +195,10 @@ class Parser {
     parse() {
         let result = this.program()
         if (this.token.tokentype !== TokenType.EOF) {
-            console.log("Parser: EOF expected"+this.token.tokentype)
+            throw {
+                msg: `Parser: EOF expected (${this.token.tokentype})`,
+                position: token.position
+            }
         }
         return result
     }
