@@ -99,7 +99,6 @@ class Interpreter {
     visit_BinOpNode(node, ctx) {
         const left = this.visit(node.left, ctx)
         const right = this.visit(node.right, ctx)
-
         switch (node.operator.tokentype) {
             case TokenType.PLUS:
                 if (left instanceof FloatNumber || right instanceof FloatNumber) {
@@ -269,6 +268,7 @@ class Interpreter {
     interpret() {
         const ctx = new Context("main")
         ctx.symbolTable.setVar("pi", new FloatNumber(Math.PI))
-        return this.visit(this.ast, ctx)
+        const result = this.visit(this.ast, ctx)
+        return result
     }
 }

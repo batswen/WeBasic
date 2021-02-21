@@ -23,17 +23,14 @@ class DTString extends DataType {
         }
     }
     add(other) {
-        if (other instanceof DTString) {
-            this.value = this.value + other.value
-        }
+    this.value = this.value + other.value
+
         return this
     }
     mul(other) {
         let result = ""
-        if (other instanceof BaseNumber) {
-            for (let i = 0; i < other.value; i++) {
-                result += this.value
-            }
+        for (let i = 0; i < other.value; i++) {
+            result += this.value
         }
         this.value = result
         return this

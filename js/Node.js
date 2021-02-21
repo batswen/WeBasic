@@ -98,6 +98,13 @@ class UnOpNode extends Node {
     }
 }
 
+class DTListNode extends Node {
+    constructor(position, list) {
+        super(position)
+        this.list = list
+    }
+}
+
 class WhileNode extends Node {
     constructor(position, condition, whiledo) {
         super(position)

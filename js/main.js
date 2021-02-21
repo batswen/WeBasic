@@ -19,9 +19,9 @@ document.getElementById("output").value = ""
 function go() {
     try {
         const tokens = new Lexer(prog.value).makeTokens()
-        //console.log(tokens)
+        // console.log(tokens)
         const ast = new Parser(tokens).parse()
-        //console.log(ast)
+        // console.log(ast)
         if (ast) {
             new Interpreter(ast).interpret()
         }

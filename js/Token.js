@@ -9,6 +9,8 @@ const TokenType = {
     "DIV": "DIV",
     "LPAREN": "LPAREN",
     "RPAREN": "RPAREN",
+    "LBRACKET": "LBRACKET",
+    "RBRACKET": "RBRACKET",
     "ASSIGN": "ASSIGN",
     "COMMA": "COMMA",
     "COLON": "COLON",

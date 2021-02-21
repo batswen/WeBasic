@@ -31,7 +31,7 @@ class Parser {
             return new UnOpNode(token.position, this.factor(), token)
         } else if (token.tokentype === TokenType.LPAREN) {
             this.advance()
-            let expr = this.expr()
+            let expr = this.orexpr()
             if (this.token.tokentype === TokenType.RPAREN) {
                 this.advance()
                 return expr
@@ -41,12 +41,31 @@ class Parser {
                     position: token.position
                 }
             }
+        } else if (token.tokentype === TokenType.LBRACKET) {
+            let list = []
+            this.advance()
+            if (this.token.tokentype !== TokenType.RBRACKET) {
+                list.push(this.orexpr())
+                while (this.token.tokentype === TokenType.COMMA) {
+                    this.advance()
+                    list.push(this.orexpr())
+                }
+            }
+            if (this.token.tokentype === TokenType.RBRACKET) {
+                this.advance()
+                return new DTListNode(token.position, list)
+            } else {
+                throw {
+                    msg: "Parser: ']' expected",
+                    position: token.position
+                }
+            }
         } else if (token.tokentype === TokenType.VARIABLE) {
             this.advance()
             return new VariableNode(token.position, token.value)
         } else {
             throw {
-                msg: "Parser: Number, '(', '+', or '-' expected",
+                msg: "Parser: Number, Variable, String, '[', '(', '+', or '-' expected",
                 position: token.position
             }
         }
