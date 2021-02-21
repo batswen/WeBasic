@@ -212,6 +212,10 @@ class Parser {
                     this.advance()
                     return new DumpNode(token.position)
                     break
+                case "CLS":
+                    this.advance()
+                    return new ClsNode(token.position)
+                    break
                 case "CPRINT":
                     this.advance()
                     return new CPrintNode(token.position, this.orexpr())

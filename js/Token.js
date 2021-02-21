@@ -29,6 +29,7 @@ const KEYWORDS = [
     "FOR", "TO", "STEP", "NEXT",
     "WHILE", "ENDWHILE",
     "FUNCTION", "ENDFUNCTION",
+    "CLS",
     "PRINT", "PRINTLN", "CPRINT",
     "DUMP", "CDUMP"
 ]

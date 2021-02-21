@@ -114,3 +114,9 @@ class IfNode extends Node {
         this.ifelse = ifelse
     }
 }
+
+class ClsNode extends Node {
+    constructor(position) {
+        super(position)
+    }
+}

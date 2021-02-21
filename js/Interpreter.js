@@ -6,6 +6,9 @@ class Interpreter {
     visit_DumpNode(node, ctx) {
         this.output.value += ctx.symbolTable.getAllVars().join("\n") + "\n"
     }
+    visit_ClsNode(node, ctx) {
+        this.output.value = ""
+    }
     visit_PrintNode(node, ctx) {
         if (node.value !== undefined) {
             this.output.value += this.visit(node.value, ctx).value
