@@ -24,9 +24,10 @@ class BaseFunction extends DataType {
 }
 
 class DefFunction extends BaseFunction {
-    constructor(identifier, prog) {
+    constructor(identifier, prog, params) {
         super(identifier)
         this.prog = prog
+        this.params = params
     }
 }
 

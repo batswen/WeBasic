@@ -14,9 +14,44 @@ class Parser {
         }
         return this.token
     }
+    getArgList(token, idOnly = false) {
+        const args = []
+        if (idOnly) {
+            if (this.token.tokentype === TokenType.IDENTIFIER) {
+                args.push(this.factor(idOnly))
+            } else {
+                throw {
+                    msg: "Parser: identifier expected",
+                    position: token.position
+                }
+            }
+        } else {
+            args.push(this.orexpr())
+        }
+        while (this.token.tokentype === TokenType.COMMA) {
+            this.advance()
+            if (idOnly) {
+                if (this.token.tokentype === TokenType.IDENTIFIER) {
+                    args.push(this.factor(idOnly))
+                } else {
+                    throw {
+                        msg: "Parser: identifier expected",
+                        position: token.position
+                    }
+                }
+            } else {
+                args.push(this.orexpr())
+            }
+        }
+        return args
+    }
     handleFuncCall(token) {
         // args
-        const args = undefined
+        let args = undefined
+
+        if (this.token.tokentype !== TokenType.RPAREN) {
+            args = this.getArgList(token)
+        }
         if (this.token.tokentype !== TokenType.RPAREN) {
             throw {
                 msg: "Parser: ')' expected",
@@ -26,8 +61,14 @@ class Parser {
         this.advance()
         return new FuncCallNode(token.position, token.value, args)
     }
-    factor() {
+    factor(idOnly) {
         const token = this.token
+        if (idOnly && token.tokentype !== TokenType.IDENTIFIER) {
+            throw {
+                msg: "Parser: identifier expected",
+                position: token.position
+            }
+        }
         if (token.tokentype === TokenType.STRING) {
             this.advance()
             return new StringNode(token.position, token.value)
@@ -103,7 +144,12 @@ class Parser {
                 this.advance()
                 return this.handleFuncCall(token)
             }
-            return new IdentifierNode(token.position, token.value, access)
+            if (idOnly) {
+                return new DeclareIdentifierNode(token.position, token.value, access)
+            } else {
+                return new IdentifierNode(token.position, token.value, access)
+            }
+
         } else {
             throw {
                 msg: "Parser: Number, Identifier, String, '[', '(', '+', or '-' expected",
@@ -173,7 +219,7 @@ class Parser {
     }
     statement() {
         const token = this.token
-        let condition, elseprog = undefined, identifier, prog
+        let condition, elseprog = undefined, identifier, prog, args
         if (token.tokentype === TokenType.IDENTIFIER) { // Variable
             let access
             this.advance()
@@ -287,6 +333,19 @@ class Parser {
                         }
                     }
                     this.advance()
+                    if (this.token.tokentype === TokenType.RPAREN) {
+                        this.advance()
+                        prog = this.program()
+                        if (this.token.tokentype !== TokenType.KEYWORD || this.token.value !== "ENDFUNCTION") {
+                            throw {
+                                msg: "Parser: 'ENDFUNCTION' expected",
+                                position: token.position
+                            }
+                        }
+                        this.advance()
+                        return new FuncDefNode(token.position, identifier, prog, undefined)
+                    }
+                    args = this.getArgList(token, true)
                     if (this.token.tokentype !== TokenType.RPAREN) {
                         throw {
                             msg: "Parser: ')' expected",
@@ -302,7 +361,7 @@ class Parser {
                         }
                     }
                     this.advance()
-                    return new FuncDefNode(token.position, identifier, prog)
+                    return new FuncDefNode(token.position, identifier, prog, args)
                     break
                 case "PRINT":
                 case "PRINTLN":
@@ -317,12 +376,7 @@ class Parser {
                             return new PrintNode(token.position, undefined)
                         }
                     } else {
-                        let args = []
-                        args.push(this.orexpr())
-                        while (this.token.tokentype === TokenType.COMMA) {
-                            this.advance()
-                            args.push(this.orexpr())
-                        }
+                        const args = this.getArgList(token)
                         if (lf) {
                             return new PrintLNNode(token.position, args)
                         } else if (con) {

@@ -20,11 +20,20 @@ class IdentifierNode extends Node {
     }
 }
 
+class DeclareIdentifierNode extends Node {
+    constructor(position, identifier, access) {
+        super(position)
+        this.identifier = identifier
+        this.access = access
+    }
+}
+
 class FuncDefNode extends Node {
-    constructor(position, identifier, prog) {
+    constructor(position, identifier, prog, args) {
         super(position)
         this.identifier = identifier
         this.prog = prog
+        this.args = args
     }
 }
 

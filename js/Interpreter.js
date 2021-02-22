@@ -4,7 +4,7 @@ class Interpreter {
         this.output = document.getElementById("output")
     }
     visit_FuncDefNode(node, ctx) {
-        ctx.symbolTable.setVar(node.identifier, new DefFunction(node.identifier, node.prog))
+        ctx.symbolTable.setVar(node.identifier, new DefFunction(node.identifier, node.prog, node.args))
     }
     visit_FuncCallNode(node, ctx) {
         const func = ctx.symbolTable.getVar(node.identifier)
@@ -15,6 +15,18 @@ class Interpreter {
             }
         }
         const context = new Context(node.identifier, ctx)
+        if (func.params.length !== node.args?.length) {
+            throw {
+                msg: `Interpreter: incorrect amount of args, expected ${func.params.length} given ${node.args.length}`,
+                position: node.position
+            }
+        }
+        if (func.params) {
+            func.params.forEach(e => { this.visit(e, context) })
+        }
+        for (let i = 0; i < func.params.length; i++) {
+            context.symbolTable.setVar(func.params[i].identifier, this.visit(node.args[i], context))
+        }
         this.visit(func.prog, context)
         return new DTString("undefined") // RETURN
     }
@@ -74,6 +86,15 @@ class Interpreter {
         if (node.right !== undefined) {
             this.visit(node.right, ctx)
         }
+    }
+    visit_DeclareIdentifierNode(node, ctx) {
+        if (ctx.symbolTable.testVarThisContext(node.identifier)) {
+            throw {
+                msg: `Interpreter: redeclaration of ${node.identifier}`,
+                position: node.position
+            }
+        }
+        ctx.symbolTable.setVar(node.identifier, undefined)
     }
     visit_IdentifierNode(node, ctx) {
         if (ctx.symbolTable.testVar(node.identifier)) {

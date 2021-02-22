@@ -14,7 +14,7 @@ statement:  identifier "=" orexpr
             "DUMP"
             "CDUMP"
             "NAMESPACE" identifier lf program lf "ENDNAMESPACE"
-            "FUNCTION" identifier "(" ")" lf program lf "ENDFUNCTION"
+            "FUNCTION" identifier "(" (orexpr ("," orexpr)*)? ")" lf program lf "ENDFUNCTION"
 
 orexpr:     andexpr ("OR" andexpr)*
 andexpr:    eqexpr ("AND" eqexpr)*
@@ -31,7 +31,7 @@ factor:     ("+"|"-") int|float
 
 string:     """ ([^"]|\\")* """
 int:        [0-9]
-float:      [0-9] ("." [0-9]*)
+float:      [0-9] ("." [0-9])+
 list:       "[" (orexpr ("," orexpr)*)? "]"
 identifier: [a-zA-Z_\$][\$_0-9\p{L}]*
 lf:         (":"|"\n")

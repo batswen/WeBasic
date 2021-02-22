@@ -27,6 +27,9 @@ class SymbolTable {
             return undefined
         }
     }
+    testVarThisContext(name) {
+        return name in this.symtable
+    }
     testVar(name) {
         if (name in this.symtable) {
             return true
