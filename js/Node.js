@@ -12,11 +12,19 @@ class StatementNode extends Node {
     }
 }
 
-class VariableNode extends Node {
-    constructor(position, value, access) {
+class IdentifierNode extends Node {
+    constructor(position, identifier, access) {
         super(position)
-        this.value = value
+        this.identifier = identifier
         this.access = access
+    }
+}
+
+class NamespaceNode extends Node {
+    constructor(position, namespace, prog) {
+        super(position)
+        this.namespace = namespace
+        this.prog = prog
     }
 }
 

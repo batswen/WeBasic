@@ -1,7 +1,7 @@
 class Context {
     constructor(context = "<anonymous>", parent = undefined) {
         if (parent) {
-            context = `${parent} > ${context}`
+            context = `${parent.context} > ${context}`
         }
         this.context = context
         this.symbolTable = new SymbolTable(context)

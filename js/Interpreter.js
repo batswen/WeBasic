@@ -3,6 +3,10 @@ class Interpreter {
         this.ast = ast
         this.output = document.getElementById("output")
     }
+    visit_NamespaceNode(node, ctx) {
+        const context = new Context(node.namespace, ctx)
+        this.visit(node.prog, context)
+    }
     visit_DumpNode(node, ctx) {
         this.output.value += ctx.symbolTable.getAllVars().join("\n") + "\n"
     }
@@ -56,11 +60,11 @@ class Interpreter {
             this.visit(node.right, ctx)
         }
     }
-    visit_VariableNode(node, ctx) {
-        if (ctx.symbolTable.testVar(node.value)) {
+    visit_IdentifierNode(node, ctx) {
+        if (ctx.symbolTable.testVar(node.identifier)) {
             if (node.access) {
                 const index = this.visit(node.access, ctx).value
-                const listVar = ctx.symbolTable.getVar(node.value)
+                const listVar = ctx.symbolTable.getVar(node.identifier)
                 if (index < 0 || index >= listVar.value.length) {
                     throw {
                         msg: `Interpreter: index out of bounds (${index})`,
@@ -69,10 +73,10 @@ class Interpreter {
                 }
                 return listVar.value[index]
             }
-            return ctx.symbolTable.getVar(node.value)
+            return ctx.symbolTable.getVar(node.identifier)
         } else {
             throw {
-                msg: "Interpreter: undeclared variable: " + node.value,
+                msg: "Interpreter: undeclared variable: " + node.identifier,
                 position: node.position
             }
         }
@@ -117,7 +121,7 @@ class Interpreter {
                 ctx.symbolTable.setVar(node.name, this.visit(node.args[index], ctx))
             } else {
                 const list = []
-                if (value?.value?.value) { // 
+                if (value?.value?.value) { //
                     for (let e of value.value.value) {
                         list.push(this.visit(e, ctx))
                     }

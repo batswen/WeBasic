@@ -21,7 +21,7 @@ const TokenType = {
     "LE": "LE",
     "GT": "GT",
     "GE": "GE",
-    "VARIABLE": "VARIABLE",
+    "IDENTIFIER": "IDENTIFIER",
     "KEYWORD": "KEYWORD"
 }
 
@@ -32,6 +32,7 @@ const KEYWORDS = [
     "FOR", "TO", "STEP", "NEXT",
     "WHILE", "ENDWHILE",
     "FUNCTION", "ENDFUNCTION",
+    "NAMESPACE", "ENDNAMESPACE",
     "CLS",
     "PRINT", "PRINTLN", "CPRINT",
     "DUMP", "CDUMP"

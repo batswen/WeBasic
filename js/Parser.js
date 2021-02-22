@@ -71,7 +71,7 @@ class Parser {
                     position: token.position
                 }
             }
-        } else if (token.tokentype === TokenType.VARIABLE) {
+        } else if (token.tokentype === TokenType.IDENTIFIER) {
             this.advance()
             let access
             if (this.token.tokentype === TokenType.LBRACKET) {
@@ -85,10 +85,10 @@ class Parser {
                 }
                 this.advance()
             }
-            return new VariableNode(token.position, token.value, access)
+            return new IdentifierNode(token.position, token.value, access)
         } else {
             throw {
-                msg: "Parser: Number, Variable, String, '[', '(', '+', or '-' expected",
+                msg: "Parser: Number, Identifier, String, '[', '(', '+', or '-' expected",
                 position: token.position
             }
         }
@@ -156,7 +156,7 @@ class Parser {
     statement() {
         const token = this.token
         let condition, elseprog = undefined
-        if (this.token.tokentype === TokenType.VARIABLE) {
+        if (this.token.tokentype === TokenType.IDENTIFIER) {
             this.advance()
             if (this.token.tokentype === TokenType.ASSIGN) {
                 this.advance()
@@ -233,6 +233,26 @@ class Parser {
                             position: token.position
                         }
                     }
+                    break
+                case "NAMESPACE":
+                    this.advance()
+                    if (this.token.tokentype !== TokenType.IDENTIFIER) {
+                        throw {
+                            msg: "Parser: identifier expected",
+                            position: token.position
+                        }
+                    }
+                    const identifier = this.token.value
+                    this.advance()
+                    const prog = this.program()
+                    if (this.token.tokentype !== TokenType.KEYWORD || this.token.value !== "ENDNAMESPACE") {
+                        throw {
+                            msg: "Parser: 'ENDNAMESPACE' expected",
+                            position: token.position
+                        }
+                    }
+                    this.advance()
+                    return new NamespaceNode(token.position, identifier, prog)
                     break
                 case "PRINT":
                 case "PRINTLN":

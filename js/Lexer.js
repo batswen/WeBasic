@@ -36,7 +36,7 @@ class Lexer {
         if (KEYWORDS.indexOf(identifier.toUpperCase()) > -1) {
             return new Token(TokenType.KEYWORD, identifier.toUpperCase(), this.position.copy())
         } else {
-            return new Token(TokenType.VARIABLE, identifier, this.position.copy())
+            return new Token(TokenType.IDENTIFIER, identifier, this.position.copy())
         }
     }
     getTokOrTok(test, ifyes, ifnt) {
