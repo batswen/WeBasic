@@ -30,6 +30,13 @@ class DefFunction extends BaseFunction {
     }
 }
 
+class BuildInFunction extends BaseFunction {
+    constructor(identifier, prog) {
+        super(identifier)
+        this.prog = prog
+    }
+}
+
 class DTList extends DataType {
     constructor(v) {
         super()

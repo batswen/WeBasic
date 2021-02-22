@@ -16,6 +16,7 @@ class Interpreter {
         }
         const context = new Context(node.identifier, ctx)
         this.visit(func.prog, context)
+        return new DTString("undefined") // RETURN
     }
     visit_NamespaceNode(node, ctx) {
         const context = new Context(node.namespace, ctx)

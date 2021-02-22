@@ -1,7 +1,7 @@
 class Context {
     constructor(context = "<anonymous>", parentContext = undefined) {
         if (parentContext) {
-            context = `${parentContext.context} > ${context}`
+            context = `${parentContext.context}.${context}`
         }
         this.context = context
         this.parentContext = parentContext
@@ -39,7 +39,7 @@ class SymbolTable {
     getAllVars() {
         const result = []
         for (let key in this.symtable) {
-            result.push(`${this.context} > ${key} := ${this.symtable[key].str()}`)
+            result.push(`${this.context}: ${key} := ${this.symtable[key].str()}`)
         }
         return result
     }
