@@ -22,7 +22,7 @@ factor:     ("+"|"-") int|float
             string
             "(" orexpr ")"
             variable
-            "[" (orexpr ("," orexpr)*)? "]"
+            "[" (orexpr ("," orexpr)*)? "]" ("[]" expr "]")?
 
 string:     """ ([^"]|\\")* """
 int:        [0-9]

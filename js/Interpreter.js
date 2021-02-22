@@ -75,14 +75,33 @@ class Interpreter {
     visit_StringNode(node, ctx) {
         return new DTString(node.value).setContext(ctx)
     }
+    visit_ListNode(node, ctx) {
+        if (node.access) {
+            console.log(node)
+            const index = this.visit(node.access, ctx).value
+            return this.visit(node.args[index], ctx)
+        }
+        return new DTList(node.args).setContext(ctx)
+    }
     visit_AssignNode(node, ctx) {
         let value = this.visit(node.value, ctx)
         if (value instanceof IntNumber) {
-            ctx.symbolTable.setVar(node.name, new IntNumber(value))
+            ctx.symbolTable.setVar(node.name, new IntNumber(value).setContext(ctx))
         } else if (value instanceof FloatNumber) {
-            ctx.symbolTable.setVar(node.name, new FloatNumber(value))
+            ctx.symbolTable.setVar(node.name, new FloatNumber(value).setContext(ctx))
+        } else if (value instanceof DTList) {
+            if (node.access) {
+                const index = this.visit(node.access, ctx)
+                ctx.symbolTable.setVar(node.name, this.visit(node.args[index], ctx))
+            } else {
+                const list = []
+                value.value.forEach(e => {
+                    list.push(this.visit(e, ctx))
+                })
+                ctx.symbolTable.setVar(node.name, new DTList(list).setContext(ctx))
+            }
         } else {
-            ctx.symbolTable.setVar(node.name, new DTString(value))
+            ctx.symbolTable.setVar(node.name, new DTString(value).setContext(ctx))
         }
     }
     visit_UnOpNode(node, ctx) {
@@ -270,6 +289,7 @@ class Interpreter {
 
     }
     visit(node, ctx) {
+        // console.log(node.constructor.name)
         return this[`visit_${node.constructor.name}`](node, ctx)
     }
     interpret() {

@@ -13,6 +13,53 @@ class DataType {
     }
 }
 
+class DTList extends DataType {
+    constructor(v) {
+        super()
+        if (v instanceof DTString) {
+            this.value = v.value
+        } else {
+            this.value = v
+        }
+    }
+    add(other) {
+        this.value = this.value + other.value
+        return this
+    }
+    mul(other) {
+        let result = ""
+        for (let i = 0; i < other.value; i++) {
+            result += this.value
+        }
+        this.value = result
+        return this
+    }
+    eq(other) {
+        this.value = this.value === other.value ? 1 : 0
+        return new IntNumber(this.value)
+    }
+    ne(other) {
+        this.value = this.value !== other.value ? 1 : 0
+        return new IntNumber(this.value)
+    }
+    lt(other) {
+        this.value = this.value < other.value ? 1 : 0
+        return new IntNumber(this.value)
+    }
+    le(other) {
+        this.value = this.value <= other.value ? 1 : 0
+        return new IntNumber(this.value)
+    }
+    gt(other) {
+        this.value = this.value > other.value ? 1 : 0
+        return new IntNumber(this.value)
+    }
+    ge(other) {
+        this.value = this.value >= other.value ? 1 : 0
+        return new IntNumber(this.value)
+    }
+}
+
 class DTString extends DataType {
     constructor(v) {
         super()
@@ -23,8 +70,7 @@ class DTString extends DataType {
         }
     }
     add(other) {
-    this.value = this.value + other.value
-
+        this.value = this.value + other.value
         return this
     }
     mul(other) {

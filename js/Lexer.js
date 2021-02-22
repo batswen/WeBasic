@@ -125,11 +125,14 @@ class Lexer {
             } else if (this.char === "[") {
                tokens.push(new Token(TokenType.LBRACKET, null, this.position.copy()))
                this.nextChar()
-           } else if (this.char === "]") {
+            } else if (this.char === "]") {
                tokens.push(new Token(TokenType.RBRACKET, null, this.position.copy()))
                this.nextChar()
-           } else if (this.char === ",") {
+            } else if (this.char === ",") {
                 tokens.push(new Token(TokenType.COMMA, null, this.position.copy()))
+                this.nextChar()
+            } else if (this.char === ".") {
+                tokens.push(new Token(TokenType.DOT, null, this.position.copy()))
                 this.nextChar()
             } else if (this.char === ":" || this.char === "\n") {
                 tokens.push(new Token(TokenType.COLON, null, this.position.copy()))

@@ -48,10 +48,18 @@ class FloatNode extends Node {
     }
 }
 
-class PrintNode extends Node {
-    constructor(position, value) {
+class ListNode extends Node {
+    constructor(position, args, access) {
         super(position)
-        this.value = value
+        this.args = args
+        this.access = access
+    }
+}
+
+class PrintNode extends Node {
+    constructor(position, args) {
+        super(position)
+        this.args = args
     }
 }
 

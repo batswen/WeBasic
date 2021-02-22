@@ -14,6 +14,7 @@ const TokenType = {
     "ASSIGN": "ASSIGN",
     "COMMA": "COMMA",
     "COLON": "COLON",
+    "DOT": "DOT",
     "EQ": "EQ",
     "NE": "NE",
     "LT": "LT",

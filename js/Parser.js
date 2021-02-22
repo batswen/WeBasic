@@ -42,7 +42,7 @@ class Parser {
                 }
             }
         } else if (token.tokentype === TokenType.LBRACKET) {
-            let list = []
+            let list = [], access = undefined
             this.advance()
             if (this.token.tokentype !== TokenType.RBRACKET) {
                 list.push(this.orexpr())
@@ -53,7 +53,18 @@ class Parser {
             }
             if (this.token.tokentype === TokenType.RBRACKET) {
                 this.advance()
-                return new DTListNode(token.position, list)
+                if (this.token.tokentype === TokenType.LBRACKET) {
+                    this.advance()
+                    access = this.expr()
+                    if (this.token.tokentype !== TokenType.RBRACKET) {
+                        throw {
+                            msg: "Parser: ']' expected",
+                            position: token.position
+                        }
+                    }
+                    this.advance()
+                }
+                return new ListNode(token.position, list, access)
             } else {
                 throw {
                     msg: "Parser: ']' expected",
