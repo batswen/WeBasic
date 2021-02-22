@@ -8,6 +8,12 @@ class Interpreter {
     }
     visit_FuncCallNode(node, ctx) {
         const func = ctx.symbolTable.getVar(node.identifier)
+        if (!func) {
+            throw {
+                msg: `Interpreter: unknown function ${node.identifier}`,
+                position: node.position
+            }
+        }
         const context = new Context(node.identifier, ctx)
         this.visit(func.prog, context)
     }

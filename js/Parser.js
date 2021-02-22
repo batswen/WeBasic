@@ -294,7 +294,7 @@ class Parser {
                         }
                     }
                     this.advance()
-                    const prog = this.program()
+                    prog = this.program()
                     if (this.token.tokentype !== TokenType.KEYWORD || this.token.value !== "ENDFUNCTION") {
                         throw {
                             msg: "Parser: 'ENDFUNCTION' expected",
