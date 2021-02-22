@@ -14,6 +14,18 @@ class Parser {
         }
         return this.token
     }
+    handleFuncCall(token) {
+        // args
+        const args = undefined
+        if (this.token.tokentype !== TokenType.RPAREN) {
+            throw {
+                msg: "Parser: ')' expected",
+                position: token.position
+            }
+        }
+        this.advance()
+        return new FuncCallNode(token.position, token.value, args)
+    }
     factor() {
         const token = this.token
         if (token.tokentype === TokenType.STRING) {
@@ -71,10 +83,13 @@ class Parser {
                     position: token.position
                 }
             }
-        } else if (token.tokentype === TokenType.IDENTIFIER) {
-            this.advance()
+        } else if (token.tokentype === TokenType.IDENTIFIER) { // Variable
             let access
-            if (this.token.tokentype === TokenType.LBRACKET) {
+            this.advance()
+            if (this.token.tokentype === TokenType.ASSIGN) {
+                this.advance()
+                return new AssignNode(token.position, token.value, this.orexpr())
+            } else if (this.token.tokentype === TokenType.LBRACKET) { // List access
                 this.advance()
                 access = this.expr()
                 if (this.token.tokentype !== TokenType.RBRACKET) {
@@ -84,6 +99,9 @@ class Parser {
                     }
                 }
                 this.advance()
+            } else if (this.token.tokentype === TokenType.LPAREN) { // Function call
+                this.advance()
+                return this.handleFuncCall(token)
             }
             return new IdentifierNode(token.position, token.value, access)
         } else {
@@ -155,18 +173,16 @@ class Parser {
     }
     statement() {
         const token = this.token
-        let condition, elseprog = undefined
-        if (this.token.tokentype === TokenType.IDENTIFIER) {
+        let condition, elseprog = undefined, identifier, prog
+        if (token.tokentype === TokenType.IDENTIFIER) { // Variable
+            let access
             this.advance()
             if (this.token.tokentype === TokenType.ASSIGN) {
                 this.advance()
                 return new AssignNode(token.position, token.value, this.orexpr())
-            } else {
-                throw {
-                    msg: "Parser: '=' expected",
-                    position: token.position,
-                    details: token
-                }
+            } else if (this.token.tokentype === TokenType.LPAREN) { // Function call
+                this.advance()
+                return this.handleFuncCall(token)
             }
         } else if (this.token.tokentype === TokenType.KEYWORD) {
             switch (this.token.value) {
@@ -184,7 +200,7 @@ class Parser {
                         }
                     } else if (this.token.tokentype === TokenType.COLON) {
                         this.advance()
-                        const prog = this.program()
+                        prog = this.program()
                         if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "ELSE") {
                             this.advance()
                             elseprog = this.program()
@@ -242,9 +258,9 @@ class Parser {
                             position: token.position
                         }
                     }
-                    const identifier = this.token.value
+                    identifier = this.token.value
                     this.advance()
-                    const prog = this.program()
+                    prog = this.program()
                     if (this.token.tokentype !== TokenType.KEYWORD || this.token.value !== "ENDNAMESPACE") {
                         throw {
                             msg: "Parser: 'ENDNAMESPACE' expected",
@@ -253,6 +269,40 @@ class Parser {
                     }
                     this.advance()
                     return new NamespaceNode(token.position, identifier, prog)
+                    break
+                case "FUNCTION":
+                    this.advance()
+                    if (this.token.tokentype !== TokenType.IDENTIFIER) {
+                        throw {
+                            msg: "Parser: identifier expected",
+                            position: token.position
+                        }
+                    }
+                    identifier = this.token.value
+                    this.advance()
+                    if (this.token.tokentype !== TokenType.LPAREN) {
+                        throw {
+                            msg: "Parser: '(' expected",
+                            position: token.position
+                        }
+                    }
+                    this.advance()
+                    if (this.token.tokentype !== TokenType.RPAREN) {
+                        throw {
+                            msg: "Parser: ')' expected",
+                            position: token.position
+                        }
+                    }
+                    this.advance()
+                    const prog = this.program()
+                    if (this.token.tokentype !== TokenType.KEYWORD || this.token.value !== "ENDFUNCTION") {
+                        throw {
+                            msg: "Parser: 'ENDFUNCTION' expected",
+                            position: token.position
+                        }
+                    }
+                    this.advance()
+                    return new FuncDefNode(token.position, identifier, prog)
                     break
                 case "PRINT":
                 case "PRINTLN":

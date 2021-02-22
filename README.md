@@ -10,8 +10,9 @@ Very early stage
 var = value
 
 #### Variables
-Fisrt character must be $_a-zA_Z, then $_0-9\p{L}
+First character must be $_a-zA_Z, then $_0-9\p{L}
 
+#### List
 
 #### Integer
 

@@ -13,10 +13,27 @@ class DataType {
     }
 }
 
+class BaseFunction extends DataType {
+    constructor(identifier) {
+        super()
+        this.identifier = identifier
+    }
+    str() {
+        return `${this.identifier}()`
+    }
+}
+
+class DefFunction extends BaseFunction {
+    constructor(identifier, prog) {
+        super(identifier)
+        this.prog = prog
+    }
+}
+
 class DTList extends DataType {
     constructor(v) {
         super()
-        if (v instanceof DTString) {
+        if (v instanceof DTList) {
             this.value = v.value
         } else {
             this.value = v
@@ -27,38 +44,6 @@ class DTList extends DataType {
             this.value.value.push(e)
         })
         return this
-    }
-    mul(other) {
-        let result = ""
-        for (let i = 0; i < other.value; i++) {
-            result += this.value
-        }
-        this.value = result
-        return this
-    }
-    eq(other) {
-        this.value = this.value === other.value ? 1 : 0
-        return new IntNumber(this.value)
-    }
-    ne(other) {
-        this.value = this.value !== other.value ? 1 : 0
-        return new IntNumber(this.value)
-    }
-    lt(other) {
-        this.value = this.value < other.value ? 1 : 0
-        return new IntNumber(this.value)
-    }
-    le(other) {
-        this.value = this.value <= other.value ? 1 : 0
-        return new IntNumber(this.value)
-    }
-    gt(other) {
-        this.value = this.value > other.value ? 1 : 0
-        return new IntNumber(this.value)
-    }
-    ge(other) {
-        this.value = this.value >= other.value ? 1 : 0
-        return new IntNumber(this.value)
     }
     str() {
         let result = []

@@ -20,6 +20,22 @@ class IdentifierNode extends Node {
     }
 }
 
+class FuncDefNode extends Node {
+    constructor(position, identifier, prog) {
+        super(position)
+        this.identifier = identifier
+        this.prog = prog
+    }
+}
+
+class FuncCallNode extends Node {
+    constructor(position, identifier, args) {
+        super(position)
+        this.identifier = identifier
+        this.args = args
+    }
+}
+
 class NamespaceNode extends Node {
     constructor(position, namespace, prog) {
         super(position)

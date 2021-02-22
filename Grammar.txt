@@ -1,5 +1,6 @@
 program:    statement (lf statement)*
 statement:  identifier "=" orexpr
+            identifier "(" ")"
             if orexpr then statement (else statement)?
             if orexpr lf program lf (else program)? endif
             while orexpr do statement
@@ -11,6 +12,7 @@ statement:  identifier "=" orexpr
             dump
             cdump
             namespace identifier lf program lf endnamespace
+            function identifier "(" ")" lf program lf endfunction
 
 orexpr:     andexpr ("OR" andexpr)*
 andexpr:    eqexpr ("AND" eqexpr)*
@@ -22,12 +24,12 @@ term:       factor (("*"|"/") factor)*
 factor:     ("+"|"-") int|float
             string
             "(" orexpr ")"
-            identifier ("[" expr "]")?
+            identifier (("[" expr "]")|("(" ")"))?
             list ("[" expr "]")?
 
 string:     """ ([^"]|\\")* """
 int:        [0-9]
 float:      [0-9] ("." [0-9]*)
 list:       "[" (orexpr ("," orexpr)*)? "]"
-identifier:   [a-zA-Z_\$][\$_0-9\p{L}]*
+identifier: [a-zA-Z_\$][\$_0-9\p{L}]*
 lf:         (":"|"\n")

@@ -3,6 +3,14 @@ class Interpreter {
         this.ast = ast
         this.output = document.getElementById("output")
     }
+    visit_FuncDefNode(node, ctx) {
+        ctx.symbolTable.setVar(node.identifier, new DefFunction(node.identifier, node.prog))
+    }
+    visit_FuncCallNode(node, ctx) {
+        const func = ctx.symbolTable.getVar(node.identifier)
+        const context = new Context(node.identifier, ctx)
+        this.visit(func.prog, context)
+    }
     visit_NamespaceNode(node, ctx) {
         const context = new Context(node.namespace, ctx)
         this.visit(node.prog, context)
