@@ -25,7 +25,7 @@ class Interpreter {
             func.params.forEach(e => { this.visit(e, context) })
         }
         for (let i = 0; i < func.params.length; i++) {
-            context.symbolTable.setVar(func.params[i].identifier, this.visit(node.args[i], context))
+            context.symbolTable.setVar(func.params[i].identifier, this.visit(node.args[i], ctx))
         }
         this.visit(func.prog, context)
         return new DTString("undefined") // RETURN

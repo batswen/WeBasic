@@ -6,7 +6,7 @@ const examples = {
     "While": `a=10:while a>5 do a=a-1:println a\nprintln\na=10:while a>5\n\tprintln a\n\ta = a - 0.5\nendwhile\ndump`,
     "List": `a=[]\na=[3, "Abc", 1] + [4]\nz=[0, 1, 2]\nb = 0:x = [5, 0, -5, "Hallo"][b]\nb = 3:x = [5, 0, -5, "Hallo"][b]:dump\nprintln ["Ja", "Nein"][0]\nprintln a[0], ", ", a[3]`,
     "Namespaces": `cls:a = 5:dump\n\nnamespace abc\nprintln "in 'abc'"\na = pi:dump\nendnamespace\nprintln "after 'abc'"\ndump`,
-    "Function": `function test()\n  println "Hallo"\na=5:dump\nendfunction\na=test()\ntest()`,
-    "Function2": `cls\na=345\ndump\nfunction test(a,b,c)\ndump\nendfunction\ntest(1,2,3)\ndump`,
+    "Function": `function test()\n  println "Hallo"\n  a=5:dump\nendfunction\na=test()\ntest()`,
+    "Function2": `cls\na=345:x=789\ndump\nfunction test(a,b,c)\n  b = x\n  dump\nendfunction\ntest(a,2,"Test")\ndump`,
     "Error": `a=1a`
 }

@@ -1,6 +1,6 @@
 program:    statement (lf statement)*
 statement:  identifier "=" orexpr
-            identifier "(" ")"
+            identifier "(" (orexpr ("," orexpr)*)? ")"
             "IF" orexpr "THEN" statement ("ELSE" statement)?
             "IF" orexpr lf program lf ("ELSE" program)? "ENDIF"
             "WHILE" orexpr "DO" statement
@@ -14,7 +14,7 @@ statement:  identifier "=" orexpr
             "DUMP"
             "CDUMP"
             "NAMESPACE" identifier lf program lf "ENDNAMESPACE"
-            "FUNCTION" identifier "(" (orexpr ("," orexpr)*)? ")" lf program lf "ENDFUNCTION"
+            "FUNCTION" identifier "(" (identifier ("," identifier)*)? ")" lf program lf "ENDFUNCTION"
 
 orexpr:     andexpr ("OR" andexpr)*
 andexpr:    eqexpr ("AND" eqexpr)*
