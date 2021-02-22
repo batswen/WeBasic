@@ -117,9 +117,11 @@ class Interpreter {
                 ctx.symbolTable.setVar(node.name, this.visit(node.args[index], ctx))
             } else {
                 const list = []
-                value.value.forEach(e => {
-                    list.push(this.visit(e, ctx))
-                })
+                if (value?.value?.value) {
+                    for (let e of value.value.value) {
+                        list.push(this.visit(e, ctx))
+                    }
+                }
                 ctx.symbolTable.setVar(node.name, new DTList(list).setContext(ctx))
             }
         } else {
@@ -155,9 +157,11 @@ class Interpreter {
                     return new IntNumber(left).add(right).setContext(ctx)
                 } else if (left instanceof DTString && right instanceof DTString) {
                     return new DTString(left).add(right).setContext(ctx)
+                } else if (left instanceof DTList && right instanceof DTList) {
+                    return new DTList(left).add(right).setContext(ctx)
                 } else {
                     throw {
-                        msg: "Interpreter: Type mismatch (+)",
+                        msg: `Interpreter: Type mismatch (+) [${typeof left}, ${typeof right}]`,
                         position: node.position
                     }
                 }

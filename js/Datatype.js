@@ -23,7 +23,9 @@ class DTList extends DataType {
         }
     }
     add(other) {
-        this.value = this.value + other.value
+        other.value.forEach(e => {
+            this.value.value.push(e)
+        })
         return this
     }
     mul(other) {
