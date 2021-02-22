@@ -21,8 +21,8 @@ term:       factor (("*"|"/") factor)*
 factor:     ("+"|"-") int|float
             string
             "(" orexpr ")"
-            variable
-            "[" (orexpr ("," orexpr)*)? "]" ("[]" expr "]")?
+            variable ("[" expr "]")?
+            "[" (orexpr ("," orexpr)*)? "]" ("[" expr "]")?
 
 string:     """ ([^"]|\\")* """
 int:        [0-9]

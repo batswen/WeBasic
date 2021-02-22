@@ -79,6 +79,12 @@ class Interpreter {
         if (node.access) {
             console.log(node)
             const index = this.visit(node.access, ctx).value
+            if (index < 0 || index >= node.args.length) {
+                throw {
+                    msg: `Interpreter: index out of bounds (${index})`,
+                    position: node.position
+                }
+            }
             return this.visit(node.args[index], ctx)
         }
         return new DTList(node.args).setContext(ctx)
@@ -91,7 +97,13 @@ class Interpreter {
             ctx.symbolTable.setVar(node.name, new FloatNumber(value).setContext(ctx))
         } else if (value instanceof DTList) {
             if (node.access) {
-                const index = this.visit(node.access, ctx)
+                const index = this.visit(node.access, ctx).value
+                if (index < 0 || index >= node.args.length) {
+                    throw {
+                        msg: `Interpreter: index out of bounds (${index})`,
+                        position: node.position
+                    }
+                }
                 ctx.symbolTable.setVar(node.name, this.visit(node.args[index], ctx))
             } else {
                 const list = []
