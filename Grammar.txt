@@ -18,7 +18,7 @@ statement:  identifier "=" orexpr
 
 orexpr:     andexpr ("OR" andexpr)*
 andexpr:    eqexpr ("AND" eqexpr)*
-eqexpr:     glexpr (("=="|"!=") eqexpr)*
+eqexpr:     glexpr (("=="|"!=") glexpr)*
 glexpr:     expr (("<"|"<="|">"|">=") expr)*
 
 expr:       term (("+"|"-") term)*
