@@ -49,7 +49,7 @@ class DTList extends DataType {
     }
     add(other) {
         other.value.forEach(e => {
-            this.value.value.push(e)
+            this.value.push(e)
         })
         return this
     }

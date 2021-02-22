@@ -15,7 +15,7 @@ class Interpreter {
             }
         }
         const context = new Context(node.identifier, ctx)
-        if (func.params.length !== node.args?.length) {
+        if (func.params?.length !== node.args?.length) {
             throw {
                 msg: `Interpreter: incorrect amount of args, expected ${func.params.length} given ${node.args.length}`,
                 position: node.position
@@ -23,9 +23,9 @@ class Interpreter {
         }
         if (func.params) {
             func.params.forEach(e => { this.visit(e, context) })
-        }
-        for (let i = 0; i < func.params.length; i++) {
-            context.symbolTable.setVar(func.params[i].identifier, this.visit(node.args[i], ctx))
+            for (let i = 0; i < func.params.length; i++) {
+                context.symbolTable.setVar(func.params[i].identifier, this.visit(node.args[i], ctx))
+            }
         }
         this.visit(func.prog, context)
         return new DTString("undefined") // RETURN
