@@ -60,6 +60,11 @@ class DTList extends DataType {
         this.value = this.value >= other.value ? 1 : 0
         return new IntNumber(this.value)
     }
+    str() {
+        let result = []
+        this.value.forEach(e => { result.push(e.str()) })
+        return `[${result.join(", ")}]`
+    }
 }
 
 class DTString extends DataType {
@@ -107,6 +112,9 @@ class DTString extends DataType {
         this.value = this.value >= other.value ? 1 : 0
         return new IntNumber(this.value)
     }
+    str() {
+        return `"${this.value}"`
+    }
 }
 
 class BaseNumber extends DataType {
@@ -117,6 +125,9 @@ class BaseNumber extends DataType {
         } else {
             this.value = v
         }
+    }
+    str() {
+        return `${this.value}`
     }
 }
 

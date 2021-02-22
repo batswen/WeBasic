@@ -27,11 +27,8 @@ class SymbolTable {
     getAllVars() {
         const result = []
         for (let key in this.symtable) {
-            if (this.symtable[key] instanceof DTString) {
-                result.push(`${this.context} ${key}:="${this.symtable[key].value}"`)
-            } else {
-                result.push(`${this.context} ${key}:=${this.symtable[key].value}`)
-            }
+            console.log(this.symtable[key])
+            result.push(`${this.context} ${key}:=${this.symtable[key].str()}`)
         }
         return result
     }
