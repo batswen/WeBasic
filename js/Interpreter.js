@@ -117,8 +117,12 @@ class Interpreter {
                 ctx.symbolTable.setVar(node.name, this.visit(node.args[index], ctx))
             } else {
                 const list = []
-                if (value?.value?.value) {
+                if (value?.value?.value) { // 
                     for (let e of value.value.value) {
+                        list.push(this.visit(e, ctx))
+                    }
+                } else if (value?.value) {
+                    for (let e of value.value) {
                         list.push(this.visit(e, ctx))
                     }
                 }
