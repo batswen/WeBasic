@@ -1,18 +1,20 @@
 program:    statement (lf statement)*
 statement:  identifier "=" orexpr
             identifier "(" ")"
-            if orexpr then statement (else statement)?
-            if orexpr lf program lf (else program)? endif
-            while orexpr do statement
-            while orexpr lf program lf endwhile
-            cls
-            print (orexpr ("," orexpr)*)?
-            println (orexpr ("," orexpr)*)?
-            cprint (orexpr ("," orexpr)*)?
-            dump
-            cdump
-            namespace identifier lf program lf endnamespace
-            function identifier "(" ")" lf program lf endfunction
+            "IF" orexpr "THEN" statement ("ELSE" statement)?
+            "IF" orexpr lf program lf ("ELSE" program)? "ENDIF"
+            "WHILE" orexpr "DO" statement
+            "WHILE" orexpr lf program lf "ENDWHILE"
+            "FOR" identifier "=" expr "TO" expr ("STEP" expr)? "DO" statement
+            "FOR" identifier "=" expr "TO" expr ("STEP" expr)? lf program lf "NEXT"
+            "CLS"
+            "PRINT" (orexpr ("," orexpr)*)?
+            "PRINTLN" (orexpr ("," orexpr)*)?
+            "CPRINT" (orexpr ("," orexpr)*)?
+            "DUMP"
+            "CDUMP"
+            "NAMESPACE" identifier lf program lf "ENDNAMESPACE"
+            "FUNCTION" identifier "(" ")" lf program lf "ENDFUNCTION"
 
 orexpr:     andexpr ("OR" andexpr)*
 andexpr:    eqexpr ("AND" eqexpr)*
