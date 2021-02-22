@@ -21,7 +21,7 @@ term:       factor (("*"|"/") factor)*
 factor:     ("+"|"-") int|float
             string
             "(" orexpr ")"
-            variable
+            variable ("[" expr "]")?
             list ("[" expr "]")?
 
 string:     """ ([^"]|\\")* """

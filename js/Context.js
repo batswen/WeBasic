@@ -27,7 +27,6 @@ class SymbolTable {
     getAllVars() {
         const result = []
         for (let key in this.symtable) {
-            console.log(this.symtable[key])
             result.push(`${this.context} ${key}:=${this.symtable[key].str()}`)
         }
         return result
