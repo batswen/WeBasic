@@ -13,9 +13,10 @@ class StatementNode extends Node {
 }
 
 class VariableNode extends Node {
-    constructor(position, value) {
+    constructor(position, value, access) {
         super(position)
         this.value = value
+        this.access = access
     }
 }
 

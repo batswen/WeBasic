@@ -58,6 +58,17 @@ class Interpreter {
     }
     visit_VariableNode(node, ctx) {
         if (ctx.symbolTable.testVar(node.value)) {
+            if (node.access) {
+                const index = this.visit(node.access, ctx).value
+                const listVar = ctx.symbolTable.getVar(node.value)
+                if (index < 0 || index >= listVar.value.length) {
+                    throw {
+                        msg: `Interpreter: index out of bounds (${index})`,
+                        position: node.position
+                    }
+                }
+                return listVar.value[index]
+            }
             return ctx.symbolTable.getVar(node.value)
         } else {
             throw {
@@ -77,7 +88,6 @@ class Interpreter {
     }
     visit_ListNode(node, ctx) {
         if (node.access) {
-            console.log(node)
             const index = this.visit(node.access, ctx).value
             if (index < 0 || index >= node.args.length) {
                 throw {

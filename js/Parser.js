@@ -73,7 +73,19 @@ class Parser {
             }
         } else if (token.tokentype === TokenType.VARIABLE) {
             this.advance()
-            return new VariableNode(token.position, token.value)
+            let access
+            if (this.token.tokentype === TokenType.LBRACKET) {
+                this.advance()
+                access = this.expr()
+                if (this.token.tokentype !== TokenType.RBRACKET) {
+                    throw {
+                        msg: "Parser: ']' expected",
+                        position: token.position
+                    }
+                }
+                this.advance()
+            }
+            return new VariableNode(token.position, token.value, access)
         } else {
             throw {
                 msg: "Parser: Number, Variable, String, '[', '(', '+', or '-' expected",
