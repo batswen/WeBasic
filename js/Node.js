@@ -56,9 +56,9 @@ class PrintNode extends Node {
 }
 
 class PrintLNNode extends Node {
-    constructor(position, value) {
+    constructor(position, args) {
         super(position)
-        this.value = value
+        this.args = args
     }
 }
 

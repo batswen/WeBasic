@@ -224,18 +224,18 @@ class Parser {
                             return new PrintNode(token.position, undefined)
                         }
                     } else {
-                        let result = []
-                        result.push(this.orexpr())
+                        let args = []
+                        args.push(this.orexpr())
                         while (this.token.tokentype === TokenType.COMMA) {
                             this.advance()
-                            result.push(this.orexpr())
+                            args.push(this.orexpr())
                         }
                         if (lf) {
-                            return new PrintLNNode(token.position, result)
+                            return new PrintLNNode(token.position, args)
                         } else if (con) {
-                            return new CPrintNode(token.position, result)
+                            return new CPrintNode(token.position, args)
                         } else {
-                            return new PrintNode(token.position, result)
+                            return new PrintNode(token.position, args)
                         }
                     }
                     break

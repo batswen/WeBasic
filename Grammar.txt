@@ -6,8 +6,8 @@ statement:  variable "=" orexpr
             while orexpr lf program lf endwhile
             cls
             print (orexpr ("," orexpr)*)?
-            println orexpr?
-            cprint orexpr
+            println (orexpr ("," orexpr)*)?
+            cprint (orexpr ("," orexpr)*)?
             dump
             cdump
 
@@ -22,6 +22,7 @@ factor:     ("+"|"-") int|float
             string
             "(" orexpr ")"
             variable
+            "[" (orexpr ("," orexpr)*)? "]"
 
 string:     """ ([^"]|\\")* """
 int:        [0-9]

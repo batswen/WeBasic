@@ -10,15 +10,15 @@ class Interpreter {
         this.output.value = ""
     }
     visit_PrintNode(node, ctx) {
-        if (node.value !== undefined) {
-            for (let e of node.value) {
+        if (node.args !== undefined) {
+            for (let e of node.args) {
                 this.output.value += this.visit(e, ctx).value
             }
         }
     }
     visit_PrintLNNode(node, ctx) {
-        if (node.value !== undefined) {
-            for (let e of node.value) {
+        if (node.args !== undefined) {
+            for (let e of node.args) {
                 this.output.value += this.visit(e, ctx).value
             }
         }
@@ -28,8 +28,8 @@ class Interpreter {
         console.log(ctx.symbolTable.getAllVars())
     }
     visit_CPrintNode(node, ctx) {
-        if (node.value !== undefined) {
-            for (let e of node.value) {
+        if (node.args !== undefined) {
+            for (let e of node.args) {
                 console.log(this.visit(e, ctx).value)
             }
         }
