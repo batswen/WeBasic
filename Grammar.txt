@@ -10,7 +10,7 @@ statement:  identifier "=" orexpr
             cprint (orexpr ("," orexpr)*)?
             dump
             cdump
-            namespace identifier program endnamespace
+            namespace identifier lf program lf endnamespace
 
 orexpr:     andexpr ("OR" andexpr)*
 andexpr:    eqexpr ("AND" eqexpr)*
