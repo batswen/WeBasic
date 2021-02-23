@@ -16,6 +16,9 @@ statement:  identifier "=" orexpr
             "NAMESPACE" identifier lf program lf "ENDNAMESPACE"
             "FUNCTION" identifier "(" (identifier ("," identifier)*)? ")" lf program lf "ENDFUNCTION"
             "RETURN" (orexpr)?
+            "COLOR" expr "," expr "," expr
+            "POINT" expr "," epxr
+            "LINE" expr "," expr "," expr "," expr
 
 orexpr:     andexpr ("OR" andexpr)*
 andexpr:    eqexpr ("AND" eqexpr)*
@@ -39,3 +42,4 @@ identifier: [a-zA-Z_\$][\$_0-9\p{L}]*
 lf:         (":"|"\n")
 buildin-function :
             "RND()"
+            "LEFT(string, int)"

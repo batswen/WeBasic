@@ -10,6 +10,7 @@ class Parser {
         this.errorMsg = {
             msg, position, details
         }
+        throw "Error"
     }
     advance() {
         if (this.pos < this.tokens.length) {
@@ -45,6 +46,26 @@ class Parser {
         }
         return args
     }
+    getTypedArgList(token, types) {
+        const args = []
+        let count = 0
+        if (this.token.tokentype === types[count]) {
+            count++
+            args.push(this.orexpr())
+        } else {
+            this.error(`Arg; expected ${types[count]}, got ${this.token.tokentype}`, token.position)
+        }
+        while (count < types.length && this.token.tokentype === TokenType.COMMA) {
+            this.advance()
+            if (this.token.tokentype === types[count]) {
+                count++
+                args.push(this.orexpr())
+            } else {
+                this.error(`Arg; expected ${types[count]}, got ${this.token.tokentype}`, token.position)
+            }
+        }
+        return args
+    }
     handleFuncCall(token) {
         // args
         let args = undefined
@@ -60,6 +81,7 @@ class Parser {
     }
     factor(idOnly) {
         const token = this.token
+        let args
         if (idOnly && token.tokentype !== TokenType.IDENTIFIER) {
             this.error(`identifier expected (${this.token.tokentype})`, token.position)
         }
@@ -133,6 +155,13 @@ class Parser {
                     this.eat(TokenType.LPAREN, token.position)
                     this.eat(TokenType.RPAREN, token.position)
                     return new RandomNode(token.posiiton)
+                    break
+                case "LEFT":
+                    this.eat(TokenType.KEYWORD, token.position)
+                    this.eat(TokenType.LPAREN, token.position)
+                    args = this.getTypedArgList(token, [TokenType.STRING, TokenType.INT])
+                    this.eat(TokenType.RPAREN, token.position)
+                    return new LeftNode(token.posiiton, args[0], args[1])
                     break
             }
         } else {
@@ -344,6 +373,19 @@ class Parser {
                         }
                     }
                     break
+                case "COLOR":
+                    this.advance()
+                    args = this.getTypedArgList(token, [TokenType.INT, TokenType.INT, TokenType.INT])
+                    return new ColorNode(token.position, args)
+                    break
+                case "POINT":
+                    this.advance()
+                    args = this.getTypedArgList(token, [TokenType.INT, TokenType.INT])
+                    return new PointNode(token.position, args)
+                    break
+                case "LINE":
+                    this.advance()
+                    break
                 case "RETURN":
                     this.advance()
                     if (this.token.tokentype === TokenType.COLON) {
@@ -383,9 +425,14 @@ class Parser {
         return result
     }
     parse() {
-        let result = this.program()
-        if (this.token.tokentype !== TokenType.EOF) {
-            this.error(`EOF expected (${this.token.tokentype}, ${this.token.value})`,this.token.position,this.tokens)
+        let result = undefined
+        try {
+            result = this.program()
+            if (this.token.tokentype !== TokenType.EOF) {
+                this.error(`EOF expected (${this.token.tokentype}, ${this.token.value})`,this.token.position,this.tokens)
+            }
+        } catch (e) {
+            console.log(e)
         }
         return [result, this.errorMsg]
     }

@@ -5,6 +5,8 @@ class Interpreter {
         this.return = undefined
         this.shouldReturn = false
         this.errorMsg = undefined
+        this.gfx = document.getElementById("gfxoutput").getContext("2d")
+        let red = 200,green = 100, blue=0,xc=50,yc=50
     }
     error(msg, position, details = undefined) {
         this.errorMsg = { msg, position, details }
@@ -64,6 +66,20 @@ class Interpreter {
             this.error(`LEFT(${str.str()}, ${num.str()})`, node.position)
         }
         return new DTNull()
+    }
+    visit_ColorNode(node, ctx) {
+        const red = this.visit(node.args[0], ctx).value
+        const green = this.visit(node.args[1], ctx).value
+        const blue = this.visit(node.args[2], ctx).value
+        if (red > 255 || red < 0 || green < 0 || green > 255 || blue < 0 || blue > 255) {
+            this.error(`Illegal quantity, must be in 0..255 (COLOR ${red}, ${green}, ${blue})`, node.position)
+        }
+        this.gfx.fillStyle = `rgb(${red}, ${green}, ${blue})`
+    }
+    visit_PointNode(node, ctx) {
+        const xc = this.visit(node.args[0], ctx).value
+        const yc = this.visit(node.args[1], ctx).value
+        this.gfx.fillRect(xc, yc, 1, 1)
     }
     visit_NamespaceNode(node, ctx) {
         const context = new Context(node.namespace, ctx)

@@ -8,5 +8,6 @@ const examples = {
     "Namespaces": `cls:a = 5:dump\n\nnamespace abc\nprintln "in 'abc'"\na = pi:dump\nendnamespace\nprintln "after 'abc'"\ndump`,
     "Function": `function test()\n  println "Hallo"\n  a = 5:dump\nendfunction\na = test()\ntest()`,
     "Function2": `cls\na=345:x=789\ndump\nfunction test(a, b, c)\n  b = x\n  dump\nendfunction\ntest(a * 5, 2, "Test")\ndump`,
+    "Graphic": `color 200, 80, 255\npoint 10, 10`,
     "Error": `a=1a`
 }

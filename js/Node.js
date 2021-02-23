@@ -104,6 +104,28 @@ class PrintNode extends Node {
     }
 }
 
+class ColorNode extends Node {
+    constructor(position, args) {
+        super(position)
+        this.args = args
+    }
+}
+
+class LeftNode extends Node {
+    constructor(position, str, num) {
+        super(position)
+        this.str = str
+        this.num = num
+    }
+}
+
+class PointNode extends Node {
+    constructor(position, args) {
+        super(position)
+        this.args = args
+    }
+}
+
 class PrintLNNode extends Node {
     constructor(position, args) {
         super(position)

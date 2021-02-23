@@ -49,7 +49,7 @@ function go() {
             showError("Interpreter", error)
         }
     } catch (e) {
-        console.log(e)
+        console.log("!"+e)
     }
 }
 
