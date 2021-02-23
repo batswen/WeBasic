@@ -190,10 +190,8 @@ class Interpreter {
     }
     visit_AssignNode(node, ctx) {
         let value = this.visit(node.value, ctx)
-        if (value instanceof IntNumber) {
-            ctx.symbolTable.setVar(node.name, new IntNumber(value).setContext(ctx))
-        } else if (value instanceof FloatNumber) {
-            ctx.symbolTable.setVar(node.name, new FloatNumber(value).setContext(ctx))
+        if (value instanceof IntNumber || value instanceof FloatNumber || value instanceof DTString) {
+            ctx.symbolTable.setVar(node.name, value)
         } else if (value instanceof DTList) {
             if (node.access) {
                 const index = this.visit(node.access, ctx).value
@@ -202,10 +200,8 @@ class Interpreter {
                 }
                 ctx.symbolTable.setVar(node.name, this.visit(node.args[index], ctx))
             } else {
-                ctx.symbolTable.setVar(node.name, new DTList(value).setContext(ctx))
+                ctx.symbolTable.setVar(node.name, value)
             }
-        } else {
-            ctx.symbolTable.setVar(node.name, new DTString(value).setContext(ctx))
         }
     }
     visit_UnOpNode(node, ctx) {

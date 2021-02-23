@@ -247,7 +247,11 @@ class Parser {
             } else if (this.token.tokentype === TokenType.LPAREN) { // Function call
                 this.advance()
                 return this.handleFuncCall(token)
-            } else {
+            } /*else if (this.token.tokentype === TokenType.LBRACKET) { // assign to list
+                this.eat(TokenType.LBRACKET, token.position)
+                this.eat(TokenType.RBRACKET, token.position)
+                return new AssignToListNode(token.position)
+            } */else {
                 this.error(`'=', '(', or '[' expected (${this.token.tokentype})`, token.position)
             }
         } else if (this.token.tokentype === TokenType.KEYWORD) {

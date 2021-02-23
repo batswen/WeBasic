@@ -58,6 +58,19 @@ class DTList extends DataType {
         }
         return this.value[n]
     }
+    setElement(n, newValue) {
+        if (n < 0) {
+            n = this.value.length + n
+            if (n < 0) {
+                throw "index"
+            }
+        }
+        if (n >= this.value.length) {
+            throw "index"
+        }
+        this.value[n] = newValue
+        return this
+    }
     add(other) {
         other.value.forEach(e => {
             this.value.push(e)
