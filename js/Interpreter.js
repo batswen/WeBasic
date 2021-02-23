@@ -195,11 +195,47 @@ class Interpreter {
             }
             return ctx.symbolTable.getVar(node.identifier)
         } else {
-            this.error(`undeclared variable: ${node.identifier}`, node.position)
+            this.error(`Undeclared variable: ${node.identifier}`, node.position)
         }
     }
     visit_IntNode(node, ctx) {
         return new IntNumber(node.value).setContext(ctx)
+    }
+    visit_IntConvNode(node, ctx) {
+        const value = this.visit(node.value, ctx)
+        if (value instanceof BaseNumber || value instanceof DTString) {
+            return new IntNumber(parseInt(value.value), ctx)
+        } else {
+            this.error(`Conversion to int error`, node.position)
+        }
+    }
+    visit_FloatConvNode(node, ctx) {
+        const value = this.visit(node.value, ctx)
+        if (value instanceof BaseNumber || value instanceof DTString) {
+            return new FloatNumber(parseFloat(value.value), ctx)
+        } else {
+            this.error(`Conversion to float error`, node.position)
+        }
+    }
+    visit_StringConvNode(node, ctx) {
+        const value = this.visit(node.value, ctx)
+        if (value instanceof BaseNumber) {
+            return new DTString("" + value.value, ctx)
+        } else {
+            this.error(`Conversion to string error`, node.position)
+        }
+    }
+    visit_IntTestNode(node, ctx) {
+        const value = this.visit(node.value, ctx)
+        return new IntNumber(value instanceof IntNumber ? 1 : 0, ctx)
+    }
+    visit_FloatTestNode(node, ctx) {
+        const value = this.visit(node.value, ctx)
+        return new IntNumber(value instanceof FloatNumber ? 1 : 0, ctx)
+    }
+    visit_StringTestNode(node, ctx) {
+        const value = this.visit(node.value, ctx)
+        return new IntNumber(value instanceof DTString ? 1 : 0, ctx)
     }
     visit_FloatNode(node, ctx) {
         return new FloatNumber(node.value).setContext(ctx)
@@ -403,7 +439,7 @@ class Interpreter {
     }
     interpret() {
         const ctx = new Context("main")
-        ctx.symbolTable.setVar("pi", new FloatNumber(Math.PI))
+        ctx.symbolTable.setVar("pi", new FloatNumber(Math.PI).setContext(ctx))
         try {
             this.visit(this.ast, ctx)
         } catch (e) {

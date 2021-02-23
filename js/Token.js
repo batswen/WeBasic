@@ -39,7 +39,10 @@ const KEYWORDS = [
     "PRINT", "PRINTLN", "CPRINT",
     "COLOR", "POINT", "LINE",
     "DUMP", "CDUMP",
-    "RND", "LEFT"
+    "RND",
+    "LEFT",
+    "INT", "FLOAT", "STRING",
+    "ISINT", "ISFLOAT", "ISSTRING"
 ]
 
 class Token {

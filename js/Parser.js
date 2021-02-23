@@ -161,14 +161,56 @@ class Parser {
                     this.eat(TokenType.KEYWORD, token.position)
                     this.eat(TokenType.LPAREN, token.position)
                     this.eat(TokenType.RPAREN, token.position)
-                    return new RandomNode(token.posiiton)
+                    return new RandomNode(token.position)
                     break
                 case "LEFT":
                     this.eat(TokenType.KEYWORD, token.position)
                     this.eat(TokenType.LPAREN, token.position)
                     args = this.getNumArgList(token, 2)
                     this.eat(TokenType.RPAREN, token.position)
-                    return new LeftNode(token.posiiton, args[0], args[1])
+                    return new LeftNode(token.position, args[0], args[1])
+                    break
+                case "INT":
+                    this.eat(TokenType.KEYWORD, token.position)
+                    this.eat(TokenType.LPAREN, token.position)
+                    args = this.getNumArgList(token, 1)
+                    this.eat(TokenType.RPAREN, token.position)
+                    return new IntConvNode(token.position, args[0])
+                    break
+                case "FLOAT":
+                    this.eat(TokenType.KEYWORD, token.position)
+                    this.eat(TokenType.LPAREN, token.position)
+                    args = this.getNumArgList(token, 1)
+                    this.eat(TokenType.RPAREN, token.position)
+                    return new FloatConvNode(token.position, args[0])
+                    break
+                case "STRING":
+                    this.eat(TokenType.KEYWORD, token.position)
+                    this.eat(TokenType.LPAREN, token.position)
+                    args = this.getNumArgList(token, 1)
+                    this.eat(TokenType.RPAREN, token.position)
+                    return new StringConvNode(token.position, args[0])
+                    break
+                case "ISINT":
+                    this.eat(TokenType.KEYWORD, token.position)
+                    this.eat(TokenType.LPAREN, token.position)
+                    args = this.getNumArgList(token, 1)
+                    this.eat(TokenType.RPAREN, token.position)
+                    return new IntTestNode(token.position, args[0])
+                    break
+                case "ISFLOAT":
+                    this.eat(TokenType.KEYWORD, token.position)
+                    this.eat(TokenType.LPAREN, token.position)
+                    args = this.getNumArgList(token, 1)
+                    this.eat(TokenType.RPAREN, token.position)
+                    return new FloatTestNode(token.position, args[0])
+                    break
+                case "ISSTRING":
+                    this.eat(TokenType.KEYWORD, token.position)
+                    this.eat(TokenType.LPAREN, token.position)
+                    args = this.getNumArgList(token, 1)
+                    this.eat(TokenType.RPAREN, token.position)
+                    return new StringTestNode(token.position, args[0])
                     break
             }
         } else {

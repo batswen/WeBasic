@@ -43,3 +43,9 @@ lf:         (":"|"\n")
 buildin-function :
             "RND()"
             "LEFT(string, int)"
+            "INT(string|float)"
+            "FLOAT(string|int)"
+            "STRING(int|float)"
+            "ISINT(expr)"
+            "ISFLOAT(expr)"
+            "ISSTRING(expr)"

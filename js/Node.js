@@ -27,6 +27,48 @@ class ReturnNode extends Node {
     }
 }
 
+class IntConvNode extends Node {
+    constructor(position, value) {
+        super(position)
+        this.value = value
+    }
+}
+
+class FloatConvNode extends Node {
+    constructor(position, value) {
+        super(position)
+        this.value = value
+    }
+}
+
+class StringConvNode extends Node {
+    constructor(position, value) {
+        super(position)
+        this.value = value
+    }
+}
+
+class IntTestNode extends Node {
+    constructor(position, value) {
+        super(position)
+        this.value = value
+    }
+}
+
+class FloatTestNode extends Node {
+    constructor(position, value) {
+        super(position)
+        this.value = value
+    }
+}
+
+class StringTestNode extends Node {
+    constructor(position, value) {
+        super(position)
+        this.value = value
+    }
+}
+
 class ForNode extends Node {
     constructor(position, forIdentifier, forStart, forEnd, forStep, forProg) {
         super(position)
