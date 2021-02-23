@@ -31,10 +31,9 @@ class DefFunction extends BaseFunction {
     }
 }
 
-class BuildInFunction extends BaseFunction {
-    constructor(identifier, prog) {
-        super(identifier)
-        this.prog = prog
+class DTNull extends DataType {
+    constructor() {
+        super()
     }
 }
 
@@ -49,13 +48,13 @@ class DTList extends DataType {
     }
     getElement(n) {
         if (n < 0) {
-            n = this.value.length - n
+            n = this.value.length + n
             if (n < 0) {
-                return undefined
+                throw "index"
             }
         }
         if (n >= this.value.length) {
-            return undefined
+            throw "index"
         }
         return this.value[n]
     }
@@ -92,6 +91,9 @@ class DTString extends DataType {
         }
         this.value = result
         return this
+    }
+    getLen() {
+        return this.value.length
     }
     eq(other) {
         this.value = this.value === other.value ? 1 : 0

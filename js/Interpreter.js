@@ -51,6 +51,20 @@ class Interpreter {
     visit_RandomNode(node, ctx) {
         return new FloatNumber(Math.random())
     }
+    visit_LeftNode(node, ctx) {
+        const str = this.visit(node.str, ctx)
+        const num = this.visit(node.num, ctx)
+        if (str instanceof DTString && num instanceof BaseNumber) {
+            if (str.getLen() < num.value) {
+                this.error(`LEFT(${str.str()}, ${num.str()})`, node.position)
+            } else {
+                return new DTString(str.value.substring(0, num.value)).setContext(ctx)
+            }
+        } else {
+            this.error(`LEFT(${str.str()}, ${num.str()})`, node.position)
+        }
+        return new DTNull()
+    }
     visit_NamespaceNode(node, ctx) {
         const context = new Context(node.namespace, ctx)
         this.visit(node.prog, context)
@@ -119,10 +133,7 @@ class Interpreter {
             if (node.access) {
                 const index = this.visit(node.access, ctx).value
                 const listVar = ctx.symbolTable.getVar(node.identifier)
-                if (index < 0 || index >= listVar.value.length) {
-                    this.error(`index out of bounds (${index})`, node.position)
-                }
-                return listVar.value[index]
+                return listVar.getElement(index)
             }
             return ctx.symbolTable.getVar(node.identifier)
         } else {
@@ -139,16 +150,17 @@ class Interpreter {
         return new DTString(node.value).setContext(ctx)
     }
     visit_ListNode(node, ctx) {
+        let index
         if (node.access) {
-            const index = this.visit(node.access, ctx).value
-            if (index < 0 || index >= node.args.length) {
-                this.error(`index out of bounds (${index})`, node.position)
-            }
-            return this.visit(node.args[index], ctx)
+            index = this.visit(node.access, ctx).value
         }
         const list = []
         node.args.forEach(e => list.push(this.visit(e, ctx)))
-        return new DTList(list).setContext(ctx)
+        if (node.access) {
+            return new DTList(list).setContext(ctx).getElement(index)
+        } else {
+            return new DTList(list).setContext(ctx)
+        }
     }
     visit_AssignNode(node, ctx) {
         let value = this.visit(node.value, ctx)
