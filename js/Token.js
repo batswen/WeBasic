@@ -31,7 +31,7 @@ const KEYWORDS = [
     "DO",
     "FOR", "TO", "STEP", "NEXT",
     "WHILE", "ENDWHILE",
-    "FUNCTION", "ENDFUNCTION",
+    "FUNCTION", "ENDFUNCTION", "RETURN",
     "NAMESPACE", "ENDNAMESPACE",
     "CLS",
     "PRINT", "PRINTLN", "CPRINT",

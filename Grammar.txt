@@ -15,6 +15,7 @@ statement:  identifier "=" orexpr
             "CDUMP"
             "NAMESPACE" identifier lf program lf "ENDNAMESPACE"
             "FUNCTION" identifier "(" (identifier ("," identifier)*)? ")" lf program lf "ENDFUNCTION"
+            "RETURN" (orexpr)?
 
 orexpr:     andexpr ("OR" andexpr)*
 andexpr:    eqexpr ("AND" eqexpr)*

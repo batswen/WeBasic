@@ -20,6 +20,13 @@ class IdentifierNode extends Node {
     }
 }
 
+class ReturnNode extends Node {
+    constructor(position, value) {
+        super(position)
+        this.value = value
+    }
+}
+
 class DeclareIdentifierNode extends Node {
     constructor(position, identifier, access) {
         super(position)

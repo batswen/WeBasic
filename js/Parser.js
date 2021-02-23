@@ -3,7 +3,13 @@ class Parser {
         this.tokens = tokens
         this.pos = -1
         this.token = undefined
+        this.errorMsg = undefined
         this.advance()
+    }
+    error(msg, position, details = undefined) {
+        this.errorMsg = {
+            msg, position, details
+        }
     }
     advance() {
         if (this.pos < this.tokens.length) {
@@ -20,10 +26,7 @@ class Parser {
             if (this.token.tokentype === TokenType.IDENTIFIER) {
                 args.push(this.factor(idOnly))
             } else {
-                throw {
-                    msg: "Parser: identifier expected",
-                    position: token.position
-                }
+                this.error(`identifier expected (${this.token.tokentype})`, token.position)
             }
         } else {
             args.push(this.orexpr())
@@ -34,10 +37,7 @@ class Parser {
                 if (this.token.tokentype === TokenType.IDENTIFIER) {
                     args.push(this.factor(idOnly))
                 } else {
-                    throw {
-                        msg: "Parser: identifier expected",
-                        position: token.position
-                    }
+                    this.error(`identifier expected (${this.token.tokentype})`, token.position)
                 }
             } else {
                 args.push(this.orexpr())
@@ -53,10 +53,7 @@ class Parser {
             args = this.getArgList(token)
         }
         if (this.token.tokentype !== TokenType.RPAREN) {
-            throw {
-                msg: "Parser: ')' expected",
-                position: token.position
-            }
+            this.error(`')' expected (${this.token.tokentype})`, token.position)
         }
         this.advance()
         return new FuncCallNode(token.position, token.value, args)
@@ -64,10 +61,7 @@ class Parser {
     factor(idOnly) {
         const token = this.token
         if (idOnly && token.tokentype !== TokenType.IDENTIFIER) {
-            throw {
-                msg: "Parser: identifier expected",
-                position: token.position
-            }
+            this.error(`identifier expected (${this.token.tokentype})`, token.position)
         }
         if (token.tokentype === TokenType.STRING) {
             this.advance()
@@ -89,10 +83,7 @@ class Parser {
                 this.advance()
                 return expr
             } else {
-                throw {
-                    msg: "Parser: ')' expected",
-                    position: token.position
-                }
+                this.error(`')' expected (${this.token.tokentype})`, token.position)
             }
         } else if (token.tokentype === TokenType.LBRACKET) {
             let list = [], access = undefined
@@ -110,19 +101,13 @@ class Parser {
                     this.advance()
                     access = this.expr()
                     if (this.token.tokentype !== TokenType.RBRACKET) {
-                        throw {
-                            msg: "Parser: ']' expected",
-                            position: token.position
-                        }
+                        this.error(`']' expected (${this.token.tokentype})`, token.position)
                     }
                     this.advance()
                 }
                 return new ListNode(token.position, list, access)
             } else {
-                throw {
-                    msg: "Parser: ']' expected",
-                    position: token.position
-                }
+                this.error(`']' expected (${this.token.tokentype})`, token.position)
             }
         } else if (token.tokentype === TokenType.IDENTIFIER) { // Variable
             let access
@@ -134,10 +119,7 @@ class Parser {
                 this.advance()
                 access = this.expr()
                 if (this.token.tokentype !== TokenType.RBRACKET) {
-                    throw {
-                        msg: "Parser: ']' expected",
-                        position: token.position
-                    }
+                    this.error(`']' expected (${this.token.tokentype})`, token.position)
                 }
                 this.advance()
             } else if (this.token.tokentype === TokenType.LPAREN) { // Function call
@@ -151,10 +133,7 @@ class Parser {
             }
 
         } else {
-            throw {
-                msg: "Parser: Number, Identifier, String, '[', '(', '+', or '-' expected",
-                position: token.position
-            }
+            this.error(`Number, Identifier, String, '[', '(', '+', or '-' expected (${this.token.tokentype})`, token.position)
         }
     }
     term() {
@@ -229,6 +208,8 @@ class Parser {
             } else if (this.token.tokentype === TokenType.LPAREN) { // Function call
                 this.advance()
                 return this.handleFuncCall(token)
+            } else {
+                this.error(`'=', '(', or '[' expected (${this.token.tokentype})`, token.position)
             }
         } else if (this.token.tokentype === TokenType.KEYWORD) {
             switch (this.token.value) {
@@ -259,16 +240,10 @@ class Parser {
                                 return new IfNode(token.position, condition, prog, undefined)
                             }
                         } else {
-                            throw {
-                                msg: "Parser: 'ENDIF' expected",
-                                position: token.position
-                            }
+                            this.error(`'ENDIF' expected (${this.token.tokentype})`, token.position)
                         }
                     } else {
-                        throw {
-                            msg: "Parser: 'THEN' expected",
-                            position: token.position
-                        }
+                        this.error(`'THEN' expected (${this.token.tokentype})`, token.position)
                     }
                     break
                 case "WHILE":
@@ -284,34 +259,22 @@ class Parser {
                             this.advance()
                             return new WhileNode(token.position, condition, result)
                         } else {
-                            throw {
-                                msg: "Parser: 'ENDWHILE' expected",
-                                position: token.position
-                            }
+                            this.error(`'ENDWHILE' expected (${this.token.tokentype})`, token.position)
                         }
                     } else {
-                        throw {
-                            msg: "Parser: 'DO' expected",
-                            position: token.position
-                        }
+                        this.error(`'DO' expected (${this.token.tokentype})`, token.position)
                     }
                     break
                 case "NAMESPACE":
                     this.advance()
                     if (this.token.tokentype !== TokenType.IDENTIFIER) {
-                        throw {
-                            msg: "Parser: identifier expected",
-                            position: token.position
-                        }
+                        this.error(`identifier expected (${this.token.tokentype})`, token.position)
                     }
                     identifier = this.token.value
                     this.advance()
                     prog = this.program()
                     if (this.token.tokentype !== TokenType.KEYWORD || this.token.value !== "ENDNAMESPACE") {
-                        throw {
-                            msg: "Parser: 'ENDNAMESPACE' expected",
-                            position: token.position
-                        }
+                        this.error(`'ENDNAMESPACE' expected (${this.token.tokentype})`, token.position)
                     }
                     this.advance()
                     return new NamespaceNode(token.position, identifier, prog)
@@ -319,46 +282,31 @@ class Parser {
                 case "FUNCTION":
                     this.advance()
                     if (this.token.tokentype !== TokenType.IDENTIFIER) {
-                        throw {
-                            msg: "Parser: identifier expected",
-                            position: token.position
-                        }
+                        this.error(`identifier expected (${this.token.tokentype})`, token.position)
                     }
                     identifier = this.token.value
                     this.advance()
                     if (this.token.tokentype !== TokenType.LPAREN) {
-                        throw {
-                            msg: "Parser: '(' expected",
-                            position: token.position
-                        }
+                        this.error(`'(' expected (${this.token.tokentype})`, token.position)
                     }
                     this.advance()
                     if (this.token.tokentype === TokenType.RPAREN) {
                         this.advance()
                         prog = this.program()
                         if (this.token.tokentype !== TokenType.KEYWORD || this.token.value !== "ENDFUNCTION") {
-                            throw {
-                                msg: "Parser: 'ENDFUNCTION' expected",
-                                position: token.position
-                            }
+                            this.error(`'ENDFUNCTION' expected (${this.token.tokentype})`, token.position)
                         }
                         this.advance()
                         return new FuncDefNode(token.position, identifier, prog, undefined)
                     }
                     args = this.getArgList(token, true)
                     if (this.token.tokentype !== TokenType.RPAREN) {
-                        throw {
-                            msg: "Parser: ')' expected",
-                            position: token.position
-                        }
+                        this.error(`')' expected (${this.token.tokentype})`, token.position)
                     }
                     this.advance()
                     prog = this.program()
                     if (this.token.tokentype !== TokenType.KEYWORD || this.token.value !== "ENDFUNCTION") {
-                        throw {
-                            msg: "Parser: 'ENDFUNCTION' expected",
-                            position: token.position
-                        }
+                        this.error(`'ENDFUNCTION' expected (${this.token.tokentype})`, token.position)
                     }
                     this.advance()
                     return new FuncDefNode(token.position, identifier, prog, args)
@@ -386,6 +334,14 @@ class Parser {
                         }
                     }
                     break
+                case "RETURN":
+                    this.advance()
+                    if (this.token.tokentype === TokenType.COLON) {
+                        return new ReturnNode(token.position, undefined)
+                    } else {
+                        return new ReturnNode(token.position, this.orexpr())
+                    }
+                    break
                 case "DUMP":
                     this.advance()
                     return new DumpNode(token.position)
@@ -408,7 +364,9 @@ class Parser {
         }
         let result = this.statement()
         while (this.token.tokentype === TokenType.COLON) {
-            this.advance()
+            while (this.token.tokentype === TokenType.COLON) {
+                this.advance()
+            }
             const stmt = this.statement()
             result = new StatementNode(result.position, result, stmt)
         }
@@ -417,12 +375,8 @@ class Parser {
     parse() {
         let result = this.program()
         if (this.token.tokentype !== TokenType.EOF) {
-            throw {
-                msg: `Parser: EOF expected (${this.token.tokentype}, ${this.token.value})`,
-                position: this.token.position,
-                details: this.tokens
-            }
+            this.error(`EOF expected (${this.token.tokentype}, ${this.token.value})`,this.token.position,this.tokens)
         }
-        return result
+        return [result, this.errorMsg]
     }
 }

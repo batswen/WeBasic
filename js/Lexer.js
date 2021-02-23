@@ -3,10 +3,11 @@ class Lexer {
         this.source = source
         this.position = new Position(-1, 1, 0)
         this.char = undefined
+        this.errorMsg = undefined
         this.nextChar()
     }
     error(msg) {
-        throw {
+        this.errorMsg = {
             msg,
             position: this.position
         }
@@ -86,7 +87,7 @@ class Lexer {
         } else if (dots === 1) {
             return new Token(TokenType.FLOAT, parseFloat(number), this.position.copy())
         } else {
-            this.error("Not a number")
+            this.error("Not a number (0 or 1 '.')")
         }
     }
     eatComment() {
@@ -96,7 +97,7 @@ class Lexer {
     makeTokens() {
         const tokens = []
 
-        while (this.char !== undefined) {
+        while (this.char !== undefined && this.errorMsg === undefined) {
             if (/[ \t]/.test(this.char)) {
                 this.nextChar()
                 continue
@@ -163,6 +164,6 @@ class Lexer {
         }
 
         tokens.push(new Token(TokenType.EOF, null, this.position.copy()))
-        return tokens
+        return [tokens, this.errorMsg]
     }
 }

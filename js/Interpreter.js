@@ -2,24 +2,26 @@ class Interpreter {
     constructor(ast) {
         this.ast = ast
         this.output = document.getElementById("output")
+        this.return = undefined
+        this.shouldReturn = false
+        this.errorMsg = undefined
+    }
+    error(msg, position, details = undefined) {
+        this.errorMsg = { msg, position, details }
     }
     visit_FuncDefNode(node, ctx) {
         ctx.symbolTable.setVar(node.identifier, new DefFunction(node.identifier, node.prog, node.args))
     }
     visit_FuncCallNode(node, ctx) {
+        this.return = undefined
+        this.shouldReturn = false
         const func = ctx.symbolTable.getVar(node.identifier)
         if (!func) {
-            throw {
-                msg: `Interpreter: unknown function ${node.identifier}`,
-                position: node.position
-            }
+            this.error(`unknown function ${node.identifier}`, node.position)
         }
         const context = new Context(node.identifier, ctx)
         if (func.params?.length !== node.args?.length) {
-            throw {
-                msg: `Interpreter: incorrect amount of args, expected ${func.params.length} given ${node.args.length}`,
-                position: node.position
-            }
+            this.error(`incorrect amount of args, expected ${func.params.length} given ${node.args.length}`, node.position)
         }
         if (func.params) {
             func.params.forEach(e => { this.visit(e, context) })
@@ -28,7 +30,20 @@ class Interpreter {
             }
         }
         this.visit(func.prog, context)
-        return new DTString("undefined") // RETURN
+        this.shouldReturn = false
+        if (this.return) {
+            return this.return
+        } else {
+            return new DTString("undefined") // RETURN
+        }
+    }
+    visit_ReturnNode(node, ctx) {
+        if (node.value) {
+            this.return = this.visit(node.value, ctx)
+        } else {
+            this.return = undefined
+        }
+        this.shouldReturn = true
     }
     visit_NamespaceNode(node, ctx) {
         const context = new Context(node.namespace, ctx)
@@ -89,10 +104,7 @@ class Interpreter {
     }
     visit_DeclareIdentifierNode(node, ctx) {
         if (ctx.symbolTable.testVarThisContext(node.identifier)) {
-            throw {
-                msg: `Interpreter: redeclaration of ${node.identifier}`,
-                position: node.position
-            }
+            this.error(`redeclaration of ${node.identifier}`, node.position)
         }
         ctx.symbolTable.setVar(node.identifier, undefined)
     }
@@ -102,19 +114,13 @@ class Interpreter {
                 const index = this.visit(node.access, ctx).value
                 const listVar = ctx.symbolTable.getVar(node.identifier)
                 if (index < 0 || index >= listVar.value.length) {
-                    throw {
-                        msg: `Interpreter: index out of bounds (${index})`,
-                        position: node.position
-                    }
+                    this.error(`index out of bounds (${index})`, node.position)
                 }
                 return listVar.value[index]
             }
             return ctx.symbolTable.getVar(node.identifier)
         } else {
-            throw {
-                msg: "Interpreter: undeclared variable: " + node.identifier,
-                position: node.position
-            }
+            this.error(`undeclared variable: ${node.identifier}`, node.position)
         }
     }
     visit_IntNode(node, ctx) {
@@ -130,10 +136,7 @@ class Interpreter {
         if (node.access) {
             const index = this.visit(node.access, ctx).value
             if (index < 0 || index >= node.args.length) {
-                throw {
-                    msg: `Interpreter: index out of bounds (${index})`,
-                    position: node.position
-                }
+                this.error(`index out of bounds (${index})`, node.position)
             }
             return this.visit(node.args[index], ctx)
         }
@@ -149,10 +152,7 @@ class Interpreter {
             if (node.access) {
                 const index = this.visit(node.access, ctx).value
                 if (index < 0 || index >= node.args.length) {
-                    throw {
-                        msg: `Interpreter: index out of bounds (${index})`,
-                        position: node.position
-                    }
+                    this.error(`index out of bounds (${index})`, node.position)
                 }
                 ctx.symbolTable.setVar(node.name, this.visit(node.args[index], ctx))
             } else {
@@ -177,10 +177,7 @@ class Interpreter {
         let result = left
         if (node.operator.tokentype === TokenType.MINUS) {
             if (!left instanceof BaseNumber) {
-                throw {
-                    msg: "Interpreter: Number expected",
-                    position: left.position
-                }
+                this.error("Number expected", left.position)
             }
             if (left instanceof IntNumber) {
                 result = new IntNumber(-left.value).setContext(ctx)
@@ -204,10 +201,7 @@ class Interpreter {
                 } else if (left instanceof DTList && right instanceof DTList) {
                     return new DTList(left).add(right).setContext(ctx)
                 } else {
-                    throw {
-                        msg: `Interpreter: Type mismatch (+) [${typeof left}, ${typeof right}]`,
-                        position: node.position
-                    }
+                    this.error(`Type mismatch (+) [${typeof left}, ${typeof right}]`, node.position)
                 }
                 break
             case TokenType.MINUS:
@@ -216,10 +210,7 @@ class Interpreter {
                 } else if (left instanceof IntNumber && right instanceof IntNumber) {
                     return new IntNumber(left).sub(right).setContext(ctx)
                 } else {
-                    throw {
-                        msg: "Interpreter: Type mismatch (-)",
-                        position: node.position
-                    }
+                    this.error("Type mismatch (-)", node.position)
                 }
                 break
             case TokenType.MUL:
@@ -230,10 +221,7 @@ class Interpreter {
                 } else if (left instanceof DTString && right instanceof BaseNumber) {
                     return new DTString(left).mul(right).setContext(ctx)
                 } else {
-                    throw {
-                        msg: "Interpreter: Type mismatch (*)",
-                        position: node.position
-                    }
+                    this.error("Type mismatch (*)", node.position)
                 }
                 break
             case TokenType.DIV:
@@ -242,10 +230,7 @@ class Interpreter {
                 } else if (left instanceof IntNumber && right instanceof IntNumber) {
                     return new IntNumber(left).div(right).setContext(ctx)
                 } else {
-                    throw {
-                        msg: "Interpreter: Type mismatch (/)",
-                        position: node.position
-                    }
+                    this.error("Type mismatch (/)", node.position)
                 }
                 break
             case TokenType.KEYWORD:
@@ -254,20 +239,14 @@ class Interpreter {
                         if (left instanceof IntNumber && right instanceof IntNumber) {
                             return new IntNumber(left).or(right).setContext(ctx)
                         } else {
-                            throw {
-                                msg: "Interpreter: Type mismatch (or)",
-                                position: node.position
-                            }
+                            this.error("Type mismatch (or)", node.position)
                         }
                         break
                     case "AND":
                         if (left instanceof IntNumber && right instanceof IntNumber) {
                             return new IntNumber(left).and(right).setContext(ctx)
                         } else {
-                            throw {
-                                msg: "Interpreter: Type mismatch (and)",
-                                position: node.position
-                            }
+                            this.error("Type mismatch (and)", node.position)
                         }
                         break
                 }
@@ -279,10 +258,7 @@ class Interpreter {
                 } else if (left instanceof DTString && right instanceof DTString) {
                     return new DTString(left).eq(right).setContext(ctx)
                 } else{
-                    throw {
-                        msg: "Interpreter: Type mismatch (==)",
-                        position: node.position
-                    }
+                    this.error("Type mismatch (==)", node.position)
                 }
                 break
             case TokenType.NE:
@@ -293,10 +269,7 @@ class Interpreter {
                 } else if (left instanceof DTString && right instanceof DTString) {
                     return new DTString(left).ne(right).setContext(ctx)
                 } else {
-                    throw {
-                        msg: "Interpreter: Type mismatch (!=)",
-                        position: node.position
-                    }
+                    this.error("Type mismatch (!=)", node.position)
                 }
                 break
             case TokenType.LT:
@@ -307,10 +280,7 @@ class Interpreter {
                 } else if (left instanceof DTString && right instanceof DTString) {
                     return new DTString(left).lt(right).setContext(ctx)
                 } else {
-                    throw {
-                        msg: "Interpreter: Type mismatch (<)",
-                        position: node.position
-                    }
+                    this.error("Type mismatch (<)", node.position)
                 }
                 break
             case TokenType.LE:
@@ -321,10 +291,7 @@ class Interpreter {
                 } else if (left instanceof DTString && right instanceof DTString) {
                     return new DTString(left).le(right).setContext(ctx)
                 } else {
-                    throw {
-                        msg: "Interpreter: Type mismatch (<=)",
-                        position: node.position
-                    }
+                    this.error("Type mismatch (<=)", node.position)
                 }
                 break
             case TokenType.GT:
@@ -335,10 +302,7 @@ class Interpreter {
                 } else if (left instanceof DTString && right instanceof DTString) {
                     return new DTString(left).gt(right).setContext(ctx)
                 } else {
-                    throw {
-                        msg: "Interpreter: Type mismatch (>)",
-                        position: node.position
-                    }
+                    this.error("Type mismatch (>)", node.position)
                 }
                 break
             case TokenType.GE:
@@ -349,10 +313,7 @@ class Interpreter {
                 } else if (left instanceof DTString && right instanceof DTString) {
                     return new DTString(left).ge(right).setContext(ctx)
                 } else {
-                    throw {
-                        msg: "Interpreter: Type mismatch (>=)",
-                        position: node.position
-                    }
+                    this.error("Type mismatch (>=)", node.position)
                 }
                 break
         }
@@ -360,12 +321,14 @@ class Interpreter {
     }
     visit(node, ctx) {
         // console.log(node.constructor.name)
-        return this[`visit_${node.constructor.name}`](node, ctx)
+        if (this.errorMsg === undefined && this.shouldReturn === false) {
+            return this[`visit_${node.constructor.name}`](node, ctx)
+        }
     }
     interpret() {
         const ctx = new Context("main")
         ctx.symbolTable.setVar("pi", new FloatNumber(Math.PI))
-        const result = this.visit(this.ast, ctx)
-        return result
+        this.visit(this.ast, ctx)
+        return this.errorMsg
     }
 }
