@@ -142,7 +142,6 @@ class Interpreter {
         const forStart = this.visit(node.forStart, ctx)
         const forEnd = this.visit(node.forEnd, ctx)
         const forStep = this.visit(node.forStep, ctx)
-        console.log(forStart.constructor.name, forStart instanceof FloatNumber)
         if (!(forStart instanceof FloatNumber) || !(forEnd instanceof FloatNumber) || !(forStep instanceof FloatNumber)) {
             this.error(`Arguments must be floats (FOR)`, node.position)
         }
