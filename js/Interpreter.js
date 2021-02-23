@@ -247,7 +247,7 @@ class Interpreter {
                 } else if (left instanceof IntNumber && right instanceof IntNumber) {
                     return new IntNumber(left).sub(right).setContext(ctx)
                 } else {
-                    this.error("Type mismatch (-)", node.position)
+                    this.error(`Type mismatch (-) [${typeof left}, ${typeof right}]`, node.position)
                 }
                 break
             case TokenType.MUL:
@@ -258,7 +258,7 @@ class Interpreter {
                 } else if (left instanceof DTString && right instanceof BaseNumber) {
                     return new DTString(left).mul(right).setContext(ctx)
                 } else {
-                    this.error("Type mismatch (*)", node.position)
+                    this.error(`Type mismatch (*) [${typeof left}, ${typeof right}]`, node.position)
                 }
                 break
             case TokenType.DIV:
@@ -267,7 +267,7 @@ class Interpreter {
                 } else if (left instanceof IntNumber && right instanceof IntNumber) {
                     return new IntNumber(left).div(right).setContext(ctx)
                 } else {
-                    this.error("Type mismatch (/)", node.position)
+                    this.error(`Type mismatch (/) [${typeof left}, ${typeof right}]`, node.position)
                 }
                 break
             case TokenType.KEYWORD:
@@ -276,14 +276,14 @@ class Interpreter {
                         if (left instanceof IntNumber && right instanceof IntNumber) {
                             return new IntNumber(left).or(right).setContext(ctx)
                         } else {
-                            this.error("Type mismatch (or)", node.position)
+                            this.error(`Type mismatch (or) [${typeof left}, ${typeof right}]`", node.position)
                         }
                         break
                     case "AND":
                         if (left instanceof IntNumber && right instanceof IntNumber) {
                             return new IntNumber(left).and(right).setContext(ctx)
                         } else {
-                            this.error("Type mismatch (and)", node.position)
+                            this.error(`Type mismatch (and) [${typeof left}, ${typeof right}]`", node.position)
                         }
                         break
                 }
@@ -295,7 +295,7 @@ class Interpreter {
                 } else if (left instanceof DTString && right instanceof DTString) {
                     return new DTString(left).eq(right).setContext(ctx)
                 } else{
-                    this.error("Type mismatch (==)", node.position)
+                    this.error(`Type mismatch (==) [${typeof left}, ${typeof right}]`, node.position)
                 }
                 break
             case TokenType.NE:
@@ -306,7 +306,7 @@ class Interpreter {
                 } else if (left instanceof DTString && right instanceof DTString) {
                     return new DTString(left).ne(right).setContext(ctx)
                 } else {
-                    this.error("Type mismatch (!=)", node.position)
+                    this.error(`Type mismatch (!=) [${typeof left}, ${typeof right}]`, node.position)
                 }
                 break
             case TokenType.LT:
@@ -317,7 +317,7 @@ class Interpreter {
                 } else if (left instanceof DTString && right instanceof DTString) {
                     return new DTString(left).lt(right).setContext(ctx)
                 } else {
-                    this.error("Type mismatch (<)", node.position)
+                    this.error(`Type mismatch (<) [${typeof left}, ${typeof right}]`, node.position)
                 }
                 break
             case TokenType.LE:
@@ -328,7 +328,7 @@ class Interpreter {
                 } else if (left instanceof DTString && right instanceof DTString) {
                     return new DTString(left).le(right).setContext(ctx)
                 } else {
-                    this.error("Type mismatch (<=)", node.position)
+                    this.error(`Type mismatch (<=) [${typeof left}, ${typeof right}]`, node.position)
                 }
                 break
             case TokenType.GT:
@@ -339,7 +339,7 @@ class Interpreter {
                 } else if (left instanceof DTString && right instanceof DTString) {
                     return new DTString(left).gt(right).setContext(ctx)
                 } else {
-                    this.error("Type mismatch (>)", node.position)
+                    this.error(`Type mismatch (>) [${typeof left}, ${typeof right}]`, node.position)
                 }
                 break
             case TokenType.GE:
@@ -350,7 +350,7 @@ class Interpreter {
                 } else if (left instanceof DTString && right instanceof DTString) {
                     return new DTString(left).ge(right).setContext(ctx)
                 } else {
-                    this.error("Type mismatch (>=)", node.position)
+                    this.error(`Type mismatch (>=) [${typeof left}, ${typeof right}]`, node.position)
                 }
                 break
         }
