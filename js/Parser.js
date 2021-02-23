@@ -10,7 +10,7 @@ class Parser {
         this.errorMsg = {
             msg, position, details
         }
-        throw "Error"
+        throw "error"
     }
     advance() {
         if (this.pos < this.tokens.length) {
@@ -438,7 +438,9 @@ class Parser {
                 this.error(`EOF expected (${this.token.tokentype}, ${this.token.value})`,this.token.position,this.tokens)
             }
         } catch (e) {
-            console.log(e)
+            if (e !== "error") {
+                console.log(e)
+            }
         }
         return [result, this.errorMsg]
     }
