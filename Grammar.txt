@@ -16,9 +16,9 @@ statement:  identifier "=" orexpr
             "NAMESPACE" identifier lf program lf "ENDNAMESPACE"
             "FUNCTION" identifier "(" (identifier ("," identifier)*)? ")" lf program lf "ENDFUNCTION"
             "RETURN" (orexpr)?
-            "COLOR" expr "," expr "," expr
-            "POINT" expr "," epxr
-            "LINE" expr "," expr "," expr "," expr
+            "COLOR" int "," int "," int
+            "POINT" int "," epxr
+            "LINE" int "," int "," int "," int
 
 orexpr:     andexpr ("OR" andexpr)*
 andexpr:    eqexpr ("AND" eqexpr)*
