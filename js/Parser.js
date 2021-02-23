@@ -385,6 +385,8 @@ class Parser {
                     break
                 case "LINE":
                     this.advance()
+                    args = this.getTypedArgList(token, [TokenType.INT, TokenType.INT, TokenType.INT, TokenType.INT])
+                    return new LineNode(token.position, args)
                     break
                 case "RETURN":
                     this.advance()

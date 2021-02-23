@@ -35,14 +35,14 @@ function go() {
             showError("Lexer", error)
             if (tokens) console.log(tokens)
         }
-        if (tokens) {
+        if (tokens && error === undefined) {
             [ast, error] = new Parser(tokens).parse()
         }
         if (error) {
             showError("Parser", error)
             if (ast) console.log(ast)
         }
-        if (ast) {
+        if (ast && error === undefined) {
             error = new Interpreter(ast).interpret()
         }
         if (error) {

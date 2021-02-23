@@ -35,7 +35,7 @@ const KEYWORDS = [
     "NAMESPACE", "ENDNAMESPACE",
     "CLS",
     "PRINT", "PRINTLN", "CPRINT",
-    "COLOR", "POINT",
+    "COLOR", "POINT", "LINE",
     "DUMP", "CDUMP",
     "RND", "LEFT"
 ]

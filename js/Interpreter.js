@@ -81,6 +81,16 @@ class Interpreter {
         const yc = this.visit(node.args[1], ctx).value
         this.gfx.fillRect(xc, yc, 1, 1)
     }
+    visit_LineNode(node, ctx) {
+        const xcStart = this.visit(node.args[0], ctx).value
+        const ycStart = this.visit(node.args[1], ctx).value
+        const xcEnd = this.visit(node.args[2], ctx).value
+        const ycEnd = this.visit(node.args[3], ctx).value
+        this.gfx.beginPath()
+        this.gfx.moveTo(xcStart, ycStart)
+        this.gfx.lineTo(xcEnd, ycEnd)
+        this.gfx.stroke()
+    }
     visit_NamespaceNode(node, ctx) {
         const context = new Context(node.namespace, ctx)
         this.visit(node.prog, context)

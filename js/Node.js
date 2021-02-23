@@ -126,6 +126,13 @@ class PointNode extends Node {
     }
 }
 
+class LineNode extends Node {
+    constructor(position, args) {
+        super(position)
+        this.args = args
+    }
+}
+
 class PrintLNNode extends Node {
     constructor(position, args) {
         super(position)
