@@ -42,7 +42,7 @@ function go() {
         }
         error = new Interpreter(ast).interpret()
         if (error) {
-            showError("Interpreter", ror)
+            showError("Interpreter", error)
         }
     } catch (e) {
         console.log(e)

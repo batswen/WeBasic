@@ -8,6 +8,7 @@ class Interpreter {
     }
     error(msg, position, details = undefined) {
         this.errorMsg = { msg, position, details }
+        throw "error"
     }
     visit_FuncDefNode(node, ctx) {
         ctx.symbolTable.setVar(node.identifier, new DefFunction(node.identifier, node.prog, node.args))
@@ -21,7 +22,9 @@ class Interpreter {
         }
         const context = new Context(node.identifier, ctx)
         if (func.params?.length !== node.args?.length) {
-            this.error(`incorrect amount of args, expected ${func.params.length} given ${node.args.length}`, node.position)
+            const flen = func.params?.length || 0
+            const alen = node.args?.length || 0
+            this.error(`incorrect amount of args, expected ${flen} given ${alen}`, node.position)
         }
         if (func.params) {
             func.params.forEach(e => { this.visit(e, context) })
@@ -143,7 +146,9 @@ class Interpreter {
             }
             return this.visit(node.args[index], ctx)
         }
-        return new DTList(node.args).setContext(ctx)
+        const list = []
+        node.args.forEach(e => list.push(this.visit(e, ctx)))
+        return new DTList(list).setContext(ctx)
     }
     visit_AssignNode(node, ctx) {
         let value = this.visit(node.value, ctx)
@@ -159,17 +164,7 @@ class Interpreter {
                 }
                 ctx.symbolTable.setVar(node.name, this.visit(node.args[index], ctx))
             } else {
-                const list = []
-                if (value?.value?.value) { //
-                    for (let e of value.value.value) {
-                        list.push(this.visit(e, ctx))
-                    }
-                } else if (value?.value) {
-                    for (let e of value.value) {
-                        list.push(this.visit(e, ctx))
-                    }
-                }
-                ctx.symbolTable.setVar(node.name, new DTList(list).setContext(ctx))
+                ctx.symbolTable.setVar(node.name, new DTList(value).setContext(ctx))
             }
         } else {
             ctx.symbolTable.setVar(node.name, new DTString(value).setContext(ctx))
@@ -331,7 +326,12 @@ class Interpreter {
     interpret() {
         const ctx = new Context("main")
         ctx.symbolTable.setVar("pi", new FloatNumber(Math.PI))
-        this.visit(this.ast, ctx)
-        return this.errorMsg
+        try {
+            this.visit(this.ast, ctx)
+        } catch (e) {
+            console.log(e)
+            return this.errorMsg
+        }
+        return undefined
     }
 }
