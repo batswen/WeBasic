@@ -34,19 +34,24 @@ function go() {
         if (error) {
             showError("Lexer", error)
             if (tokens) console.log(tokens)
-        }
-        if (tokens && error === undefined) {
-            [ast, error] = new Parser(tokens).parse()
-        }
-        if (error) {
-            showError("Parser", error)
-            if (ast) console.log(ast)
-        }
-        if (ast && error === undefined) {
-            error = new Interpreter(ast).interpret()
-        }
-        if (error) {
-            showError("Interpreter", error)
+        } else {
+            if (tokens && error === undefined) {
+                [ast, error] = new Parser(tokens).parse()
+            }
+            if (error) {
+                showError("Parser", error)
+                if (tokens) console.log(tokens)
+                if (ast) console.log(ast)
+            } else {
+                if (ast && error === undefined) {
+                    error = new Interpreter(ast).interpret()
+                }
+                if (error) {
+                    showError("Interpreter", error)
+                    if (tokens) console.log(tokens)
+                    if (ast) console.log(ast)
+                }
+            }
         }
     } catch (e) {
         if (e !== "error") {

@@ -27,6 +27,17 @@ class ReturnNode extends Node {
     }
 }
 
+class ForNode extends Node {
+    constructor(position, forIdentifier, forStart, forEnd, forStep, forProg) {
+        super(position)
+        this.forIdentifier = forIdentifier
+        this.forStart = forStart
+        this.forEnd = forEnd
+        this.forStep = forStep
+        this.forProg = forProg
+    }
+}
+
 class DeclareIdentifierNode extends Node {
     constructor(position, identifier, access) {
         super(position)

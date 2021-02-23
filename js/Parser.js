@@ -97,7 +97,7 @@ class Parser {
             this.error(`identifier expected (${this.token.tokentype})`, token.position)
         }
         if (token.tokentype === TokenType.STRING) {
-            this.advance()
+            this.eat(TokenType.STRING, token.position)
             return new StringNode(token.position, token.value)
         } else if (token.tokentype === TokenType.INT || token.tokentype === TokenType.FLOAT) {
             this.advance()
@@ -110,14 +110,10 @@ class Parser {
             this.advance()
             return new UnOpNode(token.position, this.factor(), token)
         } else if (token.tokentype === TokenType.LPAREN) {
-            this.advance()
+            this.eat(TokenType.LPAREN, token.position)
             let expr = this.orexpr()
-            if (this.token.tokentype === TokenType.RPAREN) {
-                this.advance()
-                return expr
-            } else {
-                this.error(`')' expected (${this.token.tokentype})`, token.position)
-            }
+            this.eat(TokenType.RPAREN, token.position)
+            return expr
         } else if (token.tokentype === TokenType.LBRACKET) {
             let list = [], access = undefined
             this.advance()
@@ -140,13 +136,13 @@ class Parser {
                 this.error(`']' expected (${this.token.tokentype})`, token.position)
             }
         } else if (token.tokentype === TokenType.IDENTIFIER) { // Variable
-            let access
+            let access = undefined
             this.advance()
             if (this.token.tokentype === TokenType.ASSIGN) {
-                this.advance()
+                this.eat(TokenType.ASSIGN, token.position)
                 return new AssignNode(token.position, token.value, this.orexpr())
             } else if (this.token.tokentype === TokenType.LBRACKET) { // List access
-                this.advance()
+                this.eat(TokenType.LBRACKET, token.position)
                 access = this.expr()
                 this.eat(TokenType.RBRACKET, token.position)
             } else if (this.token.tokentype === TokenType.LPAREN) { // Function call
@@ -181,9 +177,22 @@ class Parser {
     }
     eat(tokentype, pos, keyword = undefined) {
         if (this.token.tokentype === tokentype) {
+            if (tokentype === TokenType.COLON) {
+                while (this.token.tokentype === TokenType.COLON) {
+                    this.advance()
+                }
+            } else {
+                this.advance()
+            }
+        } else {
+            this.error(`${tokentype} expected, got ${this.token.tokentype} ${this.token.value}`, pos)
+        }
+    }
+    eatKeyword(keyword, pos) {
+        if (this.token.tokentype === TokenType.KEYWORD && this.token.value === keyword) {
             this.advance()
         } else {
-            this.error(`${tokentype} expected, got ${this.token.tokentype}`, pos)
+            this.error(`${keyword} expected, got ${this.token.value}`, pos)
         }
     }
     term() {
@@ -248,15 +257,14 @@ class Parser {
     }
     statement() {
         const token = this.token
-        let condition, elseprog = undefined, identifier, prog, args
+        let condition, elseprog = undefined, identifier, prog, args, stmt, access
         if (token.tokentype === TokenType.IDENTIFIER) { // Variable
-            let access
-            this.advance()
+            this.eat(TokenType.IDENTIFIER, token.position)
             if (this.token.tokentype === TokenType.ASSIGN) {
-                this.advance()
+                this.eat(TokenType.ASSIGN, token.position)
                 return new AssignNode(token.position, token.value, this.orexpr())
             } else if (this.token.tokentype === TokenType.LPAREN) { // Function call
-                this.advance()
+                this.eat(TokenType.LPAREN, token.position)
                 return this.handleFuncCall(token)
             } /*else if (this.token.tokentype === TokenType.LBRACKET) { // assign to list
                 this.eat(TokenType.LBRACKET, token.position)
@@ -271,50 +279,69 @@ class Parser {
                     this.advance()
                     condition = this.orexpr()
                     if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "THEN") {
-                        this.advance()
-                        const stmt = this.statement()
+                        this.eatKeyword("THEN", token.position)
+                        stmt = this.statement()
                         if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "ELSE") {
-                            this.advance()
+                            this.eatKeyword("ELSE", token.position)
                             return new IfNode(token.position, condition, stmt, this.statement())
                         } else {
                             return new IfNode(token.position, condition, stmt, undefined)
                         }
                     } else if (this.token.tokentype === TokenType.COLON) {
-                        this.advance()
+                        this.eat(TokenType.COLON, token.position)
                         prog = this.program()
                         if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "ELSE") {
-                            this.advance()
+                            this.eatKeyword("ELSE", token.position)
                             elseprog = this.program()
                         }
-                        if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "ENDIF") {
-                            this.advance()
-                            if (elseprog !== undefined) {
-                                return new IfNode(token.position, condition, prog, elseprog)
-                            } else {
-                                return new IfNode(token.position, condition, prog, undefined)
-                            }
+                        this.eatKeyword("ENDIF", token.position)
+                        if (elseprog !== undefined) {
+                            return new IfNode(token.position, condition, prog, elseprog)
                         } else {
-                            this.error(`'ENDIF' expected (${this.token.tokentype})`, token.position)
+                            return new IfNode(token.position, condition, prog, undefined)
                         }
+
                     } else {
                         this.error(`'THEN' expected (${this.token.tokentype})`, token.position)
+                    }
+                    break
+                case "FOR":
+                    this.advance()
+                    const forIdentifier = new DeclareIdentifierNode(this.token.position, this.token.value, undefined)
+                    this.eat(TokenType.IDENTIFIER, token.position)
+                    let forStep
+                    this.eat(TokenType.ASSIGN, token.position)
+                    const forStart = this.expr()
+                    this.eatKeyword("TO", token.position)
+                    const forEnd = this.expr()
+                    if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "STEP") {
+                        this.eatKeyword("STEP", token.position)
+                        forStep = this.orexpr()
+                    } else {
+                        forStep = new IntNode(null, 1)
+                    }
+                    if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "DO") {
+                        this.eatKeyword("DO", token.position)
+                        stmt = this.statement()
+                        return new ForNode(token.position, forIdentifier, forStart, forEnd, forStep, stmt)
+                    } else {
+                        this.eat(TokenType.COLON, token.position)
+                        prog = this.program()
+                        this.eatKeyword("NEXT", token.position)
+                        return new ForNode(token.position, forIdentifier, forStart, forEnd, forStep, prog)
                     }
                     break
                 case "WHILE":
                     this.advance()
                     condition = this.orexpr()
                     if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "DO") {
-                        this.advance()
+                        this.eatKeyword("DO", token.position)
                         return new WhileNode(token.position, condition, this.statement())
                     } else if (this.token.tokentype === TokenType.COLON) {
-                        this.advance()
+                        this.eat(TokenType.COLON, token.position)
                         const result = this.program()
-                        if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "ENDWHILE") {
-                            this.advance()
-                            return new WhileNode(token.position, condition, result)
-                        } else {
-                            this.error(`'ENDWHILE' expected (${this.token.tokentype})`, token.position)
-                        }
+                        this.eatKeyword("ENDWHILE", token.position)
+                        return new WhileNode(token.position, condition, result)
                     } else {
                         this.error(`'DO' expected (${this.token.tokentype})`, token.position)
                     }
@@ -327,42 +354,24 @@ class Parser {
                     identifier = this.token.value
                     this.advance()
                     prog = this.program()
-                    if (this.token.tokentype !== TokenType.KEYWORD || this.token.value !== "ENDNAMESPACE") {
-                        this.error(`'ENDNAMESPACE' expected (${this.token.tokentype})`, token.position)
-                    }
-                    this.advance()
+                    this.eatKeyword("ENDNAMESPACE", token.position)
                     return new NamespaceNode(token.position, identifier, prog)
                     break
                 case "FUNCTION":
                     this.advance()
+                    args = undefined
                     if (this.token.tokentype !== TokenType.IDENTIFIER) {
                         this.error(`identifier expected (${this.token.tokentype})`, token.position)
                     }
                     identifier = this.token.value
                     this.advance()
-                    if (this.token.tokentype !== TokenType.LPAREN) {
-                        this.error(`'(' expected (${this.token.tokentype})`, token.position)
-                    }
-                    this.advance()
-                    if (this.token.tokentype === TokenType.RPAREN) {
-                        this.advance()
-                        prog = this.program()
-                        if (this.token.tokentype !== TokenType.KEYWORD || this.token.value !== "ENDFUNCTION") {
-                            this.error(`'ENDFUNCTION' expected (${this.token.tokentype})`, token.position)
-                        }
-                        this.advance()
-                        return new FuncDefNode(token.position, identifier, prog, undefined)
-                    }
-                    args = this.getArgList(token, true)
+                    this.eat(TokenType.LPAREN, token.position)
                     if (this.token.tokentype !== TokenType.RPAREN) {
-                        this.error(`')' expected (${this.token.tokentype})`, token.position)
+                        args = this.getArgList(token, true)
                     }
-                    this.advance()
+                    this.eat(TokenType.RPAREN, token.position)
                     prog = this.program()
-                    if (this.token.tokentype !== TokenType.KEYWORD || this.token.value !== "ENDFUNCTION") {
-                        this.error(`'ENDFUNCTION' expected (${this.token.tokentype})`, token.position)
-                    }
-                    this.advance()
+                    this.eatKeyword("ENDFUNCTION", token.position)
                     return new FuncDefNode(token.position, identifier, prog, args)
                     break
                 case "PRINT":
@@ -395,7 +404,7 @@ class Parser {
                     break
                 case "POINT":
                     this.advance()
-                    args = this.getNumArgList(token, 3)
+                    args = this.getNumArgList(token, 2)
                     return new PointNode(token.position, args)
                     break
                 case "LINE":

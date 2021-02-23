@@ -135,6 +135,32 @@ class Interpreter {
             }
         }
     }
+    visit_ForNode(node, ctx) {
+        //constructor(position, forIdentifier, forStart, forEnd, forStep, forProg) {
+        const forIdentifier = node.forIdentifier.identifier
+        this.visit(node.forIdentifier, ctx)
+        const forStart = this.visit(node.forStart, ctx)
+        const forEnd = this.visit(node.forEnd, ctx)
+        const forStep = this.visit(node.forStep, ctx)
+        if (!forStart instanceof BaseNumber || !forEnd instanceof BaseNumber || !forStep instanceof BaseNumber) {
+            this.error(`Arguments must be numbers (FOR)`, node.position)
+        }
+        if (forStep.value === 0) {
+            this.error(`Step can't be zero (FOR)`, node.position)
+        }
+        ctx.symbolTable.setVar(forIdentifier, forStart)
+        if (forStep.value > 0) {
+            while (ctx.symbolTable.getVar(forIdentifier).value <= forEnd.value) {
+                this.visit(node.forProg, ctx)
+                ctx.symbolTable.setVar(forIdentifier, ctx.symbolTable.getVar(forIdentifier).add(new FloatNumber(forStep.value).setContext(ctx)))
+            }
+        } else {
+            while (ctx.symbolTable.getVar(forIdentifier).value >= forEnd.value) {
+                this.visit(node.forProg, ctx)
+                ctx.symbolTable.setVar(forIdentifier, ctx.symbolTable.getVar(forIdentifier).add(new FloatNumber(forStep.value).setContext(ctx)))
+            }
+        }
+    }
     visit_WhileNode(node, ctx) {
         while (this.visit(node.condition, ctx).value !== 0) {
             this.visit(node.whiledo, ctx)
@@ -158,9 +184,6 @@ class Interpreter {
         }
     }
     visit_DeclareIdentifierNode(node, ctx) {
-        if (ctx.symbolTable.testVarThisContext(node.identifier)) {
-            this.error(`redeclaration of ${node.identifier}`, node.position)
-        }
         ctx.symbolTable.setVar(node.identifier, undefined)
     }
     visit_IdentifierNode(node, ctx) {
