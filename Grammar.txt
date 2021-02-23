@@ -5,8 +5,8 @@ statement:  identifier "=" orexpr
             "IF" orexpr lf program lf ("ELSE" program)? "ENDIF"
             "WHILE" orexpr "DO" statement
             "WHILE" orexpr lf program lf "ENDWHILE"
-            "FOR" identifier "=" expr "TO" expr ("STEP" orexpr)? "DO" statement
-            "FOR" identifier "=" expr "TO" expr ("STEP" orexpr)? lf program lf "NEXT"
+            "FOR" identifier "=" expr "TO" expr ("STEP" expr)? "DO" statement
+            "FOR" identifier "=" expr "TO" expr ("STEP" expr)? lf program lf "NEXT"
             "CLS"
             "PRINT" (orexpr ("," orexpr)*)?
             "PRINTLN" (orexpr ("," orexpr)*)?

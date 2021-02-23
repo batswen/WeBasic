@@ -358,7 +358,7 @@ class Parser {
                     const forEnd = this.expr()
                     if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "STEP") {
                         this.eatKeyword("STEP", token.position)
-                        forStep = this.orexpr()
+                        forStep = this.expr()
                     } else {
                         forStep = new IntNode(null, 1)
                     }
