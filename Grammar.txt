@@ -16,9 +16,9 @@ statement:  identifier "=" orexpr
             "NAMESPACE" identifier lf program lf "ENDNAMESPACE"
             "FUNCTION" identifier "(" (identifier ("," identifier)*)? ")" lf program lf "ENDFUNCTION"
             "RETURN" (orexpr)?
-            "COLOR" int "," int "," int
-            "POINT" int "," epxr
-            "LINE" int "," int "," int "," int
+            "COLOR" expr "," expr "," expr
+            "POINT" expr "," expr
+            "LINE" expr "," expr "," expr "," expr
 
 orexpr:     andexpr ("OR" andexpr)*
 andexpr:    eqexpr ("AND" eqexpr)*
@@ -27,7 +27,7 @@ glexpr:     expr (("<"|"<="|">"|">=") expr)*
 
 expr:       term (("+"|"-") term)*
 term:       factor (("*"|"/") factor)*
-factor:     ("+"|"-") int|float
+factor:     ("+"|"-")? int|float
             string
             "(" orexpr ")"
             identifier (("[" expr "]")|("(" ")"))?
@@ -35,8 +35,8 @@ factor:     ("+"|"-") int|float
             buildin-function
 
 string:     """ ([^"]|\\")* """
-int:        [0-9]
-float:      [0-9] ("." [0-9])+
+int:        [0-9]+
+float:      [0-9]+ ("." [0-9])+
 list:       "[" (orexpr ("," orexpr)*)? "]"
 identifier: [a-zA-Z_\$][\$_0-9\p{L}]*
 lf:         (":"|"\n")

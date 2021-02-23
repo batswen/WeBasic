@@ -46,6 +46,17 @@ class Parser {
         }
         return args
     }
+    getNumArgList(token, amount) {
+        const args = []
+        let count = 1
+        args.push(this.orexpr())
+        while (count < amount && this.token.tokentype === TokenType.COMMA) {
+            this.advance()
+            count++
+            args.push(this.orexpr())
+        }
+        return args
+    }
     getTypedArgList(token, types) {
         const args = []
         let count = 0
@@ -159,7 +170,7 @@ class Parser {
                 case "LEFT":
                     this.eat(TokenType.KEYWORD, token.position)
                     this.eat(TokenType.LPAREN, token.position)
-                    args = this.getTypedArgList(token, [TokenType.STRING, TokenType.NUMBER])
+                    args = this.getNumArgList(token, 2)
                     this.eat(TokenType.RPAREN, token.position)
                     return new LeftNode(token.posiiton, args[0], args[1])
                     break
@@ -379,17 +390,17 @@ class Parser {
                     break
                 case "COLOR":
                     this.advance()
-                    args = this.getTypedArgList(token, [TokenType.INT, TokenType.INT, TokenType.INT])
+                    args = this.getNumArgList(token, 3)
                     return new ColorNode(token.position, args)
                     break
                 case "POINT":
                     this.advance()
-                    args = this.getTypedArgList(token, [TokenType.INT, TokenType.INT])
+                    args = this.getNumArgList(token, 3)
                     return new PointNode(token.position, args)
                     break
                 case "LINE":
                     this.advance()
-                    args = this.getTypedArgList(token, [TokenType.INT, TokenType.INT, TokenType.INT, TokenType.INT])
+                    args = this.getNumArgList(token, 4)
                     return new LineNode(token.position, args)
                     break
                 case "RETURN":

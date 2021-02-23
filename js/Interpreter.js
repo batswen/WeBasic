@@ -68,27 +68,36 @@ class Interpreter {
         return new DTNull()
     }
     visit_ColorNode(node, ctx) {
-        const red = this.visit(node.args[0], ctx).value
-        const green = this.visit(node.args[1], ctx).value
-        const blue = this.visit(node.args[2], ctx).value
-        if (red > 255 || red < 0 || green < 0 || green > 255 || blue < 0 || blue > 255) {
-            this.error(`Illegal quantity, must be in 0..255 (COLOR ${red}, ${green}, ${blue})`, node.position)
+        const red = this.visit(node.args[0], ctx)
+        const green = this.visit(node.args[1], ctx)
+        const blue = this.visit(node.args[2], ctx)
+        if (!red instanceof BaseNumber || !green instanceof BaseNumber || !blue instanceof BaseNumber) {
+            this.error(`Arguments must be numbers (COLOR)`, node.position)
         }
-        this.gfx.fillStyle = `rgb(${red}, ${green}, ${blue})`
+        if (red.value > 255 || red.value < 0 || green.value < 0 || green.value > 255 || blue.value < 0 || blue.value > 255) {
+            this.error(`Illegal quantity, must be in 0..255 (COLOR ${red.value}, ${green.value}, ${blue.value})`, node.position)
+        }
+        this.gfx.fillStyle = `rgb(${red.value}, ${green.value}, ${blue.value})`
     }
     visit_PointNode(node, ctx) {
-        const xc = this.visit(node.args[0], ctx).value
-        const yc = this.visit(node.args[1], ctx).value
-        this.gfx.fillRect(xc, yc, 1, 1)
+        const xc = this.visit(node.args[0], ctx)
+        const yc = this.visit(node.args[1], ctx)
+        if (!xc instanceof BaseNumber || !yc instanceof BaseNumber) {
+            this.error(`Arguments must be numbers (POINT)`, node.position)
+        }
+        this.gfx.fillRect(xc.value, yc.value, 1, 1)
     }
     visit_LineNode(node, ctx) {
-        const xcStart = this.visit(node.args[0], ctx).value
-        const ycStart = this.visit(node.args[1], ctx).value
-        const xcEnd = this.visit(node.args[2], ctx).value
-        const ycEnd = this.visit(node.args[3], ctx).value
+        const xcStart = this.visit(node.args[0], ctx)
+        const ycStart = this.visit(node.args[1], ctx)
+        const xcEnd = this.visit(node.args[2], ctx)
+        const ycEnd = this.visit(node.args[3], ctx)
+        if (!xcStart instanceof BaseNumber || !ycStart instanceof BaseNumber || !xcEnd instanceof BaseNumber || !ycEnd instanceof BaseNumber) {
+            this.error(`Arguments must be numbers (LINE)`, node.position)
+        }
         this.gfx.beginPath()
-        this.gfx.moveTo(xcStart, ycStart)
-        this.gfx.lineTo(xcEnd, ycEnd)
+        this.gfx.moveTo(xcStart.value, ycStart.value)
+        this.gfx.lineTo(xcEnd.value, ycEnd.value)
         this.gfx.stroke()
     }
     visit_NamespaceNode(node, ctx) {
