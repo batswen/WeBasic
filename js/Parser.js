@@ -100,10 +100,7 @@ class Parser {
                 if (this.token.tokentype === TokenType.LBRACKET) {
                     this.advance()
                     access = this.expr()
-                    if (this.token.tokentype !== TokenType.RBRACKET) {
-                        this.error(`']' expected (${this.token.tokentype})`, token.position)
-                    }
-                    this.advance()
+                    this.eat(TokenType.RBRACKET, token.position)
                 }
                 return new ListNode(token.position, list, access)
             } else {
@@ -118,10 +115,7 @@ class Parser {
             } else if (this.token.tokentype === TokenType.LBRACKET) { // List access
                 this.advance()
                 access = this.expr()
-                if (this.token.tokentype !== TokenType.RBRACKET) {
-                    this.error(`']' expected (${this.token.tokentype})`, token.position)
-                }
-                this.advance()
+                this.eat(TokenType.RBRACKET, token.position)
             } else if (this.token.tokentype === TokenType.LPAREN) { // Function call
                 this.advance()
                 return this.handleFuncCall(token)
@@ -132,8 +126,24 @@ class Parser {
                 return new IdentifierNode(token.position, token.value, access)
             }
 
+        } else if (this.token.tokentype === TokenType.KEYWORD) {
+            switch (this.token.value) {
+                case "RND":
+                    this.eat(TokenType.KEYWORD, token.position)
+                    this.eat(TokenType.LPAREN, token.position)
+                    this.eat(TokenType.RPAREN, token.position)
+                    return new RandomNode(token.posiiton)
+                    break
+            }
         } else {
             this.error(`Number, Identifier, String, '[', '(', '+', or '-' expected (${this.token.tokentype})`, token.position)
+        }
+    }
+    eat(tokentype, pos, keyword = undefined) {
+        if (this.token.tokentype === tokentype) {
+            this.advance()
+        } else {
+            this.error(`${tokentype} expected, got ${this.token.tokentype}`, pos)
         }
     }
     term() {

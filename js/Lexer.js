@@ -70,7 +70,7 @@ class Lexer {
             result += this.char
         }
         if (this.char !== '"') {
-            this.error(`" expected"`)
+            this.error(`" expected`)
         }
         return new Token(TokenType.STRING, result, this.position.copy())
     }
@@ -87,7 +87,7 @@ class Lexer {
         } else if (dots === 1) {
             return new Token(TokenType.FLOAT, parseFloat(number), this.position.copy())
         } else {
-            this.error("Not a number (0 or 1 '.')")
+            this.error("Not a number")
         }
     }
     eatComment() {

@@ -45,6 +45,9 @@ class Interpreter {
         }
         this.shouldReturn = true
     }
+    visit_RandomNode(node, ctx) {
+        return new FloatNumber(Math.random())
+    }
     visit_NamespaceNode(node, ctx) {
         const context = new Context(node.namespace, ctx)
         this.visit(node.prog, context)

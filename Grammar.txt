@@ -29,6 +29,7 @@ factor:     ("+"|"-") int|float
             "(" orexpr ")"
             identifier (("[" expr "]")|("(" ")"))?
             list ("[" expr "]")?
+            buildin-function
 
 string:     """ ([^"]|\\")* """
 int:        [0-9]
@@ -36,3 +37,5 @@ float:      [0-9] ("." [0-9])+
 list:       "[" (orexpr ("," orexpr)*)? "]"
 identifier: [a-zA-Z_\$][\$_0-9\p{L}]*
 lf:         (":"|"\n")
+buildin-function :
+            rnd()

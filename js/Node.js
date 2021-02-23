@@ -117,6 +117,12 @@ class DumpNode extends Node {
     }
 }
 
+class RandomNode extends Node {
+    constructor(position) {
+        super(position)
+    }
+}
+
 class CPrintNode extends Node {
     constructor(position, value) {
         super(position)

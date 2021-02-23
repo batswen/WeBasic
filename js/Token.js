@@ -35,7 +35,7 @@ const KEYWORDS = [
     "NAMESPACE", "ENDNAMESPACE",
     "CLS",
     "PRINT", "PRINTLN", "CPRINT",
-    "DUMP", "CDUMP"
+    "DUMP", "CDUMP", "RND"
 ]
 
 class Token {

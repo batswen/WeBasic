@@ -47,6 +47,18 @@ class DTList extends DataType {
             this.value = v
         }
     }
+    getElement(n) {
+        if (n < 0) {
+            n = this.value.length - n
+            if (n < 0) {
+                return undefined
+            }
+        }
+        if (n >= this.value.length) {
+            return undefined
+        }
+        return this.value[n]
+    }
     add(other) {
         other.value.forEach(e => {
             this.value.push(e)
