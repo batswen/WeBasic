@@ -8,6 +8,7 @@ const TokenType = {
     "MINUS": "MINUS",
     "MUL": "MUL",
     "DIV": "DIV",
+    "MOD": "MOD",
     "LPAREN": "LPAREN",
     "RPAREN": "RPAREN",
     "LBRACKET": "LBRACKET",

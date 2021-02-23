@@ -4,7 +4,7 @@ const examples = {
     "IfThen1": `cls\na = 5:if a > 0 then a_cond = "Ja"\nif a == 0 then result = "true" else result = "false"\ndump\nif 0 then print "Yes":print "Always"`,
     "IfThen2": `cls\nif 0 then print "true" else print "false"\nif 1 then print "true" else print "false"\nif 0\n print "true"\nelse\n print "false"\nendif\nif 1\n print "true"\nelse\n print "false"\nendif\n`,
     "While": `cls\na=10:while a>5 do a=a-1:println a\nprintln\na=10:while a>5\n\tprintln a\n\ta = a - 0.5\nendwhile\ndump`,
-    "For": `cls\nk = 7500\nfor i=1 to 8\n    println k, " : ", i, " = ", k / i\nnext\n\nfor j = 50 to 20 step -2 do print j, " "`,
+    "For": `cls\nk = 7500\nfor i=1 to 8\n    println k, " : ", i, " = ", k / i\nnext\n\nfor j = 50 to 20 step -2 do if j % 4 then print j, " "`,
     "List": `cls\na = []\na = [3, "Abc", 1] + [4]\nz=[10, 11, 12][-1]\nb = 0:x = [5, 0, -5, "Hallo"][b]\nb = 3:x = [5, 0, -5, "Hallo"][b]:dump\nprintln ["Ja", "Nein"][0]\nprintln a[0], ", ", a[3]\naz=[[5,4,3],[],"Test", [1,2,3]]:bz=az[0]:cz=az[-1]:dz=bz[2]:dump`,
     "Namespaces": `cls:a = 5:dump\n\nnamespace abc\nprintln "in 'abc'"\na = pi:dump\nendnamespace\nprintln "after 'abc'"\ndump`,
     "Function": `cls\nfunction test()\n  println "Hallo"\n  a = 5:dump\nendfunction\na = test()\ntest()`,

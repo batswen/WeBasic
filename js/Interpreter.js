@@ -302,6 +302,13 @@ class Interpreter {
                     this.error(`Type mismatch (/) [${typeof left}, ${typeof right}]`, node.position)
                 }
                 break
+            case TokenType.MOD:
+                if (left instanceof IntNumber && right instanceof IntNumber) {
+                    return new IntNumber(left).mod(right).setContext(ctx)
+                } else {
+                    this.error(`Type mismatch (%) [${typeof left}, ${typeof right}]`, node.position)
+                }
+                break
             case TokenType.KEYWORD:
                 switch (node.operator.value) {
                     case "OR":

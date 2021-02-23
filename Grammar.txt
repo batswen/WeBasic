@@ -26,7 +26,7 @@ eqexpr:     glexpr (("=="|"!=") glexpr)*
 glexpr:     expr (("<"|"<="|">"|">=") expr)*
 
 expr:       term (("+"|"-") term)*
-term:       factor (("*"|"/") factor)*
+term:       factor (("*"|"/"|"%") factor)*
 factor:     ("+"|"-")? int|float
             string
             "(" orexpr ")"

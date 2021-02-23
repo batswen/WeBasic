@@ -184,6 +184,12 @@ class IntNumber extends BaseNumber {
         }
         return this
     }
+    mod(other) {
+        if (other instanceof IntNumber) {
+            this.value = this.value % other.value
+        }
+        return this
+    }
     or(other) {
         this.value = this.value | other.value
         return this

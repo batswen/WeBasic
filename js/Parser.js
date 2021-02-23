@@ -197,7 +197,7 @@ class Parser {
     }
     term() {
         let left = this.factor()
-        while (this.token.tokentype === TokenType.MUL || this.token.tokentype === TokenType.DIV) {
+        while (this.token.tokentype === TokenType.MUL || this.token.tokentype === TokenType.DIV || this.token.tokentype === TokenType.MOD) {
             let op = this.token
             this.advance()
             let right = this.factor()

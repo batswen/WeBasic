@@ -117,6 +117,9 @@ class Lexer {
             } else if (this.char === "/") {
                 tokens.push(new Token(TokenType.DIV, null, this.position.copy()))
                 this.nextChar()
+            } else if (this.char === "%") {
+                tokens.push(new Token(TokenType.MOD, null, this.position.copy()))
+                this.nextChar()
             } else if (this.char === "(") {
                 tokens.push(new Token(TokenType.LPAREN, null, this.position.copy()))
                 this.nextChar()
