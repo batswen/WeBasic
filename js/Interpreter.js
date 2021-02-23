@@ -183,7 +183,11 @@ class Interpreter {
         const list = []
         node.args.forEach(e => list.push(this.visit(e, ctx)))
         if (node.access) {
-            return new DTList(list).setContext(ctx).getElement(index)
+            const result = new DTList(list).setContext(ctx).getElement(index)
+            if (result === undefined) {
+                this.error("Index out of bounds", node.position)
+            }
+            return result
         } else {
             return new DTList(list).setContext(ctx)
         }
@@ -195,7 +199,11 @@ class Interpreter {
         } else if (value instanceof DTList) {
             if (node.access) {
                 const index = this.visit(node.access, ctx).value
-                ctx.symbolTable.setVar(node.name, value.getElement(index))
+                const result = value.getElement(index)
+                if (result === undefined) {
+                    this.error("Index out of bounds", node.position)
+                }
+                ctx.symbolTable.setVar(node.name, result)
             } else {
                 ctx.symbolTable.setVar(node.name, value)
             }
@@ -360,9 +368,11 @@ class Interpreter {
         try {
             this.visit(this.ast, ctx)
         } catch (e) {
-            console.log(e)
+            if (e !== "error") {
+                console.log(e)
+            }
+        } finally {
             return this.errorMsg
         }
-        return undefined
     }
 }

@@ -50,11 +50,11 @@ class DTList extends DataType {
         if (n < 0) {
             n = this.value.length + n
             if (n < 0) {
-                throw "index"
+                return undefined
             }
         }
         if (n >= this.value.length) {
-            throw "index"
+            return undefined
         }
         return this.value[n]
     }
@@ -62,11 +62,11 @@ class DTList extends DataType {
         if (n < 0) {
             n = this.value.length + n
             if (n < 0) {
-                throw "index"
+                return undefined
             }
         }
         if (n >= this.value.length) {
-            throw "index"
+            return undefined
         }
         this.value[n] = newValue
         return this

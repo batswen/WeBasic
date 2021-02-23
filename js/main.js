@@ -49,7 +49,9 @@ function go() {
             showError("Interpreter", error)
         }
     } catch (e) {
-        console.log("!"+e)
+        if (e !== "error") {
+            console.log(e)
+        }
     }
 }
 
