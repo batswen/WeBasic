@@ -4,6 +4,12 @@ A BASIC interpreter for websites
 
 Very early stage
 
+No documentation, look in grammar.txt
+
+### Known bugs
+* List values cannot be changed
+* Namespaces can be declared but not accessed
+
 
 
 ### Variable assignment

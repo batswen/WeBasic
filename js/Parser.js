@@ -360,7 +360,7 @@ class Parser {
                         this.eatKeyword("STEP", token.position)
                         forStep = this.expr()
                     } else {
-                        forStep = new IntNode(null, 1)
+                        forStep = new FloatNode(null, 1)
                     }
                     if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "DO") {
                         this.eatKeyword("DO", token.position)

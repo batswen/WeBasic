@@ -82,7 +82,7 @@ class Interpreter {
     visit_PointNode(node, ctx) {
         const xc = this.visit(node.args[0], ctx)
         const yc = this.visit(node.args[1], ctx)
-        if (!(xc instanceof BaseNumber) || !(yc instanceof BaseNumber) {
+        if (!(xc instanceof BaseNumber) || !(yc instanceof BaseNumber)) {
             this.error(`Arguments must be numbers (POINT)`, node.position)
         }
         this.gfx.fillRect(xc.value, yc.value, 1, 1)
