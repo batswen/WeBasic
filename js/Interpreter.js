@@ -71,7 +71,7 @@ class Interpreter {
         const red = this.visit(node.args[0], ctx)
         const green = this.visit(node.args[1], ctx)
         const blue = this.visit(node.args[2], ctx)
-        if (!red instanceof BaseNumber || !green instanceof BaseNumber || !blue instanceof BaseNumber) {
+        if (!(red instanceof BaseNumber) || !(green instanceof BaseNumber) || !(blue instanceof BaseNumber)) {
             this.error(`Arguments must be numbers (COLOR)`, node.position)
         }
         if (red.value > 255 || red.value < 0 || green.value < 0 || green.value > 255 || blue.value < 0 || blue.value > 255) {
@@ -82,7 +82,7 @@ class Interpreter {
     visit_PointNode(node, ctx) {
         const xc = this.visit(node.args[0], ctx)
         const yc = this.visit(node.args[1], ctx)
-        if (!xc instanceof BaseNumber || !yc instanceof BaseNumber) {
+        if (!(xc instanceof BaseNumber) || !(yc instanceof BaseNumber) {
             this.error(`Arguments must be numbers (POINT)`, node.position)
         }
         this.gfx.fillRect(xc.value, yc.value, 1, 1)
@@ -92,7 +92,7 @@ class Interpreter {
         const ycStart = this.visit(node.args[1], ctx)
         const xcEnd = this.visit(node.args[2], ctx)
         const ycEnd = this.visit(node.args[3], ctx)
-        if (!xcStart instanceof BaseNumber || !ycStart instanceof BaseNumber || !xcEnd instanceof BaseNumber || !ycEnd instanceof BaseNumber) {
+        if (!(xcStart instanceof BaseNumber) || !(ycStart instanceof BaseNumber) || !(xcEnd instanceof BaseNumber) || !(ycEnd instanceof BaseNumber)) {
             this.error(`Arguments must be numbers (LINE)`, node.position)
         }
         this.gfx.beginPath()
@@ -142,8 +142,9 @@ class Interpreter {
         const forStart = this.visit(node.forStart, ctx)
         const forEnd = this.visit(node.forEnd, ctx)
         const forStep = this.visit(node.forStep, ctx)
-        if (!forStart instanceof BaseNumber || !forEnd instanceof BaseNumber || !forStep instanceof BaseNumber) {
-            this.error(`Arguments must be numbers (FOR)`, node.position)
+        console.log(forStart.constructor.name, forStart instanceof FloatNumber)
+        if (!(forStart instanceof FloatNumber) || !(forEnd instanceof FloatNumber) || !(forStep instanceof FloatNumber)) {
+            this.error(`Arguments must be floats (FOR)`, node.position)
         }
         if (forStep.value === 0) {
             this.error(`Step can't be zero (FOR)`, node.position)

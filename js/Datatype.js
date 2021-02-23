@@ -157,19 +157,19 @@ class IntNumber extends BaseNumber {
     }
     add(other) {
         if (other instanceof BaseNumber) {
-            this.value = this.value + other.value
+            this.value = this.value + parseInt(other.value)
         }
         return this
     }
     sub(other) {
         if (other instanceof BaseNumber) {
-            this.value = this.value - other.value
+            this.value = this.value - parseInt(other.value)
         }
         return this
     }
     mul(other) {
         if (other instanceof BaseNumber) {
-            this.value = this.value * other.value
+            this.value = this.value * parseInt(other.value)
         }
         return this
     }
@@ -180,13 +180,13 @@ class IntNumber extends BaseNumber {
                     msg: "Interpreter: division by zero"
                 }
             }
-            this.value = this.value / other.value
+            this.value = this.value / parseInt(other.value)
         }
         return this
     }
     mod(other) {
         if (other instanceof IntNumber) {
-            this.value = this.value % other.value
+            this.value = this.value % parseInt(other.value)
         }
         return this
     }
