@@ -195,10 +195,7 @@ class Interpreter {
         } else if (value instanceof DTList) {
             if (node.access) {
                 const index = this.visit(node.access, ctx).value
-                if (index < 0 || index >= node.args.length) {
-                    this.error(`index out of bounds (${index})`, node.position)
-                }
-                ctx.symbolTable.setVar(node.name, this.visit(node.args[index], ctx))
+                ctx.symbolTable.setVar(node.name, value.getElement(index))
             } else {
                 ctx.symbolTable.setVar(node.name, value)
             }
