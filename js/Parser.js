@@ -49,7 +49,7 @@ class Parser {
     getTypedArgList(token, types) {
         const args = []
         let count = 0
-        if (this.token.tokentype === types[count]) {
+        if ((types[count] === TokenType.NUMBER && this.token.tokentype === TokenType.INT || this.token.tokentype === TokenType.FLOAT) || this.token.tokentype === types[count]) {
             count++
             args.push(this.orexpr())
         } else {
@@ -57,7 +57,7 @@ class Parser {
         }
         while (count < types.length && this.token.tokentype === TokenType.COMMA) {
             this.advance()
-            if (this.token.tokentype === types[count]) {
+            if ((types[count] === TokenType.NUMBER && this.token.tokentype === TokenType.INT || this.token.tokentype === TokenType.FLOAT) || this.token.tokentype === types[count]) {
                 count++
                 args.push(this.orexpr())
             } else {
@@ -159,7 +159,7 @@ class Parser {
                 case "LEFT":
                     this.eat(TokenType.KEYWORD, token.position)
                     this.eat(TokenType.LPAREN, token.position)
-                    args = this.getTypedArgList(token, [TokenType.STRING, TokenType.INT])
+                    args = this.getTypedArgList(token, [TokenType.STRING, TokenType.NUMBER])
                     this.eat(TokenType.RPAREN, token.position)
                     return new LeftNode(token.posiiton, args[0], args[1])
                     break

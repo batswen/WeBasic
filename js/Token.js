@@ -2,6 +2,7 @@ const TokenType = {
     "EOF": "EOF",
     "INT": "INT",
     "FLOAT": "FLOAT",
+    "NUMBER": "NUMBER",
     "STRING": "STRING",
     "PLUS": "PLUS",
     "MINUS": "MINUS",

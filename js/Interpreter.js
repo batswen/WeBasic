@@ -276,14 +276,14 @@ class Interpreter {
                         if (left instanceof IntNumber && right instanceof IntNumber) {
                             return new IntNumber(left).or(right).setContext(ctx)
                         } else {
-                            this.error(`Type mismatch (or) [${typeof left}, ${typeof right}]`", node.position)
+                            this.error(`Type mismatch (or) [${typeof left}, ${typeof right}]`, node.position)
                         }
                         break
                     case "AND":
                         if (left instanceof IntNumber && right instanceof IntNumber) {
                             return new IntNumber(left).and(right).setContext(ctx)
                         } else {
-                            this.error(`Type mismatch (and) [${typeof left}, ${typeof right}]`", node.position)
+                            this.error(`Type mismatch (and) [${typeof left}, ${typeof right}]`, node.position)
                         }
                         break
                 }
