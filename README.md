@@ -6,6 +6,8 @@ Very early stage
 
 No documentation, look in grammar.txt
 
+Live demo: [WeBasic.bplaced.net](webasic.bplaced.net)
+
 ### Known bugs
 * List values cannot be changed
 * Namespaces can be declared but not accessed
