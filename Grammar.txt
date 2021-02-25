@@ -30,7 +30,7 @@ expr:       term (("+"|"-") term)*
 term:       factor (("*"|"/"|"%") factor)*
 factor:     ("+"|"-")? int|float
             string
-            not orexpr
+            "NOT" orexpr
             "(" orexpr ")"
             identifier (("[" expr "]")|("(" ")"))?
             list ("[" expr "]")?
