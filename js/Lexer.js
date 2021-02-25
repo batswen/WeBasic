@@ -108,7 +108,7 @@ class Lexer {
             } else if (this.char === "-") {
                 tokens.push(new Token(TokenType.MINUS, null, this.position.copy()))
                 this.nextChar()
-            } else if (this.char === ";") {
+            } else if (this.char === ";" || this.char === "#") {
                 this.eatComment()
                 this.nextChar()
             } else if (this.char === "*") {

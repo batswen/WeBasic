@@ -142,6 +142,10 @@ class Parser {
             } else if (this.token.tokentype === TokenType.LPAREN) { // Function call
                 this.eat(TokenType.LPAREN, token.position)
                 return this.handleFuncCall(token)
+            } else if (this.token.tokentype === TokenType.LBRACKET) { // List access
+                this.eat(TokenType.LBRACKET, token.position)
+                access = this.expr()
+                this.eat(TokenType.RBRACKET, token.position)
             }
             if (idOnly) {
                 return new DeclareIdentifierNode(token.position, token.value, access)
