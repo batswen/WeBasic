@@ -142,10 +142,10 @@ class Lexer {
                 tokens.push(new Token(TokenType.COLON, null, this.position.copy()))
                 this.nextChar()
             } else if (this.char === "<") {
-                tokens.push(this.getTokOrTok("=", TokenType.LE, TokenType.LT))
+                tokens.push(this.getTokOrTok("=", TokenType.LE, TokenType.LT, this.position.copy()))
                 this.nextChar()
             } else if (this.char === ">") {
-                tokens.push(this.getTokOrTok("=", TokenType.GE, TokenType.GT))
+                tokens.push(this.getTokOrTok("=", TokenType.GE, TokenType.GT, this.position.copy()))
                 this.nextChar()
             } else if (this.char === "!" && this.peekNextChar() === "=") {
                 tokens.push(new Token(TokenType.NE, null, this.position.copy()))

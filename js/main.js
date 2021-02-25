@@ -13,7 +13,7 @@ for (let e in examples) {
     select.appendChild(opt)
 }
 
-prog.value = ""
+prog.value = `# Choose an example from above\n# or write your own program\n# then click the "Run" button\n\ncls:println "Hello, world!"`
 document.getElementById("output").value = ""
 
 function showError(source, e) {
@@ -47,7 +47,10 @@ function go() {
                     error = new Interpreter(ast).interpret()
                 }
                 if (error) {
+                    const startTime = new Date().getTime()
                     showError("Interpreter", error)
+                    const endTime = new Date().getTime()
+                    console.log(startTime, endTime, endTime - startTime)
                     if (tokens) console.log(tokens)
                     if (ast) console.log(ast)
                 }
