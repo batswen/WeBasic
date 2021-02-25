@@ -114,10 +114,11 @@ class NamespaceNode extends Node {
 }
 
 class AssignNode extends Node {
-    constructor(position, name, value) {
+    constructor(position, name, value, writeAccess) {
         super(position)
         this.name = name
         this.value = value
+        this.writeAccess = writeAccess
     }
 }
 

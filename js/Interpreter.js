@@ -280,24 +280,31 @@ class Interpreter {
         }
     }
     visit_AssignNode(node, ctx) {
-        let value = this.visit(node.value, ctx)
+        let value = this.visit(node.value, ctx), writeElement = undefined
+        if (node.writeAccess) {
+            writeElement = this.visit(node.writeAccess, ctx)
+            if (!(writeElement instanceof BaseNumber)) {
+                this.error("Index must be a number", node.position)
+            }
+            writeElement = writeElement.value
+        }
         if (value instanceof IntNumber || value instanceof FloatNumber || value instanceof DTString) {
-            if (ctx.symbolTable.setVar(node.name, value) === undefined) {
+            if (ctx.symbolTable.setVar(node.name, value, writeElement) === undefined) {
                 this.error(`Undeclared variable ${node.name}`, node.position)
             }
         } else if (value instanceof DTList) {
             if (node.access) {
                 const index = this.visit(node.access, ctx).value
-                const result = value.getElement(index)
-                if (result === undefined) {
+                const value = value.getElement(index)
+                if (value === undefined) {
                     this.error("Index out of bounds", node.position)
                 }
-                if (ctx.symbolTable.setVar(node.name, result) === undefined) {
+            }
+            if (ctx.symbolTable.setVar(node.name, value, writeElement) === undefined) {
+                if (writeElement === undefined) {
                     this.error(`Undeclared variable ${node.name}`, node.position)
-                }
-            } else {
-                if (ctx.symbolTable.setVar(node.name, value) === undefined) {
-                    this.error(`Undeclared variable ${node.name}`, node.position)
+                } else {
+                    this.error("Index out of bounds", node.position)
                 }
             }
         }

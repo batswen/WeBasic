@@ -135,16 +135,12 @@ class Parser {
             }
         } else if (token.tokentype === TokenType.IDENTIFIER) { // Variable
             let access = undefined
-            this.advance()
+            this.eat(TokenType.IDENTIFIER, token.position)
             if (this.token.tokentype === TokenType.ASSIGN) {
                 this.eat(TokenType.ASSIGN, token.position)
-                return new AssignNode(token.position, token.value, this.orexpr())
-            } else if (this.token.tokentype === TokenType.LBRACKET) { // List access
-                this.eat(TokenType.LBRACKET, token.position)
-                access = this.expr()
-                this.eat(TokenType.RBRACKET, token.position)
+                return new AssignNode(token.position, token.value, this.orexpr(), null)
             } else if (this.token.tokentype === TokenType.LPAREN) { // Function call
-                this.advance()
+                this.eat(TokenType.LPAREN, token.position)
                 return this.handleFuncCall(token)
             }
             if (idOnly) {
@@ -152,7 +148,6 @@ class Parser {
             } else {
                 return new IdentifierNode(token.position, token.value, access)
             }
-
         } else if (token.tokentype === TokenType.KEYWORD) {
             switch (this.token.value) {
                 case "RND":
@@ -302,19 +297,21 @@ class Parser {
             this.eat(TokenType.IDENTIFIER, token.position)
             if (this.token.tokentype === TokenType.ASSIGN) {
                 this.eat(TokenType.ASSIGN, token.position)
-                return new AssignNode(token.position, token.value, this.orexpr())
+                return new AssignNode(token.position, token.value, this.orexpr(), null)
             } else if (this.token.tokentype === TokenType.LPAREN) { // Function call
                 this.eat(TokenType.LPAREN, token.position)
                 return this.handleFuncCall(token)
-            } /*else if (this.token.tokentype === TokenType.LBRACKET) { // assign to list
+            } else if (this.token.tokentype === TokenType.LBRACKET) { // List access
                 this.eat(TokenType.LBRACKET, token.position)
+                access = this.expr()
                 this.eat(TokenType.RBRACKET, token.position)
-                return new AssignToListNode(token.position)
-            } */else {
-                this.error(`'=', '(', or '[' expected (${this.token.tokentype})`, token.position)
+                this.eat(TokenType.ASSIGN, token.position)
+                return new AssignNode(token.position, token.value, this.orexpr(), access)
+            } else {
+                this.error(`'=', '(', or '[' expected (${token.tokentype})`, token.position)
             }
-        } else if (this.token.tokentype === TokenType.KEYWORD) {
-            switch (this.token.value) {
+        } else if (token.tokentype === TokenType.KEYWORD) {
+            switch (token.value) {
                 case "IF":
                     this.advance()
                     condition = this.orexpr()

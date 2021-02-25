@@ -13,7 +13,7 @@ for (let e in examples) {
     select.appendChild(opt)
 }
 
-prog.value = "; Type your program here"
+prog.value = "var a:a=[8,7,6]\na[0]=1:dump"
 document.getElementById("output").value = ""
 
 function showError(source, e) {

@@ -15,9 +15,13 @@ class SymbolTable {
         this.parentContext = parentContext
         this.symtable = {}
     }
-    setVar(name, value) {
+    setVar(name, value, writeElement = undefined) {
         if (name in this.symtable) {
-            this.symtable[name] = value
+            if (writeElement !== undefined) {
+                console.log(this.symtable[name].setElement(writeElement, value))
+            } else {
+                this.symtable[name] = value
+            }
             return this
         } else {
             return undefined
