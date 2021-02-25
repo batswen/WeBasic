@@ -101,25 +101,28 @@ class Parser {
             } else {
                 return new FloatNode(token.position, token.value)
             }
-        } else if (token.tokentype === TokenType.PLUS || this.token.tokentype === TokenType.MINUS) {
+        } else if (token.tokentype === TokenType.PLUS || token.tokentype === TokenType.MINUS) {
             this.advance()
             return new UnOpNode(token.position, this.factor(), token)
+        } else if (token.tokentype === TokenType.KEYWORD && token.value === "NOT") {
+            this.eatKeyword("NOT", token.position)
+            return new UnOpNode(token.position, this.orexpr(), token)
         } else if (token.tokentype === TokenType.LPAREN) {
             this.eat(TokenType.LPAREN, token.position)
             let expr = this.orexpr()
-            this.eat(TokenType.RPAREN, token.position)
+            this.eat(TokenType.RPAREN, this.token.position)
             return expr
         } else if (token.tokentype === TokenType.LBRACKET) {
             let list = [], access = undefined
             this.advance()
-            if (this.token.tokentype !== TokenType.RBRACKET) {
+            if (token.tokentype !== TokenType.RBRACKET) {
                 list.push(this.orexpr())
-                while (this.token.tokentype === TokenType.COMMA) {
+                while (token.tokentype === TokenType.COMMA) {
                     this.advance()
                     list.push(this.orexpr())
                 }
             }
-            if (this.token.tokentype === TokenType.RBRACKET) {
+            if (token.tokentype === TokenType.RBRACKET) {
                 this.advance()
                 if (this.token.tokentype === TokenType.LBRACKET) {
                     this.advance()
@@ -136,11 +139,11 @@ class Parser {
             if (this.token.tokentype === TokenType.ASSIGN) {
                 this.eat(TokenType.ASSIGN, token.position)
                 return new AssignNode(token.position, token.value, this.orexpr())
-            } else if (this.token.tokentype === TokenType.LBRACKET) { // List access
+            } else if (token.tokentype === TokenType.LBRACKET) { // List access
                 this.eat(TokenType.LBRACKET, token.position)
                 access = this.expr()
                 this.eat(TokenType.RBRACKET, token.position)
-            } else if (this.token.tokentype === TokenType.LPAREN) { // Function call
+            } else if (token.tokentype === TokenType.LPAREN) { // Function call
                 this.advance()
                 return this.handleFuncCall(token)
             }
@@ -150,7 +153,7 @@ class Parser {
                 return new IdentifierNode(token.position, token.value, access)
             }
 
-        } else if (this.token.tokentype === TokenType.KEYWORD) {
+        } else if (token.tokentype === TokenType.KEYWORD) {
             switch (this.token.value) {
                 case "RND":
                     this.eat(TokenType.KEYWORD, token.position)

@@ -17,9 +17,9 @@ statement:  "VAR" identifier ("," identifier)*
             "NAMESPACE" identifier lf program lf "ENDNAMESPACE"
             "FUNCTION" identifier "(" (identifier ("," identifier)*)? ")" lf program lf "ENDFUNCTION"
             "RETURN" (orexpr)?
-            "COLOR" expr "," expr "," expr
-            "POINT" expr "," expr
-            "LINE" expr "," expr "," expr "," expr
+            "COLOR" orexpr "," orexpr "," orexpr
+            "POINT" orexpr "," orexpr
+            "LINE" orexpr "," orexpr "," orexpr "," orexpr
 
 orexpr:     andexpr ("OR" andexpr)*
 andexpr:    eqexpr ("AND" eqexpr)*
@@ -30,6 +30,7 @@ expr:       term (("+"|"-") term)*
 term:       factor (("*"|"/"|"%") factor)*
 factor:     ("+"|"-")? int|float
             string
+            not orexpr
             "(" orexpr ")"
             identifier (("[" expr "]")|("(" ")"))?
             list ("[" expr "]")?
@@ -47,6 +48,6 @@ buildin-function :
             "INT(string|float)"
             "FLOAT(string|int)"
             "STRING(int|float)"
-            "ISINT(expr)"
-            "ISFLOAT(expr)"
-            "ISSTRING(expr)"
+            "ISINT(orexpr)"
+            "ISFLOAT(orexpr)"
+            "ISSTRING(orexpr)"

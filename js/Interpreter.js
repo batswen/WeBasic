@@ -13,7 +13,9 @@ class Interpreter {
         throw "error"
     }
     visit_FuncDefNode(node, ctx) {
-        ctx.symbolTable.declareVar(node.identifier)
+        if (ctx.symbolTable.declareVar(node.identifier) === undefined) {
+            this.error(`Redeclaration of ${node.identifier}`, node.position)
+        }
         ctx.symbolTable.setVar(node.identifier, new DefFunction(node.identifier, node.prog, node.args))
     }
     visit_FuncCallNode(node, ctx) {
@@ -191,7 +193,11 @@ class Interpreter {
         }
     }
     visit_DeclareIdentifierNode(node, ctx) {
-        node.identifier.forEach(e => {ctx.symbolTable.declareVar(e.identifier, undefined)})
+        node.identifier.forEach(e => {
+            if (ctx.symbolTable.declareVar(e.identifier) === undefined) {
+                this.error(`Redeclaration of ${e.identifier}`, node.position)
+            }
+        })
     }
     visit_IdentifierNode(node, ctx) {
         if (ctx.symbolTable.testVar(node.identifier)) {
@@ -295,12 +301,18 @@ class Interpreter {
         let result = left
         if (node.operator.tokentype === TokenType.MINUS) {
             if (!left instanceof BaseNumber) {
-                this.error("Number expected", left.position)
+                this.error("Number expected (-)", left.position)
             }
             if (left instanceof IntNumber) {
                 result = new IntNumber(-left.value).setContext(ctx)
             } else if (left instanceof FloatNumber ) {
                 result = new FloatNumber(-left.value).setContext(ctx)
+            }
+        } else if (node.operator.tokentype === TokenType.KEYWORD && node.operator.value === "NOT") {
+            if (left instanceof IntNumber) {
+                return new IntNumber(left.value === 0 ? 1 : 0).setContext(ctx)
+            } else {
+                this.error("Integer expected (NOT)", left.position)
             }
         }
         return result

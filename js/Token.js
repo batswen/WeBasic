@@ -17,6 +17,7 @@ const TokenType = {
     "COMMA": "COMMA",
     "COLON": "COLON",
     "DOT": "DOT",
+    "NOT": "NOT",
     "EQ": "EQ",
     "NE": "NE",
     "LT": "LT",
