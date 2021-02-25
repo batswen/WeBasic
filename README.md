@@ -9,7 +9,7 @@ No documentation, look in grammar.txt
 Live demo: [WeBasic.bplaced.net](http://webasic.bplaced.net)
 
 ### Known bugs
-* List values cannot be changed
+* List access (r/w) ins't recursive
 * Namespaces can be declared but not accessed
 
 
@@ -21,13 +21,21 @@ var = value
 First character must be $_a-zA_Z, then $_0-9\p{L}
 
 #### List
+[expr, expr, ...]
+
+Read access: [...][index]
+
+Write access: a=[...]:println a[index]
+
 
 #### Integer
+12345
 
 #### Float
+12345.6789
 
 #### Strings
-Must be in quotes.
+"Must be in quotes."
 
 Escapes:
 
