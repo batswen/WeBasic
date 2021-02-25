@@ -18,7 +18,7 @@ class SymbolTable {
     setVar(name, value, writeElement = undefined) {
         if (name in this.symtable) {
             if (writeElement !== undefined) {
-                console.log(this.symtable[name].setElement(writeElement, value))
+                this.symtable[name].setElement(writeElement, value)
             } else {
                 this.symtable[name] = value
             }

@@ -479,6 +479,8 @@ class Interpreter {
         const ctx = new Context("main")
         ctx.symbolTable.declareVar("pi")
         ctx.symbolTable.setVar("pi", new FloatNumber(Math.PI).setContext(ctx))
+        ctx.symbolTable.declareVar("null")
+        ctx.symbolTable.setVar("null", new DTNull().setContext(ctx))
         try {
             this.visit(this.ast, ctx)
         } catch (e) {
