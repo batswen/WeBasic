@@ -28,6 +28,7 @@ const TokenType = {
 }
 
 const KEYWORDS = [
+    "VAR",
     "AND", "OR", "NOT",
     "IF", "THEN", "ELSE", "ENDIF",
     "DO",

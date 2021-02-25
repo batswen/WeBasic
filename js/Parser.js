@@ -21,39 +21,34 @@ class Parser {
         }
         return this.token
     }
-    getArgList(token, idOnly = false) {
-        const args = []
-        if (idOnly) {
-            if (this.token.tokentype === TokenType.IDENTIFIER) {
-                args.push(this.factor(idOnly))
-            } else {
-                this.error(`identifier expected (${this.token.tokentype})`, token.position)
-            }
-        } else {
-            args.push(this.orexpr())
-        }
-        while (this.token.tokentype === TokenType.COMMA) {
-            this.advance()
-            if (idOnly) {
-                if (this.token.tokentype === TokenType.IDENTIFIER) {
-                    args.push(this.factor(idOnly))
-                } else {
-                    this.error(`identifier expected (${this.token.tokentype})`, token.position)
-                }
-            } else {
-                args.push(this.orexpr())
-            }
-        }
-        return args
+    getArgList(token) {
+        return this.getNumArgList(token, 1000000)
     }
     getNumArgList(token, amount) {
         const args = []
         let count = 1
         args.push(this.orexpr())
         while (count < amount && this.token.tokentype === TokenType.COMMA) {
-            this.advance()
+            this.eat(TokenType.COMMA, token.position)
             count++
             args.push(this.orexpr())
+        }
+        return args
+    }
+    getIdentifierList(token) {
+        const args = []
+        if (this.token.tokentype === TokenType.IDENTIFIER) {
+            args.push(this.factor(true))
+        } else {
+            this.error(`identifier expected (${this.token.tokentype})`, token.position)
+        }
+        while (this.token.tokentype === TokenType.COMMA) {
+            this.eat(TokenType.COMMA, token.position)
+            if (this.token.tokentype === TokenType.IDENTIFIER) {
+                args.push(this.factor(true))
+            } else {
+                this.error(`identifier expected (${this.token.tokentype})`, token.position)
+            }
         }
         return args
     }
@@ -409,7 +404,7 @@ class Parser {
                     this.advance()
                     this.eat(TokenType.LPAREN, token.position)
                     if (this.token.tokentype !== TokenType.RPAREN) {
-                        args = this.getArgList(token, true)
+                        args = this.getIdentifierList(token)
                     }
                     this.eat(TokenType.RPAREN, token.position)
                     prog = this.program()
@@ -474,6 +469,9 @@ class Parser {
                     this.advance()
                     return new CDumpNode(token.position)
                     break
+                case "VAR":
+                    this.advance()
+                    return new DeclareIdentifierNode(token.position, this.getIdentifierList(token))
                 default:
             }//switch
         }//else if keyword

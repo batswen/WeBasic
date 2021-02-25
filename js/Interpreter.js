@@ -13,25 +13,29 @@ class Interpreter {
         throw "error"
     }
     visit_FuncDefNode(node, ctx) {
-        ctx.symbolTable.setVar(node.identifier, new DefFunction(node.identifier, node.prog, node.args))
+        ctx.symbolTable.declareVar(node.identifier, new DefFunction(node.identifier, node.prog, node.args))
     }
     visit_FuncCallNode(node, ctx) {
         this.return = undefined
         this.shouldReturn = false
         const func = ctx.symbolTable.getVar(node.identifier)
         if (!func) {
-            this.error(`unknown function ${node.identifier}`, node.position)
+            this.error(`Unknown function ${node.identifier}`, node.position)
         }
         const context = new Context(node.identifier, ctx)
         if (func.params?.length !== node.args?.length) {
             const flen = func.params?.length || 0
             const alen = node.args?.length || 0
-            this.error(`incorrect amount of args, expected ${flen} given ${alen}`, node.position)
+            this.error(`Incorrect amount of args, expected ${flen} given ${alen}`, node.position)
         }
         if (func.params) {
+            // Declare formal parameters
             func.params.forEach(e => { this.visit(e, context) })
+            // Fill with args
             for (let i = 0; i < func.params.length; i++) {
-                context.symbolTable.setVar(func.params[i].identifier, this.visit(node.args[i], ctx))
+                if (context.symbolTable.setVar(func.params[i].identifier, this.visit(node.args[i], ctx)) === undefined) {
+                    this.error(`Undeclared variable ${func.params[i].identifier}`, node.position)
+                }
             }
         }
         this.visit(func.prog, context)
@@ -148,7 +152,9 @@ class Interpreter {
         if (forStep.value === 0) {
             this.error(`Step can't be zero (FOR)`, node.position)
         }
-        ctx.symbolTable.setVar(forIdentifier, forStart)
+        if (ctx.symbolTable.setVar(forIdentifier, forStart) === undefined) {
+            this.error(`Undeclared variable: ${forIdentifier}`, node.position)
+        }
         if (forStep.value > 0) {
             while (ctx.symbolTable.getVar(forIdentifier).value <= forEnd.value) {
                 this.visit(node.forProg, ctx)
@@ -184,7 +190,7 @@ class Interpreter {
         }
     }
     visit_DeclareIdentifierNode(node, ctx) {
-        ctx.symbolTable.setVar(node.identifier, undefined)
+        node.identifier.forEach(e => {ctx.symbolTable.declareVar(e.identifier, undefined)})
     }
     visit_IdentifierNode(node, ctx) {
         if (ctx.symbolTable.testVar(node.identifier)) {
@@ -263,7 +269,9 @@ class Interpreter {
     visit_AssignNode(node, ctx) {
         let value = this.visit(node.value, ctx)
         if (value instanceof IntNumber || value instanceof FloatNumber || value instanceof DTString) {
-            ctx.symbolTable.setVar(node.name, value)
+            if (ctx.symbolTable.setVar(node.name, value) === undefined) {
+                this.error(`Undeclared variable ${node.name}`, node.position)
+            }
         } else if (value instanceof DTList) {
             if (node.access) {
                 const index = this.visit(node.access, ctx).value
@@ -271,9 +279,13 @@ class Interpreter {
                 if (result === undefined) {
                     this.error("Index out of bounds", node.position)
                 }
-                ctx.symbolTable.setVar(node.name, result)
+                if (ctx.symbolTable.setVar(node.name, result) === undefined) {
+                    this.error(`Undeclared variable ${node.name}`, node.position)
+                }
             } else {
-                ctx.symbolTable.setVar(node.name, value)
+                if (ctx.symbolTable.setVar(node.name, value) === undefined) {
+                    this.error(`Undeclared variable ${node.name}`, node.position)
+                }
             }
         }
     }
@@ -439,6 +451,7 @@ class Interpreter {
     }
     interpret() {
         const ctx = new Context("main")
+        ctx.symbolTable.declareVar("pi")
         ctx.symbolTable.setVar("pi", new FloatNumber(Math.PI).setContext(ctx))
         try {
             this.visit(this.ast, ctx)

@@ -1,5 +1,5 @@
 const examples = {
-    "Assignment": `;pi is predefined\ncls\na=3<5-2\nb="a"=="a":a0_A = 3 * -5\ncc = 15 and 7:xcv = "\q\\\\\a"\naäßé_µµ=5\ndump`,
+    "Assignment": `;pi is predefined\nvar a,b,a0_A,cc,xcv,aäßé_µµ\ncls\na=3<5-2\nb="a"=="a":a0_A = 3 * -5\ncc = 15 and 7:xcv = "\q\\\\\a"\naäßé_µµ=5\ndump`,
     "Print": `cls:println "🍕" * 20 + "!"\nk=9:println "abc", 2, "rr" ,k\n\nprint "Hello\\n":println "World!"\nprintln ---3 * 2.5\n\n; cprint writes to the js console\ncprint "console.log emulation"`,
     "IfThen1": `cls\na = 5:if a > 0 then a_cond = "Ja"\nif a == 0 then result = "true" else result = "false"\ndump\nif 0 then print "Yes":print "Always"`,
     "IfThen2": `cls\nif 0 then print "true" else print "false"\nif 1 then print "true" else print "false"\nif 0\n print "true"\nelse\n print "false"\nendif\nif 1\n print "true"\nelse\n print "false"\nendif\n`,

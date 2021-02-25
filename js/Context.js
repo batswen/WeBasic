@@ -16,7 +16,20 @@ class SymbolTable {
         this.symtable = {}
     }
     setVar(name, value) {
-        this.symtable[name] = value
+        if (name in this.symtable) {
+            this.symtable[name] = value
+            return this
+        } else {
+            return undefined
+        }
+    }
+    declareVar(name) {
+        if (!(name in this.symtable)) {
+            this.symtable[name] = undefined
+            return this
+        } else {
+            return undefined
+        }
     }
     getVar(name) {
         if (name in this.symtable) {
@@ -42,6 +55,7 @@ class SymbolTable {
     getAllVars() {
         const result = []
         for (let key in this.symtable) {
+            console.log(key)
             result.push(`${this.context}: ${key} := ${this.symtable[key].str()}`)
         }
         return result

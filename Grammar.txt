@@ -1,5 +1,6 @@
 program:    statement (lf statement)*
-statement:  identifier "=" orexpr
+statement:  "VAR" identifier ("," identifier)*
+            identifier "=" orexpr
             identifier "(" (orexpr ("," orexpr)*)? ")"
             "IF" orexpr "THEN" statement ("ELSE" statement)?
             "IF" orexpr lf program lf ("ELSE" program)? "ENDIF"
