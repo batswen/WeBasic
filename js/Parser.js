@@ -113,19 +113,19 @@ class Parser {
             this.eat(TokenType.RPAREN, this.token.position)
             return expr
         } else if (token.tokentype === TokenType.LBRACKET) {
+            this.eat(TokenType.LBRACKET, token.position)
             let list = [], access = undefined
-            this.advance()
-            if (token.tokentype !== TokenType.RBRACKET) {
+            if (this.token.tokentype !== TokenType.RBRACKET) {
                 list.push(this.orexpr())
-                while (token.tokentype === TokenType.COMMA) {
-                    this.advance()
+                while (this.token.tokentype === TokenType.COMMA) {
+                    this.eat(TokenType.COMMA, token.position)
                     list.push(this.orexpr())
                 }
             }
-            if (token.tokentype === TokenType.RBRACKET) {
-                this.advance()
+            if (this.token.tokentype === TokenType.RBRACKET) {
+                this.eat(TokenType.RBRACKET, token.position)
                 if (this.token.tokentype === TokenType.LBRACKET) {
-                    this.advance()
+                    this.eat(TokenType.LBRACKET, token.position)
                     access = this.expr()
                     this.eat(TokenType.RBRACKET, token.position)
                 }
@@ -139,11 +139,11 @@ class Parser {
             if (this.token.tokentype === TokenType.ASSIGN) {
                 this.eat(TokenType.ASSIGN, token.position)
                 return new AssignNode(token.position, token.value, this.orexpr())
-            } else if (token.tokentype === TokenType.LBRACKET) { // List access
+            } else if (this.token.tokentype === TokenType.LBRACKET) { // List access
                 this.eat(TokenType.LBRACKET, token.position)
                 access = this.expr()
                 this.eat(TokenType.RBRACKET, token.position)
-            } else if (token.tokentype === TokenType.LPAREN) { // Function call
+            } else if (this.token.tokentype === TokenType.LPAREN) { // Function call
                 this.advance()
                 return this.handleFuncCall(token)
             }

@@ -25,7 +25,7 @@ class SymbolTable {
     }
     declareVar(name) {
         if (!(name in this.symtable)) {
-            this.symtable[name] = undefined
+            this.symtable[name] = new DTNull()
             return this
         } else {
             return undefined

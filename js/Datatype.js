@@ -35,6 +35,9 @@ class DTNull extends DataType {
     constructor() {
         super()
     }
+    str() {
+        return `NULL`
+    }
 }
 
 class DTList extends DataType {

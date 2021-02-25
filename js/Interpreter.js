@@ -193,11 +193,17 @@ class Interpreter {
         }
     }
     visit_DeclareIdentifierNode(node, ctx) {
-        node.identifier.forEach(e => {
-            if (ctx.symbolTable.declareVar(e.identifier) === undefined) {
-                this.error(`Redeclaration of ${e.identifier}`, node.position)
+        if (Array.isArray(node.identifier)) {
+            node.identifier.forEach(e => {
+                if (ctx.symbolTable.declareVar(e.identifier) === undefined) {
+                    this.error(`Redeclaration of ${e.identifier}`, node.position)
+                }
+            })
+        } else {
+            if (ctx.symbolTable.declareVar(node.identifier) === undefined) {
+                this.error(`Redeclaration of ${node.identifier}`, node.position)
             }
-        })
+        }
     }
     visit_IdentifierNode(node, ctx) {
         if (ctx.symbolTable.testVar(node.identifier)) {
