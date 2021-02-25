@@ -13,7 +13,8 @@ class Interpreter {
         throw "error"
     }
     visit_FuncDefNode(node, ctx) {
-        ctx.symbolTable.declareVar(node.identifier, new DefFunction(node.identifier, node.prog, node.args))
+        ctx.symbolTable.declareVar(node.identifier)
+        ctx.symbolTable.setVar(node.identifier, new DefFunction(node.identifier, node.prog, node.args))
     }
     visit_FuncCallNode(node, ctx) {
         this.return = undefined
