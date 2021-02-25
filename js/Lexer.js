@@ -28,27 +28,27 @@ class Lexer {
         }
         return this.char
     }
-    getVarOrKeyword() {
+    getVarOrKeyword(position) {
         let identifier = this.char
         while (this.nextChar() !== undefined && /[\$_0-9\p{L}]/u.test(this.char)) {
             identifier += this.char
         }
 
         if (KEYWORDS.indexOf(identifier.toUpperCase()) > -1) {
-            return new Token(TokenType.KEYWORD, identifier.toUpperCase(), this.position.copy())
+            return new Token(TokenType.KEYWORD, identifier.toUpperCase(), position.copy())
         } else {
-            return new Token(TokenType.IDENTIFIER, identifier, this.position.copy())
+            return new Token(TokenType.IDENTIFIER, identifier, position.copy())
         }
     }
-    getTokOrTok(test, ifyes, ifnt) {
+    getTokOrTok(test, ifyes, ifnt, position) {
         if (this.peekNextChar() === test) {
             this.nextChar()
-            return new Token(ifyes, null, this.position.copy())
+            return new Token(ifyes, null, position.copy())
         } else {
-            return new Token(ifnt, null, this.position.copy())
+            return new Token(ifnt, null, position.copy())
         }
     }
-    getString() {
+    getString(position) {
         let result = "", currentChar
         while (this.nextChar() !== undefined && this.char !== '"' && this.char !== "\n") {
             if (this.char === "\\" && this.peekNextChar() !== undefined) {
@@ -72,9 +72,9 @@ class Lexer {
         if (this.char !== '"') {
             this.error(`" expected`)
         }
-        return new Token(TokenType.STRING, result, this.position.copy())
+        return new Token(TokenType.STRING, result, position.copy())
     }
-    getNumber() {
+    getNumber(position) {
         let number = this.char, dots = 0
         while (this.nextChar() !== undefined && /[0-9\.]/.test(this.char)) {
             number += this.char
@@ -83,9 +83,9 @@ class Lexer {
             }
         }
         if (dots === 0) {
-            return new Token(TokenType.INT, parseInt(number), this.position.copy())
+            return new Token(TokenType.INT, parseInt(number), position.copy())
         } else if (dots === 1) {
-            return new Token(TokenType.FLOAT, parseFloat(number), this.position.copy())
+            return new Token(TokenType.FLOAT, parseFloat(number), position.copy())
         } else {
             this.error("Not a number")
         }
@@ -152,15 +152,15 @@ class Lexer {
                 this.nextChar()
                 this.nextChar()
             } else if (this.char === "=") {
-                tokens.push(this.getTokOrTok("=", TokenType.EQ, TokenType.ASSIGN))
+                tokens.push(this.getTokOrTok("=", TokenType.EQ, TokenType.ASSIGN, this.position.copy()))
                 this.nextChar()
             } else if (this.char === '"') {
-                tokens.push(this.getString())
+                tokens.push(this.getString(this.position.copy()))
                 this.nextChar()
             } else if (/[a-zA-Z_\$]/.test(this.char)) {
-                tokens.push(this.getVarOrKeyword())
+                tokens.push(this.getVarOrKeyword(this.position.copy()))
             } else if (/[0-9]/.test(this.char)) {
-                tokens.push(this.getNumber())
+                tokens.push(this.getNumber(this.position.copy()))
             } else {
                 this.error(`Unknown character: '${this.char}'`)
             }

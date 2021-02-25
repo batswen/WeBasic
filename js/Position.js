@@ -9,7 +9,7 @@ class Position {
         this.col++
 
         if (char === "\n") {
-            this.col = 0
+            this.col = 1
             this.line++
         }
     }
