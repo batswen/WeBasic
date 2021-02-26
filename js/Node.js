@@ -173,6 +173,23 @@ class LeftNode extends Node {
     }
 }
 
+class RightNode extends Node {
+    constructor(position, str, num) {
+        super(position)
+        this.str = str
+        this.num = num
+    }
+}
+
+class MidNode extends Node {
+    constructor(position, str, num, amount) {
+        super(position)
+        this.str = str
+        this.num = num
+        this.amount = amount
+    }
+}
+
 class PointNode extends Node {
     constructor(position, args) {
         super(position)

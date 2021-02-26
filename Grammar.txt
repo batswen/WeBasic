@@ -45,6 +45,8 @@ lf:         (":"|"\n")
 buildin-function :
             "RND()"
             "LEFT(string, int)"
+            "RIGHT(string, int)"
+            "MID(string, int, int)"
             "INT(string|float)"
             "FLOAT(string|int)"
             "STRING(int|float)"

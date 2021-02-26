@@ -74,6 +74,34 @@ class Interpreter {
         }
         return new DTNull()
     }
+    visit_RightNode(node, ctx) {
+        const str = this.visit(node.str, ctx)
+        const num = this.visit(node.num, ctx)
+        if (str instanceof DTString && num instanceof BaseNumber) {
+            if (str.getLen() < num.value) {
+                this.error(`LEFT(${str.str()}, ${num.str()})`, node.position)
+            } else {
+                return new DTString(str.value.substring(0, num.value)).setContext(ctx)
+            }
+        } else {
+            this.error(`LEFT(${str.str()}, ${num.str()})`, node.position)
+        }
+        return new DTNull()
+    }
+    visit_MidNode(node, ctx) {
+        const str = this.visit(node.str, ctx)
+        const num = this.visit(node.num, ctx)
+        if (str instanceof DTString && num instanceof BaseNumber) {
+            if (str.getLen() < num.value) {
+                this.error(`LEFT(${str.str()}, ${num.str()})`, node.position)
+            } else {
+                return new DTString(str.value.substring(0, num.value)).setContext(ctx)
+            }
+        } else {
+            this.error(`LEFT(${str.str()}, ${num.str()})`, node.position)
+        }
+        return new DTNull()
+    }
     visit_ColorNode(node, ctx) {
         const red = this.visit(node.args[0], ctx)
         const green = this.visit(node.args[1], ctx)

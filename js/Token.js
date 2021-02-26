@@ -42,7 +42,7 @@ const KEYWORDS = [
     "COLOR", "POINT", "LINE",
     "DUMP", "CDUMP",
     "RND",
-    "LEFT",
+    "LEFT", "RIGHT", "MID",
     "INT", "FLOAT", "STRING",
     "ISINT", "ISFLOAT", "ISSTRING"
 ]

@@ -167,6 +167,20 @@ class Parser {
                     this.eat(TokenType.RPAREN, token.position)
                     return new LeftNode(token.position, args[0], args[1])
                     break
+                case "RIGHT":
+                    this.eat(TokenType.KEYWORD, token.position)
+                    this.eat(TokenType.LPAREN, token.position)
+                    args = this.getNumArgList(token, 2)
+                    this.eat(TokenType.RPAREN, token.position)
+                    return new RightNode(token.position, args[0], args[1])
+                    break
+                case "MID":
+                    this.eat(TokenType.KEYWORD, token.position)
+                    this.eat(TokenType.LPAREN, token.position)
+                    args = this.getNumArgList(token, 3)
+                    this.eat(TokenType.RPAREN, token.position)
+                    return new MidNode(token.position, args[0], args[1], args[2])
+                    break
                 case "INT":
                     this.eat(TokenType.KEYWORD, token.position)
                     this.eat(TokenType.LPAREN, token.position)
