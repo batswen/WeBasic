@@ -1,70 +1,75 @@
-program:    statement (lf statement)*
-statement:  "VAR" identifier ("," identifier)*
-            identifier ("[" expr "]")? "=" orexpr
-            identifier "(" (orexpr ("," orexpr)*)? ")"
-            "IF" orexpr "THEN" statement ("ELSE" statement)?
-            "IF" orexpr lf program lf ("ELSE" program)? "ENDIF"
-            "WHILE" orexpr "DO" statement
-            "WHILE" orexpr lf program lf "ENDWHILE"
-            "FOR" identifier "=" expr "TO" expr ("STEP" expr)? "DO" statement
-            "FOR" identifier "=" expr "TO" expr ("STEP" expr)? lf program lf "NEXT"
-            "CLS"
-            "PRINT" (orexpr ("," orexpr)*)?
-            "PRINTLN" (orexpr ("," orexpr)*)?
-            "CPRINT" (orexpr ("," orexpr)*)?
-            "DUMP"
-            "CDUMP"
-            "NAMESPACE" identifier lf program lf "ENDNAMESPACE"
-            "FUNCTION" identifier "(" (identifier ("," identifier)*)? ")" lf program lf "ENDFUNCTION"
-            "RETURN" (orexpr)?
-            "COLOR" orexpr "," orexpr "," orexpr
-            "FILLCOLOR" orexpr "," orexpr "," orexpr
-            "POINT" orexpr "," orexpr
-            "LINE" orexpr "," orexpr "," orexpr "," orexpr
-            "LINEWIDTH" orexpr
-            "RECT" orexpr "," orexpr "," orexpr "," orexpr "," orexpr
+program:            statement (lf statement)*
+statement:          "VAR" identifier ("," identifier)*
+                    identifier ("[" expr "]")? "=" orexpr
+                    identifier "(" (orexpr ("," orexpr)*)? ")"
+                    "IF" orexpr "THEN" statement ("ELSE" statement)?
+                    "IF" orexpr lf program lf ("ELSE" program)? "ENDIF"
+                    "WHILE" orexpr "DO" statement
+                    "WHILE" orexpr lf program lf "ENDWHILE"
+                    "FOR" identifier "=" expr "TO" expr ("STEP" expr)? "DO" statement
+                    "FOR" identifier "=" expr "TO" expr ("STEP" expr)? lf program lf "NEXT"
+                    "CLS"
+                    "PRINT" (orexpr ("," orexpr)*)?
+                    "PRINTLN" (orexpr ("," orexpr)*)?
+                    "CPRINT" (orexpr ("," orexpr)*)?
+                    "DUMP"
+                    "CDUMP"
+                    "NAMESPACE" identifier lf program lf "ENDNAMESPACE"
+                    "FUNCTION" identifier "(" (identifier ("," identifier)*)? ")" lf program lf "ENDFUNCTION"
+                    "RETURN" (orexpr)?
+                    "COLOR" orexpr "," orexpr "," orexpr
+                    "FILLCOLOR" orexpr "," orexpr "," orexpr
+                    "POINT" orexpr "," orexpr
+                    "LINE" orexpr "," orexpr "," orexpr "," orexpr
+                    "LINEWIDTH" orexpr
+                    "RECT" orexpr "," orexpr "," orexpr "," orexpr "," orexpr
 
-orexpr:     andexpr ("OR" andexpr)*
-andexpr:    eqexpr ("AND" eqexpr)*
-eqexpr:     glexpr (("=="|"!=") glexpr)*
-glexpr:     expr (("<"|"<="|">"|">=") expr)*
+orexpr:             andexpr ("OR" andexpr)*
+andexpr:            eqexpr ("AND" eqexpr)*
+eqexpr:             glexpr (("=="|"!=") glexpr)*
+glexpr:             expr (("<"|"<="|">"|">=") expr)*
 
-expr:       term (("+"|"-") term)*
-term:       factor (("*"|"/"|"%") factor)*
-factor:     ("+"|"-")? int|float
-            string
-            "NOT" orexpr
-            "(" orexpr ")"
-            identifier (("[" expr "]")|("(" ")"))?
-            list ("[" expr "]")?
-            buildin-function
+expr:               term (("+"|"-") term)*
+term:               factor (("*"|"/"|"%") factor)*
+factor:             ("+"|"-")? int|float
+                    string
+                    "NOT" orexpr
+                    "(" orexpr ")"
+                    identifier ("(" ")"))?
+                    function-call
+                    list ("[" expr "]")?
+                    buildin-function
 
-string:     """ ([^"]|\\")* """
-int:        [0-9]+
-float:      [0-9]+ ("." [0-9])+
-list:       "[" (orexpr ("," orexpr)*)? "]"
-identifier: [a-zA-Z_\$][\$_0-9\p{L}]*
-lf:         (":"|"\n")
-buildin-function:
-            "RND()"
-            "LEFT(string, int)"
-            "RIGHT(string, int)"
-            "MID(string, int, int)"
-            "INT(string|float)"
-            "FLOAT(string|int)"
-            "STRING(int|float)"
-            "ISINT(orexpr)"
-            "ISFLOAT(orexpr)"
-            "ISSTRING(orexpr)"
-            "DATE()"
-            "TIME()"
-            "LEN(string|list)"
-            "INPUT(string)"
-            "SQRT(number)"
-            "ABS(number)"
-            "ROUND(number)"
-            "FLOOR(number)"
-            "CEIL(number)"
-            "SIN(number)"
-            "COS(number)"
-            "TAN(number)"
+string:             """ ([^"]|\\")* """
+int:                [0-9]+
+float:              [0-9]+ ("." [0-9])+
+list:               "[" (orexpr ("," orexpr)*)? "]"
+identifier:         [a-zA-Z_\$][\$_0-9\p{L}]*
+lf:                 (":"|"\n")
+
+function-call:      identifier "(" (orexpr ("," orexpr)*)? ")"
+buildin-function:   "RND()"
+                    "LEFT(string, number)"
+                    "RIGHT(string, number)"
+                    "MID(string, number, number)"
+                    "INT(string|float)"
+                    "FLOAT(string|int)"
+                    "STRING(int|float)"
+                    "ISINT(orexpr)"
+                    "ISFLOAT(orexpr)"
+                    "ISSTRING(orexpr)"
+                    "DATE()"
+                    "TIME()"
+                    "LEN(string|list)"
+                    "INPUT(string)"
+                    "SQRT(number)"
+                    "ABS(number)"
+                    "ROUND(number)"
+                    "FLOOR(number)"
+                    "CEIL(number)"
+                    "SIN(number)"
+                    "COS(number)"
+                    "TAN(number)"
+                    "LOG(number)"
+                    "POWER(number, number)"
+                    "SIGN(number)"
