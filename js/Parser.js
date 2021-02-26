@@ -21,6 +21,40 @@ class Parser {
         }
         return this.token
     }
+    eat(tokentype, pos) {
+        if (this.token.tokentype === tokentype) {
+            if (tokentype === TokenType.COLON) {
+                while (this.token.tokentype === TokenType.COLON) {
+                    this.advance()
+                }
+            } else {
+                this.advance()
+            }
+        } else {
+            this.error(`${tokentype} expected, got ${this.token.tokentype} ${this.token.value}`, pos)
+        }
+    }
+    eatTokenTypes(tokentypes, pos) {
+        if (tokentypes.indexOf(this.token.tokentype) > -1) {
+                this.advance()
+        } else {
+            this.error(`${tokentypes} expected, got ${this.token.tokentype} ${this.token.value}`, pos)
+        }
+    }
+    eatKeyword(keyword, pos) {
+        if (this.token.tokentype === TokenType.KEYWORD && this.token.value === keyword) {
+            this.advance()
+        } else {
+            this.error(`${keyword} expected, got ${this.token.value}`, pos)
+        }
+    }
+    eatKeywords(keywords, pos) {
+        if (this.token.tokentype === TokenType.KEYWORD && keywords.indexOf(this.token.value) > -1) {
+            this.advance()
+        } else {
+            this.error(`${keywords} expected, got ${this.token.value}`, pos)
+        }
+    }
     getArgList(token) {
         return this.getNumArgList(token, 1000000)
     }
@@ -62,7 +96,7 @@ class Parser {
             this.error(`Arg; expected ${types[count]}, got ${this.token.tokentype}`, token.position)
         }
         while (count < types.length && this.token.tokentype === TokenType.COMMA) {
-            this.advance()
+            this.eat(TokenType.COMMA, this.token.position)
             if ((types[count] === TokenType.NUMBER && this.token.tokentype === TokenType.INT || this.token.tokentype === TokenType.FLOAT) || this.token.tokentype === types[count]) {
                 count++
                 args.push(this.orexpr())
@@ -82,7 +116,7 @@ class Parser {
         if (this.token.tokentype !== TokenType.RPAREN) {
             this.error(`')' expected (${this.token.tokentype})`, token.position)
         }
-        this.advance()
+        this.eat(TokenType.RPAREN, this.token.position)
         return new FuncCallNode(token.position, token.value, args)
     }
     factor(idOnly) {
@@ -95,14 +129,14 @@ class Parser {
             this.eat(TokenType.STRING, token.position)
             return new StringNode(token.position, token.value)
         } else if (token.tokentype === TokenType.INT || token.tokentype === TokenType.FLOAT) {
-            this.advance()
+            this.eatTokenTypes(["INT", "FLOAT"], token.position)
             if (token.tokentype === TokenType.INT) {
                 return new IntNode(token.position, token.value)
             } else {
                 return new FloatNode(token.position, token.value)
             }
         } else if (token.tokentype === TokenType.PLUS || token.tokentype === TokenType.MINUS) {
-            this.advance()
+            this.eatTokenTypes(["PLUS", "MINUS"], token.position)
             return new UnOpNode(token.position, this.factor(), token)
         } else if (token.tokentype === TokenType.KEYWORD && token.value === "NOT") {
             this.eatKeyword("NOT", token.position)
@@ -332,31 +366,11 @@ class Parser {
             this.error(`Number, Identifier, String, '[', '(', '+', or '-' expected (${this.token.tokentype})`, token.position)
         }
     }
-    eat(tokentype, pos) {
-        if (this.token.tokentype === tokentype) {
-            if (tokentype === TokenType.COLON) {
-                while (this.token.tokentype === TokenType.COLON) {
-                    this.advance()
-                }
-            } else {
-                this.advance()
-            }
-        } else {
-            this.error(`${tokentype} expected, got ${this.token.tokentype} ${this.token.value}`, pos)
-        }
-    }
-    eatKeyword(keyword, pos) {
-        if (this.token.tokentype === TokenType.KEYWORD && this.token.value === keyword) {
-            this.advance()
-        } else {
-            this.error(`${keyword} expected, got ${this.token.value}`, pos)
-        }
-    }
     term() {
         let left = this.factor()
         while (this.token.tokentype === TokenType.MUL || this.token.tokentype === TokenType.DIV || this.token.tokentype === TokenType.MOD) {
             let op = this.token
-            this.advance()
+            this.eatTokenTypes(["MUL", "DIV", "MOD"], this.token.position)
             let right = this.factor()
             left = new BinOpNode(this.token.position, left, op, right)
         }
@@ -366,7 +380,7 @@ class Parser {
         let left = this.term()
         while (this.token.tokentype === TokenType.PLUS || this.token.tokentype === TokenType.MINUS) {
             let op = this.token
-            this.advance()
+            this.eatTokenTypes(["PLUS", "MINUS"], this.token.position)
             let right = this.term()
             left = new BinOpNode(this.token.position, left, op, right)
         }
@@ -376,7 +390,7 @@ class Parser {
         let left = this.expr()
         while (this.token.tokentype === TokenType.LT || this.token.tokentype === TokenType.LE || this.token.tokentype === TokenType.GT || this.token.tokentype === TokenType.GE) {
             let op = this.token
-            this.advance()
+            this.eatTokenTypes(["LT", "LE", "GT", "GE"], this.token.position)
             let right = this.expr()
             left = new BinOpNode(this.token.position, left, op, right)
         }
@@ -386,7 +400,7 @@ class Parser {
         let left = this.glexpr()
         while (this.token.tokentype === TokenType.EQ || this.token.tokentype === TokenType.NE) {
             let op = this.token
-            this.advance()
+            this.eatTokenTypes(["EQ", "NE"], this.token.position)
             let right = this.glexpr()
             left = new BinOpNode(this.token.position, left, op, right)
         }
@@ -396,7 +410,7 @@ class Parser {
         let left = this.eqexpr()
         if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "AND") {
             let op = this.token
-            this.advance()
+            this.eatKeyword("AND", this.token.position)
             let right = this.eqexpr()
             left = new BinOpNode(this.token.position, left, op, right)
         }
@@ -406,7 +420,7 @@ class Parser {
         let left = this.andexpr()
         if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "OR") {
             let op = this.token
-            this.advance()
+            this.eatKeyword("OR", this.token.position)
             let right = this.andexpr()
             left = new BinOpNode(this.token.position, left, op, right)
         }
@@ -435,7 +449,7 @@ class Parser {
         } else if (token.tokentype === TokenType.KEYWORD) {
             switch (token.value) {
                 case "IF":
-                    this.advance()
+                    this.eatKeyword("IF", token.position)
                     condition = this.orexpr()
                     if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "THEN") {
                         this.eatKeyword("THEN", token.position)
@@ -465,7 +479,7 @@ class Parser {
                     }
                     break
                 case "FOR":
-                    this.advance()
+                    this.eatKeyword("FOR", token.position)
                     const forIdentifier = new DeclareIdentifierNode(this.token.position, this.token.value, undefined)
                     this.eat(TokenType.IDENTIFIER, token.position)
                     let forStep
@@ -491,7 +505,7 @@ class Parser {
                     }
                     break
                 case "WHILE":
-                    this.advance()
+                    this.eatKeyword("WHILE", token.position)
                     condition = this.orexpr()
                     if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "DO") {
                         this.eatKeyword("DO", token.position)
@@ -506,24 +520,24 @@ class Parser {
                     }
                     break
                 case "NAMESPACE":
-                    this.advance()
+                    this.eatKeyword("NAMESPACE", token.position)
                     if (this.token.tokentype !== TokenType.IDENTIFIER) {
                         this.error(`identifier expected (${this.token.tokentype})`, token.position)
                     }
                     identifier = this.token.value
-                    this.advance()
+                    this.eat(TokenType.IDENTIFIER, this.token.position)
                     prog = this.program()
                     this.eatKeyword("ENDNAMESPACE", token.position)
                     return new NamespaceNode(token.position, identifier, prog)
                     break
                 case "FUNCTION":
-                    this.advance()
+                    this.eatKeyword("FUNCTION", token.position)
                     args = undefined
                     if (this.token.tokentype !== TokenType.IDENTIFIER) {
                         this.error(`identifier expected (${this.token.tokentype})`, token.position)
                     }
                     identifier = this.token.value
-                    this.advance()
+                    this.eat(TokenType.IDENTIFIER, this.token.position)
                     this.eat(TokenType.LPAREN, token.position)
                     if (this.token.tokentype !== TokenType.RPAREN) {
                         args = this.getIdentifierList(token)
@@ -538,7 +552,7 @@ class Parser {
                 case "CPRINT":
                     const lf = this.token.value === "PRINTLN"
                     const con = this.token.value === "CPRINT"
-                    this.advance()
+                    this.eatKeywords(["PRINT", "PRINTLN", "CPRINT"], token.position)
                     if (this.token.tokentype === TokenType.COLON) {
                         if (lf) {
                             return new PrintLNNode(token.position, undefined)
@@ -557,37 +571,37 @@ class Parser {
                     }
                     break
                 case "COLOR":
-                    this.advance()
+                    this.eatKeyword("COLOR", token.position)
                     args = this.getNumArgList(token, 3)
                     return new ColorNode(token.position, args)
                     break
                 case "FILLCOLOR":
-                    this.advance()
+                    this.eatKeyword("FILLCOLOR", token.position)
                     args = this.getNumArgList(token, 3)
                     return new FillColorNode(token.position, args)
                     break
                 case "POINT":
-                    this.advance()
+                    this.eatKeyword("POINT", token.position)
                     args = this.getNumArgList(token, 2)
                     return new PointNode(token.position, args)
                     break
                 case "LINEWIDTH":
-                    this.advance()
+                    this.eatKeyword("LINEWIDTH", token.position)
                     args = this.getNumArgList(token, 1)
                     return new LineWidthNode(token.position, args)
                     break
                 case "LINE":
-                    this.advance()
+                    this.eatKeyword("LINE", token.position)
                     args = this.getNumArgList(token, 4)
                     return new LineNode(token.position, args)
                     break
                 case "RECT":
-                    this.advance()
+                    this.eatKeyword("RECT", token.position)
                     args = this.getNumArgList(token, 5)
                     return new RectNode(token.position, args)
                     break
                 case "RETURN":
-                    this.advance()
+                    this.eatKeyword("RETURN", token.position)
                     if (this.token.tokentype === TokenType.COLON) {
                         return new ReturnNode(token.position, undefined)
                     } else {
@@ -595,19 +609,19 @@ class Parser {
                     }
                     break
                 case "DUMP":
-                    this.advance()
+                    this.eatKeyword("DUMP", token.position)
                     return new DumpNode(token.position)
                     break
                 case "CLS":
-                    this.advance()
+                    this.eatKeyword("CLS", token.position)
                     return new ClsNode(token.position)
                     break
                 case "CDUMP":
-                    this.advance()
+                    this.eatKeyword("CDUMP", token.position)
                     return new CDumpNode(token.position)
                     break
                 case "VAR":
-                    this.advance()
+                    this.eatKeyword("VAR", token.position)
                     return new DeclareIdentifierNode(token.position, this.getIdentifierList(token))
                 default:
             }//switch
@@ -615,12 +629,12 @@ class Parser {
     }//fn
     program() {
         while (this.token.tokentype === TokenType.COLON) {
-            this.advance()
+            this.eat(TokenType.COLON, this.token.position)
         }
         let result = this.statement()
         while (this.token.tokentype === TokenType.COLON) {
             while (this.token.tokentype === TokenType.COLON) {
-                this.advance()
+                this.eat(TokenType.COLON, this.token.position)
             }
             const stmt = this.statement()
             result = new StatementNode(result.position, result, stmt)
