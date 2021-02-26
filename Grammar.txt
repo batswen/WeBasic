@@ -45,7 +45,7 @@ float:      [0-9]+ ("." [0-9])+
 list:       "[" (orexpr ("," orexpr)*)? "]"
 identifier: [a-zA-Z_\$][\$_0-9\p{L}]*
 lf:         (":"|"\n")
-buildin-function :
+buildin-function:
             "RND()"
             "LEFT(string, int)"
             "RIGHT(string, int)"
@@ -60,3 +60,11 @@ buildin-function :
             "TIME()"
             "LEN(string|list)"
             "INPUT(string)"
+            "SQRT(number)"
+            "ABS(number)"
+            "ROUND(number)"
+            "FLOOR(number)"
+            "CEIL(number)"
+            "SIN(number)"
+            "COS(number)"
+            "TAN(number)"
