@@ -108,6 +108,28 @@ class Interpreter {
         }
         return new IntNumber(Math.tan(arg.value))
     }
+    visit_LogNode(node, ctx) {
+        const arg =  this.visit(node.arg, ctx)
+        if (!(arg instanceof BaseNumber)) {
+            this.error(`Argument must be a number (LOG(${arg.value}))`, node.position)
+        }
+        return new IntNumber(Math.log(arg.value))
+    }
+    visit_SignNode(node, ctx) {
+        const arg =  this.visit(node.arg, ctx)
+        if (!(arg instanceof BaseNumber)) {
+            this.error(`Argument must be a number (SIGN(${arg.value}))`, node.position)
+        }
+        return new IntNumber(arg.value < 0 ? -1 : arg.value > 0 ? 1 : 0)
+    }
+    visit_PowerNode(node, ctx) {
+        const arg =  this.visit(node.arg, ctx)
+        const exp =  this.visit(node.exp, ctx)
+        if (!(arg instanceof BaseNumber) || !(exp instanceof BaseNumber)) {
+            this.error(`Argument must be a number (POWER(${arg.value}))`, node.position)
+        }
+        return new IntNumber(Math.pow(arg.value, exp.value))
+    }
     visit_AbsNode(node, ctx) {
         const arg =  this.visit(node.arg, ctx)
         if (!(arg instanceof BaseNumber)) {

@@ -106,9 +106,9 @@ class RoundNode extends Node {
 
 
 class CeilNode extends Node {
-    constructor(position, len) {
+    constructor(position, arg) {
         super(position)
-        this.len = len
+        this.arg = arg
     }
 }
 
@@ -116,6 +116,28 @@ class FloorNode extends Node {
     constructor(position, arg) {
         super(position)
         this.arg = arg
+    }
+}
+
+class LogNode extends Node {
+    constructor(position, arg) {
+        super(position)
+        this.arg = arg
+    }
+}
+
+class SignNode extends Node {
+    constructor(position, arg) {
+        super(position)
+        this.arg = arg
+    }
+}
+
+class PowerNode extends Node {
+    constructor(position, arg, exp) {
+        super(position)
+        this.arg = arg
+        this.exp = exp
     }
 }
 

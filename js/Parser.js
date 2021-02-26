@@ -305,6 +305,27 @@ class Parser {
                     this.eat(TokenType.RPAREN, token.position)
                     return new CeilNode(token.position, args[0])
                     break
+                case "LOG":
+                    this.eatKeyword("LOG", token.position)
+                    this.eat(TokenType.LPAREN, token.position)
+                    args = this.getNumArgList(token, 1)
+                    this.eat(TokenType.RPAREN, token.position)
+                    return new LogNode(token.position, args[0])
+                    break
+                case "POWER":
+                    this.eatKeyword("POWER", token.position)
+                    this.eat(TokenType.LPAREN, token.position)
+                    args = this.getNumArgList(token, 2)
+                    this.eat(TokenType.RPAREN, token.position)
+                    return new PowerNode(token.position, args[0], args[1])
+                    break
+                case "SIGN":
+                    this.eatKeyword("SIGN", token.position)
+                    this.eat(TokenType.LPAREN, token.position)
+                    args = this.getNumArgList(token, 1)
+                    this.eat(TokenType.RPAREN, token.position)
+                    return new SignNode(token.position, args[0])
+                    break
 
             }
         } else {
