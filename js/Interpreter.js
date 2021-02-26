@@ -48,7 +48,7 @@ class Interpreter {
         if (this.return) {
             return this.return
         } else {
-            return new DTString("undefined") // RETURN
+            return new DTNull() // RETURN
         }
     }
     visit_ReturnNode(node, ctx) {
@@ -84,7 +84,7 @@ class Interpreter {
         const str = this.visit(node.str, ctx)
         const num = this.visit(node.num, ctx)
         if (str instanceof DTString && num instanceof BaseNumber) {
-            if (str.getLen() < num.value) {
+            if (num.value < 0 || str.getLen() < num.value) {
                 this.error(`Illegal quantity (LEFT(${str.str()}, ${num.str()}))`, node.position)
             } else {
                 return new DTString(str.value.substring(0, num.value)).setContext(ctx)
@@ -98,7 +98,7 @@ class Interpreter {
         const str = this.visit(node.str, ctx)
         const num = this.visit(node.num, ctx)
         if (str instanceof DTString && num instanceof BaseNumber) {
-            if (str.getLen() < num.value) {
+            if (num. value < 0 || str.getLen() < num.value) {
                 this.error(`Illegal quantity (RIGHT(${str.str()}, ${num.str()}))`, node.position)
             } else {
                 return new DTString(str.value.substr(-num.value)).setContext(ctx)
@@ -113,7 +113,7 @@ class Interpreter {
         const num = this.visit(node.num, ctx)
         const amount = this.visit(node.amount, ctx)
         if (str instanceof DTString && num instanceof BaseNumber && amount instanceof BaseNumber) {
-            if (str.getLen() < num.value + amount.value - 1) {
+            if (num.value < 0 || amount.value < 0 || str.getLen() < num.value + amount.value - 1) {
                 this.error(`Illegal quantity (MID(${str.str()}, ${num.str()}, ${amount.str()}))`, node.position)
             } else {
                 return new DTString(str.value.substr(num.value - 1, amount.value)).setContext(ctx)

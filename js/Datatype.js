@@ -19,7 +19,7 @@ class BaseFunction extends DataType {
         this.identifier = identifier
     }
     str() {
-        return `${this.identifier}()`
+        return `function ${this.identifier}()`
     }
 }
 

@@ -57,9 +57,12 @@ class SymbolTable {
         }
     }
     getAllVars() {
-        const result = []
+        let result = []
         for (let key in this.symtable) {
             result.push(`${this.context}: ${key} := ${this.symtable[key].str()}`)
+        }
+        if (this.parentContext?.symbolTable) {
+            result = result.concat(this.parentContext.symbolTable.getAllVars())
         }
         return result
     }
