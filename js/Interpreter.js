@@ -105,6 +105,12 @@ class Interpreter {
         }
         return new DTNull()
     }
+    visit_DateNode(node, ctx) {
+        return new DTString(new Date().toLocaleDateString()).setContext(ctx)
+    }
+    visit_TimeNode(node, ctx) {
+        return new DTString(new Date().toLocaleTimeString()).setContext(ctx)
+    }
     visit_LineWidthNode(node, ctx) {
         const width = this.visit(node.args[0], ctx)
         if (!(width instanceof BaseNumber)) {

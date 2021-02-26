@@ -44,7 +44,8 @@ const KEYWORDS = [
     "RND",
     "LEFT", "RIGHT", "MID",
     "INT", "FLOAT", "STRING",
-    "ISINT", "ISFLOAT", "ISSTRING"
+    "ISINT", "ISFLOAT", "ISSTRING",
+    "DATE", "TIME"
 ]
 
 class Token {

@@ -238,6 +238,18 @@ class DumpNode extends Node {
     }
 }
 
+class DateNode extends Node {
+    constructor(position) {
+        super(position)
+    }
+}
+
+class TimeNode extends Node {
+    constructor(position) {
+        super(position)
+    }
+}
+
 class RandomNode extends Node {
     constructor(position) {
         super(position)

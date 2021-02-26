@@ -56,3 +56,5 @@ buildin-function :
             "ISINT(orexpr)"
             "ISFLOAT(orexpr)"
             "ISSTRING(orexpr)"
+            "DATE()"
+            "TIME()"

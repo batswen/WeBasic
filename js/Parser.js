@@ -223,6 +223,18 @@ class Parser {
                     this.eat(TokenType.RPAREN, token.position)
                     return new StringTestNode(token.position, args[0])
                     break
+                case "DATE":
+                    this.eat(TokenType.KEYWORD, token.position)
+                    this.eat(TokenType.LPAREN, token.position)
+                    this.eat(TokenType.RPAREN, token.position)
+                    return new DateNode(token.position)
+                    break
+                case "TIME":
+                    this.eat(TokenType.KEYWORD, token.position)
+                    this.eat(TokenType.LPAREN, token.position)
+                    this.eat(TokenType.RPAREN, token.position)
+                    return new TimeNode(token.position)
+                    break
             }
         } else {
             this.error(`Number, Identifier, String, '[', '(', '+', or '-' expected (${this.token.tokentype})`, token.position)
