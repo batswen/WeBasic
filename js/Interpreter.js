@@ -65,7 +65,7 @@ class Interpreter {
         const num = this.visit(node.num, ctx)
         if (str instanceof DTString && num instanceof BaseNumber) {
             if (str.getLen() < num.value) {
-                this.error(`LEFT(${str.str()}, ${num.str()})`, node.position)
+                this.error(`Illegal quantity (LEFT(${str.str()}, ${num.str()}))`, node.position)
             } else {
                 return new DTString(str.value.substring(0, num.value)).setContext(ctx)
             }
@@ -79,26 +79,27 @@ class Interpreter {
         const num = this.visit(node.num, ctx)
         if (str instanceof DTString && num instanceof BaseNumber) {
             if (str.getLen() < num.value) {
-                this.error(`LEFT(${str.str()}, ${num.str()})`, node.position)
+                this.error(`Illegal quantity (RIGHT(${str.str()}, ${num.str()}))`, node.position)
             } else {
-                return new DTString(str.value.substring(0, num.value)).setContext(ctx)
+                return new DTString(str.value.substr(-num.value)).setContext(ctx)
             }
         } else {
-            this.error(`LEFT(${str.str()}, ${num.str()})`, node.position)
+            this.error(`RIGHT(${str.str()}, ${num.str()})`, node.position)
         }
         return new DTNull()
     }
     visit_MidNode(node, ctx) {
         const str = this.visit(node.str, ctx)
         const num = this.visit(node.num, ctx)
-        if (str instanceof DTString && num instanceof BaseNumber) {
-            if (str.getLen() < num.value) {
-                this.error(`LEFT(${str.str()}, ${num.str()})`, node.position)
+        const amount = this.visit(node.amount, ctx)
+        if (str instanceof DTString && num instanceof BaseNumber && amount instanceof BaseNumber) {
+            if (str.getLen() < num.value + amount.value - 1) {
+                this.error(`Illegal quantity (MID(${str.str()}, ${num.str()}, ${amount.str()}))`, node.position)
             } else {
-                return new DTString(str.value.substring(0, num.value)).setContext(ctx)
+                return new DTString(str.value.substr(num.value - 1, amount.value)).setContext(ctx)
             }
         } else {
-            this.error(`LEFT(${str.str()}, ${num.str()})`, node.position)
+            this.error(`MID(${str.str()}, ${num.str()}, ${num.str()})`, node.position)
         }
         return new DTNull()
     }
