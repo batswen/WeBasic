@@ -158,13 +158,6 @@ class PrintNode extends Node {
     }
 }
 
-class ColorNode extends Node {
-    constructor(position, args) {
-        super(position)
-        this.args = args
-    }
-}
-
 class LeftNode extends Node {
     constructor(position, str, num) {
         super(position)
@@ -190,6 +183,27 @@ class MidNode extends Node {
     }
 }
 
+class ColorNode extends Node {
+    constructor(position, args) {
+        super(position)
+        this.args = args
+    }
+}
+
+class FillColorNode extends Node {
+    constructor(position, args) {
+        super(position)
+        this.args = args
+    }
+}
+
+class LineWidthNode extends Node {
+    constructor(position, args) {
+        super(position)
+        this.args = args
+    }
+}
+
 class PointNode extends Node {
     constructor(position, args) {
         super(position)
@@ -198,6 +212,13 @@ class PointNode extends Node {
 }
 
 class LineNode extends Node {
+    constructor(position, args) {
+        super(position)
+        this.args = args
+    }
+}
+
+class RectNode extends Node {
     constructor(position, args) {
         super(position)
         this.args = args

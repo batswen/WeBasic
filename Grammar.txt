@@ -18,8 +18,11 @@ statement:  "VAR" identifier ("," identifier)*
             "FUNCTION" identifier "(" (identifier ("," identifier)*)? ")" lf program lf "ENDFUNCTION"
             "RETURN" (orexpr)?
             "COLOR" orexpr "," orexpr "," orexpr
+            "FILLCOLOR" orexpr "," orexpr "," orexpr
             "POINT" orexpr "," orexpr
             "LINE" orexpr "," orexpr "," orexpr "," orexpr
+            "LINEWIDTH" orexpr
+            "RECT" orexpr "," orexpr "," orexpr "," orexpr "," orexpr
 
 orexpr:     andexpr ("OR" andexpr)*
 andexpr:    eqexpr ("AND" eqexpr)*

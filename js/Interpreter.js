@@ -6,7 +6,9 @@ class Interpreter {
         this.shouldReturn = false
         this.errorMsg = undefined
         this.gfx = document.getElementById("gfxoutput").getContext("2d")
-        let red = 200,green = 100, blue=0,xc=50,yc=50
+        this.gfx.fillStyle = 'rgb(0, 0, 0)'
+        this.gfx.strokeStyle = 'rgb(0, 0, 0)'
+        this.gfx.lineWidth = '1'
     }
     error(msg, position, details = undefined) {
         this.errorMsg = { msg, position, details }
@@ -103,6 +105,13 @@ class Interpreter {
         }
         return new DTNull()
     }
+    visit_LineWidthNode(node, ctx) {
+        const width = this.visit(node.args[0], ctx)
+        if (!(width instanceof BaseNumber)) {
+            this.error(`Argument must be a number (STROKE)`, node.position)
+        }
+        this.gfx.lineWidth = `${width.value}`
+    }
     visit_ColorNode(node, ctx) {
         const red = this.visit(node.args[0], ctx)
         const green = this.visit(node.args[1], ctx)
@@ -112,6 +121,18 @@ class Interpreter {
         }
         if (red.value > 255 || red.value < 0 || green.value < 0 || green.value > 255 || blue.value < 0 || blue.value > 255) {
             this.error(`Illegal quantity, must be in 0..255 (COLOR ${red.value}, ${green.value}, ${blue.value})`, node.position)
+        }
+        this.gfx.strokeStyle = `rgb(${red.value}, ${green.value}, ${blue.value})`
+    }
+    visit_FillColorNode(node, ctx) {
+        const red = this.visit(node.args[0], ctx)
+        const green = this.visit(node.args[1], ctx)
+        const blue = this.visit(node.args[2], ctx)
+        if (!(red instanceof BaseNumber) || !(green instanceof BaseNumber) || !(blue instanceof BaseNumber)) {
+            this.error(`Arguments must be numbers (FILLCOLOR)`, node.position)
+        }
+        if (red.value > 255 || red.value < 0 || green.value < 0 || green.value > 255 || blue.value < 0 || blue.value > 255) {
+            this.error(`Illegal quantity, must be in 0..255 (FILLCOLOR ${red.value}, ${green.value}, ${blue.value})`, node.position)
         }
         this.gfx.fillStyle = `rgb(${red.value}, ${green.value}, ${blue.value})`
     }
@@ -135,6 +156,21 @@ class Interpreter {
         this.gfx.moveTo(xcStart.value, ycStart.value)
         this.gfx.lineTo(xcEnd.value, ycEnd.value)
         this.gfx.stroke()
+    }
+    visit_RectNode(node, ctx) {
+        const xcStart = this.visit(node.args[0], ctx)
+        const ycStart = this.visit(node.args[1], ctx)
+        const rectWidth = this.visit(node.args[2], ctx)
+        const rectHeight = this.visit(node.args[3], ctx)
+        const fillFlag = this.visit(node.args[4], ctx)
+        if (!(xcStart instanceof BaseNumber) || !(ycStart instanceof BaseNumber) || !(rectWidth instanceof BaseNumber) || !(rectHeight instanceof BaseNumber)) {
+            this.error(`Arguments must be numbers (RECT)`, node.position)
+        }
+        if (fillFlag.value !== 0) {
+            this.gfx.fillRect(xcStart.value, ycStart.value, rectWidth.value, rectHeight.value)
+        } else {
+            this.gfx.strokeRect(xcStart.value, ycStart.value, rectWidth.value, rectHeight.value)
+        }
     }
     visit_NamespaceNode(node, ctx) {
         const context = new Context(node.namespace, ctx)

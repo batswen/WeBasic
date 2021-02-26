@@ -39,7 +39,7 @@ const KEYWORDS = [
     "NAMESPACE", "ENDNAMESPACE",
     "CLS",
     "PRINT", "PRINTLN", "CPRINT",
-    "COLOR", "POINT", "LINE",
+    "COLOR", "FILLCOLOR", "POINT", "LINE", "RECT", "LINEWIDTH",
     "DUMP", "CDUMP",
     "RND",
     "LEFT", "RIGHT", "MID",

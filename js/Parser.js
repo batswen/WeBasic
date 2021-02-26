@@ -457,15 +457,30 @@ class Parser {
                     args = this.getNumArgList(token, 3)
                     return new ColorNode(token.position, args)
                     break
+                case "FILLCOLOR":
+                    this.advance()
+                    args = this.getNumArgList(token, 3)
+                    return new FillColorNode(token.position, args)
+                    break
                 case "POINT":
                     this.advance()
                     args = this.getNumArgList(token, 2)
                     return new PointNode(token.position, args)
                     break
+                case "LINEWIDTH":
+                    this.advance()
+                    args = this.getNumArgList(token, 1)
+                    return new LineWidthNode(token.position, args)
+                    break
                 case "LINE":
                     this.advance()
                     args = this.getNumArgList(token, 4)
                     return new LineNode(token.position, args)
+                    break
+                case "RECT":
+                    this.advance()
+                    args = this.getNumArgList(token, 5)
+                    return new RectNode(token.position, args)
                     break
                 case "RETURN":
                     this.advance()

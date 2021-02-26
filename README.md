@@ -9,7 +9,7 @@ No documentation, look in grammar.txt
 Live demo: [WeBasic.bplaced.net](http://webasic.bplaced.net)
 
 ### Known bugs
-* List access (r/w) ins't recursive
+* List access (r/w) isn't recursive
 * Namespaces can be declared but not accessed
 
 
@@ -25,7 +25,7 @@ First character must be $_a-zA_Z, then $_0-9\p{L}
 
 Read access: [...][index]
 
-Write access: a=[...]:println a[index]
+Write access: a[index]=...
 
 
 #### Integer
