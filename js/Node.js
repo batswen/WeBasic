@@ -69,10 +69,53 @@ class StringTestNode extends Node {
     }
 }
 
-class LenNode extends Node {
+class SinNode extends Node {
+    constructor(position, arg) {
+        super(position)
+        this.arg = arg
+    }
+}
+
+class CosNode extends Node {
+    constructor(position, arg) {
+        super(position)
+        this.arg = arg
+    }
+}
+
+class TanNode extends Node {
+    constructor(position, arg) {
+        super(position)
+        this.arg = arg
+    }
+}
+
+class AbsNode extends Node {
+    constructor(position, arg) {
+        super(position)
+        this.arg = arg
+    }
+}
+
+class RoundNode extends Node {
+    constructor(position, arg) {
+        super(position)
+        this.arg = arg
+    }
+}
+
+
+class CeilNode extends Node {
     constructor(position, len) {
         super(position)
         this.len = len
+    }
+}
+
+class FloorNode extends Node {
+    constructor(position, arg) {
+        super(position)
+        this.arg = arg
     }
 }
 

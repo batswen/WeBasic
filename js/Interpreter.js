@@ -66,13 +66,62 @@ class Interpreter {
         }
         return new IntNumber(arg.getLen())
     }
+    visit_RoundNode(node, ctx) {
+        const arg =  this.visit(node.arg, ctx)
+        if (!(arg instanceof BaseNumber)) {
+            this.error(`Argument must be a number (ROUND(${arg.value}))`, node.position)
+        }
+        return new IntNumber(Math.round(arg.value))
+    }
+    visit_FloorNode(node, ctx) {
+        const arg =  this.visit(node.arg, ctx)
+        if (!(arg instanceof BaseNumber)) {
+            this.error(`Argument must be a number (FLOOR(${arg.value}))`, node.position)
+        }
+        return new IntNumber(Math.floor(arg.value))
+    }
+    visit_CeilNode(node, ctx) {
+        const arg =  this.visit(node.arg, ctx)
+        if (!(arg instanceof BaseNumber)) {
+            this.error(`Argument must be a number (CEIL(${arg.value}))`, node.position)
+        }
+        return new IntNumber(Math.ceil(arg.value))
+    }
+    visit_SinNode(node, ctx) {
+        const arg =  this.visit(node.arg, ctx)
+        if (!(arg instanceof BaseNumber)) {
+            this.error(`Argument must be a number (SIN(${arg.value}))`, node.position)
+        }
+        return new IntNumber(Math.sin(arg.value))
+    }
+    visit_CosNode(node, ctx) {
+        const arg =  this.visit(node.arg, ctx)
+        if (!(arg instanceof BaseNumber)) {
+            this.error(`Argument must be a number (COS(${arg.value}))`, node.position)
+        }
+        return new IntNumber(Math.cos(arg.value))
+    }
+    visit_TanNode(node, ctx) {
+        const arg =  this.visit(node.arg, ctx)
+        if (!(arg instanceof BaseNumber)) {
+            this.error(`Argument must be a number (TAN(${arg.value}))`, node.position)
+        }
+        return new IntNumber(Math.tan(arg.value))
+    }
+    visit_AbsNode(node, ctx) {
+        const arg =  this.visit(node.arg, ctx)
+        if (!(arg instanceof BaseNumber)) {
+            this.error(`Argument must be a number (ROUND(${arg.value}))`, node.position)
+        }
+        return new IntNumber(Math.abs(arg.value))
+    }
     visit_RandomNode(node, ctx) {
         return new FloatNumber(Math.random())
     }
     visit_InputNode(node, ctx) {
         const prompt = this.visit(node.prompt, ctx)
         if (!(prompt instanceof DTString)) {
-            this.error(`Prompt must be a String (INPUT("${prompt.str()}"))`, node.position)
+            this.error(`Prompt must be a String (INPUT(${prompt.str()}))`, node.position)
         }
         let input = window.prompt(prompt.value)
         if (typeof input !== "string") {

@@ -155,106 +155,163 @@ class Parser {
         } else if (token.tokentype === TokenType.KEYWORD) {
             switch (this.token.value) {
                 case "RND":
-                    this.eat(TokenType.KEYWORD, token.position)
+                    this.eatKeyword("RND", token.position)
                     this.eat(TokenType.LPAREN, token.position)
                     this.eat(TokenType.RPAREN, token.position)
                     return new RandomNode(token.position)
                     break
                 case "LEFT":
-                    this.eat(TokenType.KEYWORD, token.position)
+                    this.eatKeyword("LEFT", token.position)
                     this.eat(TokenType.LPAREN, token.position)
                     args = this.getNumArgList(token, 2)
                     this.eat(TokenType.RPAREN, token.position)
                     return new LeftNode(token.position, args[0], args[1])
                     break
                 case "RIGHT":
-                    this.eat(TokenType.KEYWORD, token.position)
+                    this.eatKeyword("RIGHT", token.position)
                     this.eat(TokenType.LPAREN, token.position)
                     args = this.getNumArgList(token, 2)
                     this.eat(TokenType.RPAREN, token.position)
                     return new RightNode(token.position, args[0], args[1])
                     break
                 case "MID":
-                    this.eat(TokenType.KEYWORD, token.position)
+                    this.eatKeyword("MID", token.position)
                     this.eat(TokenType.LPAREN, token.position)
                     args = this.getNumArgList(token, 3)
                     this.eat(TokenType.RPAREN, token.position)
                     return new MidNode(token.position, args[0], args[1], args[2])
                     break
                 case "INT":
-                    this.eat(TokenType.KEYWORD, token.position)
+                    this.eatKeyword("INT", token.position)
                     this.eat(TokenType.LPAREN, token.position)
                     args = this.getNumArgList(token, 1)
                     this.eat(TokenType.RPAREN, token.position)
                     return new IntConvNode(token.position, args[0])
                     break
                 case "FLOAT":
-                    this.eat(TokenType.KEYWORD, token.position)
+                    this.eatKeyword("FLOAT", token.position)
                     this.eat(TokenType.LPAREN, token.position)
                     args = this.getNumArgList(token, 1)
                     this.eat(TokenType.RPAREN, token.position)
                     return new FloatConvNode(token.position, args[0])
                     break
                 case "STRING":
-                    this.eat(TokenType.KEYWORD, token.position)
+                    this.eatKeyword("STRING", token.position)
                     this.eat(TokenType.LPAREN, token.position)
                     args = this.getNumArgList(token, 1)
                     this.eat(TokenType.RPAREN, token.position)
                     return new StringConvNode(token.position, args[0])
                     break
                 case "ISINT":
-                    this.eat(TokenType.KEYWORD, token.position)
+                    this.eatKeyword("ISINT", token.position)
                     this.eat(TokenType.LPAREN, token.position)
                     args = this.getNumArgList(token, 1)
                     this.eat(TokenType.RPAREN, token.position)
                     return new IntTestNode(token.position, args[0])
                     break
                 case "ISFLOAT":
-                    this.eat(TokenType.KEYWORD, token.position)
+                    this.eatKeyword("ISFLOAT", token.position)
                     this.eat(TokenType.LPAREN, token.position)
                     args = this.getNumArgList(token, 1)
                     this.eat(TokenType.RPAREN, token.position)
                     return new FloatTestNode(token.position, args[0])
                     break
                 case "ISSTRING":
-                    this.eat(TokenType.KEYWORD, token.position)
+                    this.eatKeyword("ISSTRING", token.position)
                     this.eat(TokenType.LPAREN, token.position)
                     args = this.getNumArgList(token, 1)
                     this.eat(TokenType.RPAREN, token.position)
                     return new StringTestNode(token.position, args[0])
                     break
                 case "DATE":
-                    this.eat(TokenType.KEYWORD, token.position)
+                    this.eatKeyword("DATE", token.position)
                     this.eat(TokenType.LPAREN, token.position)
                     this.eat(TokenType.RPAREN, token.position)
                     return new DateNode(token.position)
                     break
                 case "TIME":
-                    this.eat(TokenType.KEYWORD, token.position)
+                    this.eatKeyword("TIME", token.position)
                     this.eat(TokenType.LPAREN, token.position)
                     this.eat(TokenType.RPAREN, token.position)
                     return new TimeNode(token.position)
                     break
                 case "LEN":
-                    this.eat(TokenType.KEYWORD, token.position)
+                    this.eatKeyword("LEN", token.position)
                     this.eat(TokenType.LPAREN, token.position)
                     args = this.getNumArgList(token, 1)
                     this.eat(TokenType.RPAREN, token.position)
                     return new LenNode(token.position, args[0])
                     break
                 case "INPUT":
-                    this.eat(TokenType.KEYWORD, token.position)
+                    this.eatKeyword("INPUT", token.position)
                     this.eat(TokenType.LPAREN, token.position)
                     args = this.getNumArgList(token, 1)
                     this.eat(TokenType.RPAREN, token.position)
                     return new InputNode(token.position, args[0])
                     break
+                case "SQRT":
+                    this.eatKeyword("SQRT", token.position)
+                    this.eat(TokenType.LPAREN, token.position)
+                    args = this.getNumArgList(token, 1)
+                    this.eat(TokenType.RPAREN, token.position)
+                    return new SqrtNode(token.position, args[0])
+                    break
+                case "ABS":
+                    this.eatKeyword("ABS", token.position)
+                    this.eat(TokenType.LPAREN, token.position)
+                    args = this.getNumArgList(token, 1)
+                    this.eat(TokenType.RPAREN, token.position)
+                    return new AbsNode(token.position, args[0])
+                    break
+                case "SIN":
+                    this.eatKeyword("SIN", token.position)
+                    this.eat(TokenType.LPAREN, token.position)
+                    args = this.getNumArgList(token, 1)
+                    this.eat(TokenType.RPAREN, token.position)
+                    return new SinNode(token.position, args[0])
+                    break
+                case "COS":
+                    this.eatKeyword("COS", token.position)
+                    this.eat(TokenType.LPAREN, token.position)
+                    args = this.getNumArgList(token, 1)
+                    this.eat(TokenType.RPAREN, token.position)
+                    return new CosNode(token.position, args[0])
+                    break
+                case "TAN":
+                    this.eatKeyword("TAN", token.position)
+                    this.eat(TokenType.LPAREN, token.position)
+                    args = this.getNumArgList(token, 1)
+                    this.eat(TokenType.RPAREN, token.position)
+                    return new TanNode(token.position, args[0])
+                    break
+                case "ROUND":
+                    this.eatKeyword("ROUND", token.position)
+                    this.eat(TokenType.LPAREN, token.position)
+                    args = this.getNumArgList(token, 1)
+                    this.eat(TokenType.RPAREN, token.position)
+                    return new RoundNode(token.position, args[0])
+                    break
+                case "FLOOR":
+                    this.eatKeyword("FLOOR", token.position)
+                    this.eat(TokenType.LPAREN, token.position)
+                    args = this.getNumArgList(token, 1)
+                    this.eat(TokenType.RPAREN, token.position)
+                    return new FloorNode(token.position, args[0])
+                    break
+                case "CEIL":
+                    this.eatKeyword("CEIL", token.position)
+                    this.eat(TokenType.LPAREN, token.position)
+                    args = this.getNumArgList(token, 1)
+                    this.eat(TokenType.RPAREN, token.position)
+                    return new CeilNode(token.position, args[0])
+                    break
+
             }
         } else {
             this.error(`Number, Identifier, String, '[', '(', '+', or '-' expected (${this.token.tokentype})`, token.position)
         }
     }
-    eat(tokentype, pos, keyword = undefined) {
+    eat(tokentype, pos) {
         if (this.token.tokentype === tokentype) {
             if (tokentype === TokenType.COLON) {
                 while (this.token.tokentype === TokenType.COLON) {
