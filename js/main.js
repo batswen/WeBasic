@@ -44,13 +44,13 @@ function go() {
                 if (ast) console.log(ast)
             } else {
                 if (ast && error === undefined) {
-                    error = new Interpreter(ast).interpret()
-                }
-                if (error) {
                     const startTime = new Date().getTime()
-                    showError("Interpreter", error)
+                    error = new Interpreter(ast).interpret()
                     const endTime = new Date().getTime()
                     console.log(startTime, endTime, endTime - startTime)
+                }
+                if (error) {
+                    showError("Interpreter", error)
                     if (tokens) console.log(tokens)
                     if (ast) console.log(ast)
                 }

@@ -546,6 +546,8 @@ class Interpreter {
         ctx.symbolTable.setVar("pi", new FloatNumber(Math.PI).setContext(ctx))
         ctx.symbolTable.declareVar("null")
         ctx.symbolTable.setVar("null", new DTNull().setContext(ctx))
+        ctx.symbolTable.declareVar("light")
+        ctx.symbolTable.setVar("light", new IntNumber(299792458).setContext(ctx))
         try {
             this.visit(this.ast, ctx)
         } catch (e) {
