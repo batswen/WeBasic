@@ -58,3 +58,5 @@ buildin-function :
             "ISSTRING(orexpr)"
             "DATE()"
             "TIME()"
+            "LEN(string|list)"
+            "INPUT(string)"

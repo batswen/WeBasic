@@ -59,8 +59,26 @@ class Interpreter {
         }
         this.shouldReturn = true
     }
+    visit_LenNode(node, ctx) {
+        const arg =  this.visit(node.len, ctx)
+        if (!(arg instanceof DTString || arg instanceof DTList)) {
+            this.error(`Argument must be String or List (LEN(${arg.value}))`, node.position)
+        }
+        return new IntNumber(arg.getLen())
+    }
     visit_RandomNode(node, ctx) {
         return new FloatNumber(Math.random())
+    }
+    visit_InputNode(node, ctx) {
+        const prompt = this.visit(node.prompt, ctx)
+        if (!(prompt instanceof DTString)) {
+            this.error(`Prompt must be a String (INPUT("${prompt.str()}"))`, node.position)
+        }
+        let input = window.prompt(prompt.value)
+        if (typeof input !== "string") {
+            input = ""
+        }
+        return new DTString(input).setContext(ctx)
     }
     visit_LeftNode(node, ctx) {
         const str = this.visit(node.str, ctx)
@@ -148,7 +166,10 @@ class Interpreter {
         if (!(xc instanceof BaseNumber) || !(yc instanceof BaseNumber)) {
             this.error(`Arguments must be numbers (POINT)`, node.position)
         }
+        const oldLineWidth = this.gfx.lineWidth
+        this.gfx.lineWidth = "1"
         this.gfx.fillRect(xc.value, yc.value, 1, 1)
+        this.gfx.lineWidth = oldLineWidth
     }
     visit_LineNode(node, ctx) {
         const xcStart = this.visit(node.args[0], ctx)

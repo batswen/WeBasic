@@ -45,6 +45,8 @@ const KEYWORDS = [
     "LEFT", "RIGHT", "MID",
     "INT", "FLOAT", "STRING",
     "ISINT", "ISFLOAT", "ISSTRING",
+    "LEN",
+    "INPUT",
     "DATE", "TIME"
 ]
 

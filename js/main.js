@@ -47,7 +47,7 @@ function go() {
                     const startTime = new Date().getTime()
                     error = new Interpreter(ast).interpret()
                     const endTime = new Date().getTime()
-                    console.log(startTime, endTime, endTime - startTime)
+                    console.log(endTime - startTime, "ms")
                 }
                 if (error) {
                     showError("Interpreter", error)

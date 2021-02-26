@@ -74,6 +74,9 @@ class DTList extends DataType {
         this.value[n] = newValue
         return this
     }
+    getLen() {
+        return this.value.length
+    }
     add(other) {
         other.value.forEach(e => {
             this.value.push(e)

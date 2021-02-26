@@ -235,6 +235,20 @@ class Parser {
                     this.eat(TokenType.RPAREN, token.position)
                     return new TimeNode(token.position)
                     break
+                case "LEN":
+                    this.eat(TokenType.KEYWORD, token.position)
+                    this.eat(TokenType.LPAREN, token.position)
+                    args = this.getNumArgList(token, 1)
+                    this.eat(TokenType.RPAREN, token.position)
+                    return new LenNode(token.position, args[0])
+                    break
+                case "INPUT":
+                    this.eat(TokenType.KEYWORD, token.position)
+                    this.eat(TokenType.LPAREN, token.position)
+                    args = this.getNumArgList(token, 1)
+                    this.eat(TokenType.RPAREN, token.position)
+                    return new InputNode(token.position, args[0])
+                    break
             }
         } else {
             this.error(`Number, Identifier, String, '[', '(', '+', or '-' expected (${this.token.tokentype})`, token.position)

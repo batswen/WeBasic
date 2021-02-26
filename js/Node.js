@@ -69,6 +69,20 @@ class StringTestNode extends Node {
     }
 }
 
+class LenNode extends Node {
+    constructor(position, len) {
+        super(position)
+        this.len = len
+    }
+}
+
+class InputNode extends Node {
+    constructor(position, prompt) {
+        super(position)
+        this.prompt = prompt
+    }
+}
+
 class ForNode extends Node {
     constructor(position, forIdentifier, forStart, forEnd, forStep, forProg) {
         super(position)
