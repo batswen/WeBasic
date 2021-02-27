@@ -45,7 +45,7 @@ while y0 > bottom_edge
                 if (i > 9)
                     the_char = "@"
                 else
-                    the_char = [" ", ".",":","-","+","=","*","$","%","#"][i]
+                    the_char = [" ", ".","-",":","+","=","*","$","%","#"][i]
                 endif
                 i = max_iter
             endif
