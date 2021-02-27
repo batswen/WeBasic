@@ -42,11 +42,7 @@ class Interpreter {
             }
         }
         this.visit(func.prog, context)
-        if (this.return) {
-            return this.return
-        } else {
-            return new DTNull()
-        }
+        return this.return ? this.return : new DTNull()
     }
     visit_ReturnNode(node, ctx) {
         if (node.value) {
@@ -88,28 +84,28 @@ class Interpreter {
         if (!(arg instanceof BaseNumber)) {
             this.error(`Argument must be a number (SIN(${arg.value}))`, node.position)
         }
-        return new IntNumber(Math.sin(arg.value))
+        return new FloatNumber(Math.sin(arg.value))
     }
     visit_CosNode(node, ctx) {
         const arg =  this.visit(node.arg, ctx)
         if (!(arg instanceof BaseNumber)) {
             this.error(`Argument must be a number (COS(${arg.value}))`, node.position)
         }
-        return new IntNumber(Math.cos(arg.value))
+        return new FloatNumber(Math.cos(arg.value))
     }
     visit_TanNode(node, ctx) {
         const arg =  this.visit(node.arg, ctx)
         if (!(arg instanceof BaseNumber)) {
             this.error(`Argument must be a number (TAN(${arg.value}))`, node.position)
         }
-        return new IntNumber(Math.tan(arg.value))
+        return new FloatNumber(Math.tan(arg.value))
     }
     visit_LogNode(node, ctx) {
         const arg =  this.visit(node.arg, ctx)
         if (!(arg instanceof BaseNumber)) {
             this.error(`Argument must be a number (LOG(${arg.value}))`, node.position)
         }
-        return new IntNumber(Math.log(arg.value))
+        return new FloatNumber(Math.log(arg.value))
     }
     visit_SignNode(node, ctx) {
         const arg =  this.visit(node.arg, ctx)
@@ -124,12 +120,12 @@ class Interpreter {
         if (!(arg instanceof BaseNumber) || !(exp instanceof BaseNumber)) {
             this.error(`Argument must be a number (POWER(${arg.value}))`, node.position)
         }
-        return new IntNumber(Math.pow(arg.value, exp.value))
+        return new FloatNumber(Math.pow(arg.value, exp.value))
     }
     visit_AbsNode(node, ctx) {
         const arg =  this.visit(node.arg, ctx)
         if (!(arg instanceof BaseNumber)) {
-            this.error(`Argument must be a number (ROUND(${arg.value}))`, node.position)
+            this.error(`Argument must be a number (ABS(${arg.value}))`, node.position)
         }
         return new IntNumber(Math.abs(arg.value))
     }

@@ -183,7 +183,7 @@ class IntNumber extends BaseNumber {
         if (other instanceof BaseNumber) {
             if (other.value === 0) {
                 throw {
-                    msg: "Interpreter: division by zero"
+                    msg: "Division by zero"
                 }
             }
             this.value = this.value / parseInt(other.value)
@@ -256,7 +256,7 @@ class FloatNumber extends BaseNumber {
         if (other instanceof BaseNumber) {
             if (other.value === 0) {
                 throw {
-                    msg: "Interpreter: division by zero"
+                    msg: "Division by zero"
                 }
             }
             this.value = this.value / other.value
