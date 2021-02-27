@@ -3,7 +3,6 @@ class Interpreter {
         this.ast = ast
         this.output = document.getElementById("output")
         this.return = undefined
-        this.shouldReturn = false
         this.errorMsg = undefined
         this.gfx = document.getElementById("gfxoutput").getContext("2d")
         this.gfx.fillStyle = 'rgb(0, 0, 0)'
@@ -22,7 +21,6 @@ class Interpreter {
     }
     visit_FuncCallNode(node, ctx) {
         this.return = undefined
-        this.shouldReturn = false
         const func = ctx.symbolTable.getVar(node.identifier)
         if (!func) {
             this.error(`Unknown function ${node.identifier}`, node.position)
@@ -44,11 +42,10 @@ class Interpreter {
             }
         }
         this.visit(func.prog, context)
-        this.shouldReturn = false
         if (this.return) {
             return this.return
         } else {
-            return new DTNull() // RETURN
+            return new DTNull()
         }
     }
     visit_ReturnNode(node, ctx) {
@@ -57,7 +54,6 @@ class Interpreter {
         } else {
             this.return = undefined
         }
-        this.shouldReturn = true
     }
     visit_LenNode(node, ctx) {
         const arg =  this.visit(node.len, ctx)
@@ -634,7 +630,7 @@ class Interpreter {
     }
     visit(node, ctx) {
         // console.log(node.constructor.name)
-        if (this.errorMsg === undefined && this.shouldReturn === false) {
+        if (this.errorMsg === undefined) {
             return this[`visit_${node.constructor.name}`](node, ctx)
         }
     }
