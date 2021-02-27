@@ -6,6 +6,8 @@ Very early stage
 
 No documentation, look in grammar.txt
 
+Blog: [webasiclang.blogspot.com](https://webasiclang.blogspot.com/)
+
 Live demo: [WeBasic.bplaced.net](http://webasic.bplaced.net)
 
 ### Known bugs
