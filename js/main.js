@@ -14,7 +14,7 @@ for (let e in examples) {
 }
 
 prog.value = `# Choose an example from above\n# or write your own program\n# then click the "Run" button\n\ncls:println "Hello, world!"`
-document.getElementById("output").value = ""
+document.getElementById("output").value = "Text output"
 
 function showError(source, e) {
     if (e.details) {

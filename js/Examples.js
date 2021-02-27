@@ -10,5 +10,54 @@ const examples = {
     "Function": `cls\nvar a\nfunction test()\n  var a\n  println "Hallo"\n  a = 5:dump\nendfunction\na = test()\ntest()`,
     "Function2": `cls\nvar a, b, x\na=345:x=789\ndump\nfunction test(a, b, c)\n  b = x\n  dump\nendfunction\ntest(a * 5, 2, "Test")\ndump`,
     "Graphic": `color 200, 80, 255\nfor x = 10.0 to 100.0 step 5.0 do point x, 10\ncolor 20, 20, 80:line 20, 20, 80, 80`,
-    "Error": `a=1a`
+    "Error": `a=1a`,
+    "Text-Apfelmännchen": `# Taken from Rosetta Code
+# http://rosettacode.org/wiki/Compiler/Sample_programs#Ascii_Mandlebrot
+
+var left_edge, right_edge, top_edge, bottom_edge
+var x_step, y_step, max_iter
+var x0, y0, x, y, i, x_x, y_y
+var the_char
+
+cls
+
+left_edge   = -420
+right_edge  =  300
+top_edge    =  300
+bottom_edge = -300
+x_step      =    7
+y_step      =   15
+
+max_iter    =  200
+
+y0 = top_edge
+while y0 > bottom_edge
+    x0 = left_edge
+    while x0 < right_edge
+        y = 0
+        x = 0
+        the_char = " "
+        i = 0
+        while i < max_iter
+            x_x = (x * x) / 200
+            y_y = (y * y) / 200
+            if x_x + y_y > 800
+                if (i > 9)
+                    the_char = "@"
+                else
+                    the_char = [" ", ".",":","-","+","=","*","$","%","#"][i]
+                endif
+                i = max_iter
+            endif
+            y = x * y / 100 + y0
+            x = x_x - y_y + x0
+            i = i + 1
+        endwhile
+        print the_char
+        x0 = x0 + x_step
+    endwhile
+    println
+    y0 = y0 - y_step
+endwhile
+`
 }

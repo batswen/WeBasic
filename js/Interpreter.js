@@ -45,11 +45,7 @@ class Interpreter {
         return this.return ? this.return : new DTNull()
     }
     visit_ReturnNode(node, ctx) {
-        if (node.value) {
-            this.return = this.visit(node.value, ctx)
-        } else {
-            this.return = undefined
-        }
+        this.return = node.value ? this.visit(node.value, ctx) : undefined
     }
     visit_LenNode(node, ctx) {
         const arg =  this.visit(node.len, ctx)
