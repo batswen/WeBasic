@@ -17,9 +17,6 @@ prog.value = `# Choose an example from above\n# or write your own program\n# the
 document.getElementById("output").value = "Text output"
 
 function showError(source, e) {
-    if (e.details) {
-        console.log(e.details)
-    }
     modalHeader.textContent = `(${source}): ${e.title ? e.title : "Error"}`
     modalMessage.textContent = e.msg
     modalLine.textContent = e.position?.line

@@ -6,9 +6,9 @@ class Parser {
         this.errorMsg = undefined
         this.advance()
     }
-    error(msg, position, details = undefined) {
+    error(msg, position) {
         this.errorMsg = {
-            msg, position, details
+            msg, position
         }
         throw "error"
     }
@@ -74,14 +74,14 @@ class Parser {
         if (this.token.tokentype === TokenType.IDENTIFIER) {
             args.push(this.factor(true))
         } else {
-            this.error(`identifier expected (${this.token.tokentype})`, token.position)
+            this.error(`Identifier expected (${this.token.tokentype})`, token.position)
         }
         while (this.token.tokentype === TokenType.COMMA) {
             this.eat(TokenType.COMMA, token.position)
             if (this.token.tokentype === TokenType.IDENTIFIER) {
                 args.push(this.factor(true))
             } else {
-                this.error(`identifier expected (${this.token.tokentype})`, token.position)
+                this.error(`Identifier expected (${this.token.tokentype})`, token.position)
             }
         }
         return args
@@ -123,7 +123,7 @@ class Parser {
         const token = this.token
         let args
         if (idOnly && token.tokentype !== TokenType.IDENTIFIER) {
-            this.error(`identifier expected (${this.token.tokentype})`, token.position)
+            this.error(`Identifier expected (${this.token.tokentype})`, token.position)
         }
         if (token.tokentype === TokenType.STRING) {
             this.eat(TokenType.STRING, token.position)
@@ -451,6 +451,13 @@ class Parser {
                 this.eat(TokenType.LPAREN, token.position)
                 return this.handleFuncCall(token)
             } else if (this.token.tokentype === TokenType.LBRACKET) { // List access
+                // access = []
+                // while (this.token.tokentype === TokenType.LBRACKET) {
+                //     this.eat(TokenType.LBRACKET, token.position)
+                //     access.push(this.expr())
+                //     this.eat(TokenType.RBRACKET, token.position)
+                // }
+
                 this.eat(TokenType.LBRACKET, token.position)
                 access = this.expr()
                 this.eat(TokenType.RBRACKET, token.position)
@@ -659,7 +666,7 @@ class Parser {
         try {
             result = this.program()
             if (this.token.tokentype !== TokenType.EOF) {
-                this.error(`EOF expected (${this.token.tokentype}, ${this.token.value})`,this.token.position,this.tokens)
+                this.error(`EOF expected (${this.token.tokentype}, ${this.token.value})`,this.token.position)
             }
         } catch (e) {
             if (e !== "error") {

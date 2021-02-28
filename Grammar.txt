@@ -1,7 +1,7 @@
 program:            statement (lf statement)*
 statement:          "VAR" identifier ("," identifier)*
                     identifier ("[" expr "]")? "=" orexpr
-                    identifier "(" (orexpr ("," orexpr)*)? ")"
+                    function-call
                     "IF" orexpr "THEN" statement ("ELSE" statement)?
                     "IF" orexpr lf program lf ("ELSE" program)? "ENDIF"
                     "WHILE" orexpr "DO" statement
@@ -35,7 +35,6 @@ factor:             ("+"|"-")? int|float
                     string
                     "NOT" orexpr
                     "(" orexpr ")"
-                    identifier ("(" ")"))?
                     function-call
                     list ("[" expr "]")?
                     buildin-function
