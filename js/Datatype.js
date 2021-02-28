@@ -1,15 +1,5 @@
 class DataType {
     constructor() {
-        this.context = undefined
-        this.position = undefined
-    }
-    setPosition(position) {
-        this.position = position
-        return this
-    }
-    setContext(context) {
-        this.context = context
-        return this
     }
 }
 

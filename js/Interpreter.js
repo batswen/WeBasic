@@ -137,7 +137,7 @@ class Interpreter {
         if (typeof input !== "string") {
             input = ""
         }
-        return new DTString(input).setContext(ctx)
+        return new DTString(input)
     }
     visit_LeftNode(node, ctx) {
         const str = this.visit(node.str, ctx)
@@ -146,7 +146,7 @@ class Interpreter {
             if (num.value < 0 || str.getLen() < num.value) {
                 this.error(`Illegal quantity (LEFT(${str.str()}, ${num.str()}))`, node.position)
             } else {
-                return new DTString(str.value.substring(0, num.value)).setContext(ctx)
+                return new DTString(str.value.substring(0, num.value))
             }
         } else {
             this.error(`LEFT(${str.str()}, ${num.str()})`, node.position)
@@ -160,7 +160,7 @@ class Interpreter {
             if (num. value < 0 || str.getLen() < num.value) {
                 this.error(`Illegal quantity (RIGHT(${str.str()}, ${num.str()}))`, node.position)
             } else {
-                return new DTString(str.value.substr(-num.value)).setContext(ctx)
+                return new DTString(str.value.substr(-num.value))
             }
         } else {
             this.error(`RIGHT(${str.str()}, ${num.str()})`, node.position)
@@ -175,7 +175,7 @@ class Interpreter {
             if (num.value < 0 || amount.value < 0 || str.getLen() < num.value + amount.value - 1) {
                 this.error(`Illegal quantity (MID(${str.str()}, ${num.str()}, ${amount.str()}))`, node.position)
             } else {
-                return new DTString(str.value.substr(num.value - 1, amount.value)).setContext(ctx)
+                return new DTString(str.value.substr(num.value - 1, amount.value))
             }
         } else {
             this.error(`MID(${str.str()}, ${num.str()}, ${num.str()})`, node.position)
@@ -183,10 +183,10 @@ class Interpreter {
         return new DTNull()
     }
     visit_DateNode(node, ctx) {
-        return new DTString(new Date().toLocaleDateString()).setContext(ctx)
+        return new DTString(new Date().toLocaleDateString())
     }
     visit_TimeNode(node, ctx) {
-        return new DTString(new Date().toLocaleTimeString()).setContext(ctx)
+        return new DTString(new Date().toLocaleTimeString())
     }
     visit_LineWidthNode(node, ctx) {
         const width = this.visit(node.args[0], ctx)
@@ -312,12 +312,12 @@ class Interpreter {
         if (forStep.value > 0) {
             while (ctx.symbolTable.getVar(forIdentifier).value <= forEnd.value) {
                 this.visit(node.forProg, ctx)
-                ctx.symbolTable.setVar(forIdentifier, ctx.symbolTable.getVar(forIdentifier).add(new FloatNumber(forStep.value).setContext(ctx)))
+                ctx.symbolTable.setVar(forIdentifier, ctx.symbolTable.getVar(forIdentifier).add(new FloatNumber(forStep.value)))
             }
         } else {
             while (ctx.symbolTable.getVar(forIdentifier).value >= forEnd.value) {
                 this.visit(node.forProg, ctx)
-                ctx.symbolTable.setVar(forIdentifier, ctx.symbolTable.getVar(forIdentifier).add(new FloatNumber(forStep.value).setContext(ctx)))
+                ctx.symbolTable.setVar(forIdentifier, ctx.symbolTable.getVar(forIdentifier).add(new FloatNumber(forStep.value)))
             }
         }
     }
@@ -369,7 +369,7 @@ class Interpreter {
         }
     }
     visit_IntNode(node, ctx) {
-        return new IntNumber(node.value).setContext(ctx)
+        return new IntNumber(node.value)
     }
     visit_IntConvNode(node, ctx) {
         const value = this.visit(node.value, ctx)
@@ -408,10 +408,10 @@ class Interpreter {
         return new IntNumber(value instanceof DTString ? 1 : 0, ctx)
     }
     visit_FloatNode(node, ctx) {
-        return new FloatNumber(node.value).setContext(ctx)
+        return new FloatNumber(node.value)
     }
     visit_StringNode(node, ctx) {
-        return new DTString(node.value).setContext(ctx)
+        return new DTString(node.value)
     }
     visit_ListNode(node, ctx) {
         let index
@@ -421,13 +421,13 @@ class Interpreter {
         const list = []
         node.args.forEach(e => list.push(this.visit(e, ctx)))
         if (node.access) {
-            const result = new DTList(list).setContext(ctx).getElement(index)
+            const result = new DTList(list).getElement(index)
             if (result === undefined) {
                 this.error("Index out of bounds", node.position)
             }
             return result
         } else {
-            return new DTList(list).setContext(ctx)
+            return new DTList(list)
         }
     }
     visit_AssignNode(node, ctx) {
@@ -468,13 +468,13 @@ class Interpreter {
                 this.error("Number expected (-)", left.position)
             }
             if (left instanceof IntNumber) {
-                result = new IntNumber(-left.value).setContext(ctx)
+                result = new IntNumber(-left.value)
             } else if (left instanceof FloatNumber ) {
-                result = new FloatNumber(-left.value).setContext(ctx)
+                result = new FloatNumber(-left.value)
             }
         } else if (node.operator.tokentype === TokenType.KEYWORD && node.operator.value === "NOT") {
             if (left instanceof IntNumber) {
-                return new IntNumber(left.value === 0 ? 1 : 0).setContext(ctx)
+                return new IntNumber(left.value === 0 ? 1 : 0)
             } else {
                 this.error("Integer expected (NOT)", left.position)
             }
@@ -487,49 +487,49 @@ class Interpreter {
         switch (node.operator.tokentype) {
             case TokenType.PLUS:
                 if (left instanceof FloatNumber || right instanceof FloatNumber) {
-                    return new FloatNumber(left).add(right).setContext(ctx)
+                    return new FloatNumber(left).add(right)
                 } else if (left instanceof IntNumber && right instanceof IntNumber) {
-                    return new IntNumber(left).add(right).setContext(ctx)
+                    return new IntNumber(left).add(right)
                 } else if (left instanceof DTString && right instanceof DTString) {
-                    return new DTString(left).add(right).setContext(ctx)
+                    return new DTString(left).add(right)
                 } else if (left instanceof DTList && right instanceof DTList) {
-                    return new DTList(left).add(right).setContext(ctx)
+                    return new DTList(left).add(right)
                 } else {
                     this.error(`Type mismatch (+) [${typeof left}, ${typeof right}]`, node.position)
                 }
                 break
             case TokenType.MINUS:
                 if (left instanceof FloatNumber || right instanceof FloatNumber) {
-                    return new FloatNumber(left).sub(right).setContext(ctx)
+                    return new FloatNumber(left).sub(right)
                 } else if (left instanceof IntNumber && right instanceof IntNumber) {
-                    return new IntNumber(left).sub(right).setContext(ctx)
+                    return new IntNumber(left).sub(right)
                 } else {
                     this.error(`Type mismatch (-) [${typeof left}, ${typeof right}]`, node.position)
                 }
                 break
             case TokenType.MUL:
                 if (left instanceof FloatNumber || right instanceof FloatNumber) {
-                    return new FloatNumber(left).mul(right).setContext(ctx)
+                    return new FloatNumber(left).mul(right)
                 } else if (left instanceof IntNumber && right instanceof IntNumber) {
-                    return new IntNumber(left).mul(right).setContext(ctx)
+                    return new IntNumber(left).mul(right)
                 } else if (left instanceof DTString && right instanceof BaseNumber) {
-                    return new DTString(left).mul(right).setContext(ctx)
+                    return new DTString(left).mul(right)
                 } else {
                     this.error(`Type mismatch (*) [${typeof left}, ${typeof right}]`, node.position)
                 }
                 break
             case TokenType.DIV:
                 if (left instanceof FloatNumber || right instanceof FloatNumber) {
-                    return new FloatNumber(left).div(right).setContext(ctx)
+                    return new FloatNumber(left).div(right)
                 } else if (left instanceof IntNumber && right instanceof IntNumber) {
-                    return new IntNumber(left).div(right).setContext(ctx)
+                    return new IntNumber(left).div(right)
                 } else {
                     this.error(`Type mismatch (/) [${typeof left}, ${typeof right}]`, node.position)
                 }
                 break
             case TokenType.MOD:
                 if (left instanceof IntNumber && right instanceof IntNumber) {
-                    return new IntNumber(left).mod(right).setContext(ctx)
+                    return new IntNumber(left).mod(right)
                 } else {
                     this.error(`Type mismatch (%) [${typeof left}, ${typeof right}]`, node.position)
                 }
@@ -538,14 +538,14 @@ class Interpreter {
                 switch (node.operator.value) {
                     case "OR":
                         if (left instanceof IntNumber && right instanceof IntNumber) {
-                            return new IntNumber(left).or(right).setContext(ctx)
+                            return new IntNumber(left).or(right)
                         } else {
                             this.error(`Type mismatch (or) [${typeof left}, ${typeof right}]`, node.position)
                         }
                         break
                     case "AND":
                         if (left instanceof IntNumber && right instanceof IntNumber) {
-                            return new IntNumber(left).and(right).setContext(ctx)
+                            return new IntNumber(left).and(right)
                         } else {
                             this.error(`Type mismatch (and) [${typeof left}, ${typeof right}]`, node.position)
                         }
@@ -553,66 +553,66 @@ class Interpreter {
                 }
             case TokenType.EQ:
                 if (left instanceof FloatNumber || right instanceof FloatNumber) {
-                    return new FloatNumber(left).eq(right).setContext(ctx)
+                    return new FloatNumber(left).eq(right)
                 } else if (left instanceof IntNumber && right instanceof IntNumber) {
-                    return new IntNumber(left).eq(right).setContext(ctx)
+                    return new IntNumber(left).eq(right)
                 } else if (left instanceof DTString && right instanceof DTString) {
-                    return new DTString(left).eq(right).setContext(ctx)
+                    return new DTString(left).eq(right)
                 } else{
                     this.error(`Type mismatch (==) [${typeof left}, ${typeof right}]`, node.position)
                 }
                 break
             case TokenType.NE:
                 if (left instanceof FloatNumber || right instanceof FloatNumber) {
-                    return new FloatNumber(left).ne(right).setContext(ctx)
+                    return new FloatNumber(left).ne(right)
                 } else if (left instanceof IntNumber && right instanceof IntNumber) {
-                    return new IntNumber(left).ne(right).setContext(ctx)
+                    return new IntNumber(left).ne(right)
                 } else if (left instanceof DTString && right instanceof DTString) {
-                    return new DTString(left).ne(right).setContext(ctx)
+                    return new DTString(left).ne(right)
                 } else {
                     this.error(`Type mismatch (!=) [${typeof left}, ${typeof right}]`, node.position)
                 }
                 break
             case TokenType.LT:
                 if (left instanceof FloatNumber || right instanceof FloatNumber) {
-                    return new FloatNumber(left).lt(right).setContext(ctx)
+                    return new FloatNumber(left).lt(right)
                 } else if (left instanceof IntNumber && right instanceof IntNumber) {
-                    return new IntNumber(left).lt(right).setContext(ctx)
+                    return new IntNumber(left).lt(right)
                 } else if (left instanceof DTString && right instanceof DTString) {
-                    return new DTString(left).lt(right).setContext(ctx)
+                    return new DTString(left).lt(right)
                 } else {
                     this.error(`Type mismatch (<) [${typeof left}, ${typeof right}]`, node.position)
                 }
                 break
             case TokenType.LE:
                 if (left instanceof FloatNumber || right instanceof FloatNumber) {
-                    return new FloatNumber(left).le(right).setContext(ctx)
+                    return new FloatNumber(left).le(right)
                 } else if (left instanceof IntNumber && right instanceof IntNumber) {
-                    return new IntNumber(left).le(right).setContext(ctx)
+                    return new IntNumber(left).le(right)
                 } else if (left instanceof DTString && right instanceof DTString) {
-                    return new DTString(left).le(right).setContext(ctx)
+                    return new DTString(left).le(right)
                 } else {
                     this.error(`Type mismatch (<=) [${typeof left}, ${typeof right}]`, node.position)
                 }
                 break
             case TokenType.GT:
                 if (left instanceof FloatNumber || right instanceof FloatNumber) {
-                    return new FloatNumber(left).gt(right).setContext(ctx)
+                    return new FloatNumber(left).gt(right)
                 } else if (left instanceof IntNumber && right instanceof IntNumber) {
-                    return new IntNumber(left).gt(right).setContext(ctx)
+                    return new IntNumber(left).gt(right)
                 } else if (left instanceof DTString && right instanceof DTString) {
-                    return new DTString(left).gt(right).setContext(ctx)
+                    return new DTString(left).gt(right)
                 } else {
                     this.error(`Type mismatch (>) [${typeof left}, ${typeof right}]`, node.position)
                 }
                 break
             case TokenType.GE:
                 if (left instanceof FloatNumber || right instanceof FloatNumber) {
-                    return new FloatNumber(left).ge(right).setContext(ctx)
+                    return new FloatNumber(left).ge(right)
                 } else if (left instanceof IntNumber && right instanceof IntNumber) {
-                    return new IntNumber(left).ge(right).setContext(ctx)
+                    return new IntNumber(left).ge(right)
                 } else if (left instanceof DTString && right instanceof DTString) {
-                    return new DTString(left).ge(right).setContext(ctx)
+                    return new DTString(left).ge(right)
                 } else {
                     this.error(`Type mismatch (>=) [${typeof left}, ${typeof right}]`, node.position)
                 }
@@ -629,11 +629,11 @@ class Interpreter {
     interpret() {
         const ctx = new Context("main")
         ctx.symbolTable.declareVar("pi")
-        ctx.symbolTable.setVar("pi", new FloatNumber(Math.PI).setContext(ctx))
+        ctx.symbolTable.setVar("pi", new FloatNumber(Math.PI))
         ctx.symbolTable.declareVar("null")
-        ctx.symbolTable.setVar("null", new DTNull().setContext(ctx))
+        ctx.symbolTable.setVar("null", new DTNull())
         ctx.symbolTable.declareVar("light")
-        ctx.symbolTable.setVar("light", new IntNumber(299792458).setContext(ctx))
+        ctx.symbolTable.setVar("light", new IntNumber(299792458))
         try {
             this.visit(this.ast, ctx)
         } catch (e) {
