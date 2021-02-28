@@ -71,50 +71,39 @@ class Parser {
     }
     getIdentifierList(token) {
         const args = []
-        if (this.token.tokentype === TokenType.IDENTIFIER) {
-            args.push(this.factor(true))
-        } else {
-            this.error(`Identifier expected (${this.token.tokentype})`, token.position)
-        }
+        args.push(this.factor(true))
         while (this.token.tokentype === TokenType.COMMA) {
             this.eat(TokenType.COMMA, token.position)
-            if (this.token.tokentype === TokenType.IDENTIFIER) {
-                args.push(this.factor(true))
-            } else {
-                this.error(`Identifier expected (${this.token.tokentype})`, token.position)
-            }
+            args.push(this.factor(true))
         }
         return args
     }
-    getTypedArgList(token, types) {
-        const args = []
-        let count = 0
-        if ((types[count] === TokenType.NUMBER && this.token.tokentype === TokenType.INT || this.token.tokentype === TokenType.FLOAT) || this.token.tokentype === types[count]) {
-            count++
-            args.push(this.orexpr())
-        } else {
-            this.error(`Arg expected ${types[count]}, got ${this.token.tokentype}`, token.position)
-        }
-        while (count < types.length && this.token.tokentype === TokenType.COMMA) {
-            this.eat(TokenType.COMMA, this.token.position)
-            if ((types[count] === TokenType.NUMBER && this.token.tokentype === TokenType.INT || this.token.tokentype === TokenType.FLOAT) || this.token.tokentype === types[count]) {
-                count++
-                args.push(this.orexpr())
-            } else {
-                this.error(`Arg expected ${types[count]}, got ${this.token.tokentype}`, token.position)
-            }
-        }
-        return args
-    }
+    // getTypedArgList(token, types) {
+    //     const args = []
+    //     let count = 0
+    //     if ((types[count] === TokenType.NUMBER && this.token.tokentype === TokenType.INT || this.token.tokentype === TokenType.FLOAT) || this.token.tokentype === types[count]) {
+    //         count++
+    //         args.push(this.orexpr())
+    //     } else {
+    //         this.error(`Arg expected ${types[count]}, got ${this.token.tokentype}`, token.position)
+    //     }
+    //     while (count < types.length && this.token.tokentype === TokenType.COMMA) {
+    //         this.eat(TokenType.COMMA, this.token.position)
+    //         if ((types[count] === TokenType.NUMBER && this.token.tokentype === TokenType.INT || this.token.tokentype === TokenType.FLOAT) || this.token.tokentype === types[count]) {
+    //             count++
+    //             args.push(this.orexpr())
+    //         } else {
+    //             this.error(`Arg expected ${types[count]}, got ${this.token.tokentype}`, token.position)
+    //         }
+    //     }
+    //     return args
+    // }
     handleFuncCall(token) {
         // args
         let args = undefined
-
+        this.eat(TokenType.LPAREN, this.token.position)
         if (this.token.tokentype !== TokenType.RPAREN) {
             args = this.getArgList(token)
-        }
-        if (this.token.tokentype !== TokenType.RPAREN) {
-            this.error(`')' expected (${this.token.tokentype})`, token.position)
         }
         this.eat(TokenType.RPAREN, this.token.position)
         return new FuncCallNode(token.position, token.value, args)
@@ -156,17 +145,13 @@ class Parser {
                     list.push(this.orexpr())
                 }
             }
-            if (this.token.tokentype === TokenType.RBRACKET) {
-                this.eat(TokenType.RBRACKET, token.position)
-                if (this.token.tokentype === TokenType.LBRACKET) {
-                    this.eat(TokenType.LBRACKET, this.token.position)
-                    access = this.expr()
-                    this.eat(TokenType.RBRACKET, this.token.position)
-                }
-                return new ListNode(token.position, list, access)
-            } else {
-                this.error(`']' expected (${this.token.tokentype})`, token.position)
+            this.eat(TokenType.RBRACKET, token.position)
+            if (this.token.tokentype === TokenType.LBRACKET) {
+                this.eat(TokenType.LBRACKET, this.token.position)
+                access = this.expr()
+                this.eat(TokenType.RBRACKET, this.token.position)
             }
+            return new ListNode(token.position, list, access)
         } else if (token.tokentype === TokenType.IDENTIFIER) { // Variable
             let access = undefined
             this.eat(TokenType.IDENTIFIER, token.position)
@@ -174,7 +159,6 @@ class Parser {
                 this.eat(TokenType.ASSIGN, token.position)
                 return new AssignNode(token.position, token.value, this.orexpr(), null)
             } else if (this.token.tokentype === TokenType.LPAREN) { // Function call
-                this.eat(TokenType.LPAREN, token.position)
                 return this.handleFuncCall(token)
             } else if (this.token.tokentype === TokenType.LBRACKET) { // List access
                 this.eat(TokenType.LBRACKET, token.position)
@@ -455,7 +439,6 @@ class Parser {
                 this.eat(TokenType.ASSIGN, token.position)
                 return new AssignNode(token.position, token.value, this.orexpr(), null)
             } else if (this.token.tokentype === TokenType.LPAREN) { // Function call
-                this.eat(TokenType.LPAREN, token.position)
                 return this.handleFuncCall(token)
             } else if (this.token.tokentype === TokenType.LBRACKET) { // List access
                 // access = []
@@ -548,9 +531,6 @@ class Parser {
                     break
                 case "NAMESPACE":
                     this.eatKeyword("NAMESPACE", token.position)
-                    if (this.token.tokentype !== TokenType.IDENTIFIER) {
-                        this.error(`identifier expected (${this.token.tokentype})`, token.position)
-                    }
                     identifier = this.token.value
                     this.eat(TokenType.IDENTIFIER, this.token.position)
                     prog = this.program()
@@ -560,9 +540,6 @@ class Parser {
                 case "FUNCTION":
                     this.eatKeyword("FUNCTION", token.position)
                     args = undefined
-                    if (this.token.tokentype !== TokenType.IDENTIFIER) {
-                        this.error(`identifier expected (${this.token.tokentype})`, token.position)
-                    }
                     identifier = this.token.value
                     this.eat(TokenType.IDENTIFIER, this.token.position)
                     this.eat(TokenType.LPAREN, token.position)
