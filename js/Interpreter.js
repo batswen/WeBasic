@@ -103,6 +103,13 @@ class Interpreter {
         }
         return new FloatNumber(Math.log(arg.value))
     }
+    visit_ExpNode(node, ctx) {
+        const arg =  this.visit(node.arg, ctx)
+        if (!(arg instanceof BaseNumber)) {
+            this.error(`Argument must be a number: EXP(${arg.value})`, node.position)
+        }
+        return new FloatNumber(Math.exp(arg.value))
+    }
     visit_SignNode(node, ctx) {
         const arg =  this.visit(node.arg, ctx)
         if (!(arg instanceof BaseNumber)) {

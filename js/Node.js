@@ -126,6 +126,13 @@ class LogNode extends Node {
     }
 }
 
+class ExpNode extends Node {
+    constructor(position, arg) {
+        super(position)
+        this.arg = arg
+    }
+}
+
 class SignNode extends Node {
     constructor(position, arg) {
         super(position)

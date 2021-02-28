@@ -346,6 +346,13 @@ class Parser {
                     this.eat(TokenType.RPAREN, this.token.position)
                     return new LogNode(token.position, args[0])
                     break
+                case "EXP":
+                    this.eatKeyword("EXP", token.position)
+                    this.eat(TokenType.LPAREN, this.token.position)
+                    args = this.getNumArgList(token, 1)
+                    this.eat(TokenType.RPAREN, this.token.position)
+                    return new ExpNode(token.position, args[0])
+                    break
                 case "POWER":
                     this.eatKeyword("POWER", token.position)
                     this.eat(TokenType.LPAREN, this.token.position)
