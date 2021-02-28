@@ -50,63 +50,63 @@ class Interpreter {
     visit_LenNode(node, ctx) {
         const arg =  this.visit(node.len, ctx)
         if (!(arg instanceof DTString || arg instanceof DTList)) {
-            this.error(`Argument must be String or List (LEN(${arg.value}))`, node.position)
+            this.error(`Argument must be String or List: LEN(${arg.value})`, node.position)
         }
         return new IntNumber(arg.getLen())
     }
     visit_RoundNode(node, ctx) {
         const arg =  this.visit(node.arg, ctx)
         if (!(arg instanceof BaseNumber)) {
-            this.error(`Argument must be a number (ROUND(${arg.value}))`, node.position)
+            this.error(`Argument must be a number: ROUND(${arg.value})`, node.position)
         }
         return new IntNumber(Math.round(arg.value))
     }
     visit_FloorNode(node, ctx) {
         const arg =  this.visit(node.arg, ctx)
         if (!(arg instanceof BaseNumber)) {
-            this.error(`Argument must be a number (FLOOR(${arg.value}))`, node.position)
+            this.error(`Argument must be a number: FLOOR(${arg.value})`, node.position)
         }
         return new IntNumber(Math.floor(arg.value))
     }
     visit_CeilNode(node, ctx) {
         const arg =  this.visit(node.arg, ctx)
         if (!(arg instanceof BaseNumber)) {
-            this.error(`Argument must be a number (CEIL(${arg.value}))`, node.position)
+            this.error(`Argument must be a number: CEIL(${arg.value})`, node.position)
         }
         return new IntNumber(Math.ceil(arg.value))
     }
     visit_SinNode(node, ctx) {
         const arg =  this.visit(node.arg, ctx)
         if (!(arg instanceof BaseNumber)) {
-            this.error(`Argument must be a number (SIN(${arg.value}))`, node.position)
+            this.error(`Argument must be a number: SIN(${arg.value})`, node.position)
         }
         return new FloatNumber(Math.sin(arg.value))
     }
     visit_CosNode(node, ctx) {
         const arg =  this.visit(node.arg, ctx)
         if (!(arg instanceof BaseNumber)) {
-            this.error(`Argument must be a number (COS(${arg.value}))`, node.position)
+            this.error(`Argument must be a number: COS(${arg.value})`, node.position)
         }
         return new FloatNumber(Math.cos(arg.value))
     }
     visit_TanNode(node, ctx) {
         const arg =  this.visit(node.arg, ctx)
         if (!(arg instanceof BaseNumber)) {
-            this.error(`Argument must be a number (TAN(${arg.value}))`, node.position)
+            this.error(`Argument must be a number: TAN(${arg.value})`, node.position)
         }
         return new FloatNumber(Math.tan(arg.value))
     }
     visit_LogNode(node, ctx) {
         const arg =  this.visit(node.arg, ctx)
         if (!(arg instanceof BaseNumber)) {
-            this.error(`Argument must be a number (LOG(${arg.value}))`, node.position)
+            this.error(`Argument must be a number: LOG(${arg.value})`, node.position)
         }
         return new FloatNumber(Math.log(arg.value))
     }
     visit_SignNode(node, ctx) {
         const arg =  this.visit(node.arg, ctx)
         if (!(arg instanceof BaseNumber)) {
-            this.error(`Argument must be a number (SIGN(${arg.value}))`, node.position)
+            this.error(`Argument must be a number: SIGN(${arg.value})`, node.position)
         }
         return new IntNumber(arg.value < 0 ? -1 : arg.value > 0 ? 1 : 0)
     }
@@ -114,14 +114,14 @@ class Interpreter {
         const arg =  this.visit(node.arg, ctx)
         const exp =  this.visit(node.exp, ctx)
         if (!(arg instanceof BaseNumber) || !(exp instanceof BaseNumber)) {
-            this.error(`Argument must be a number (POWER(${arg.value}))`, node.position)
+            this.error(`Argument must be a number: POWER(${arg.value})`, node.position)
         }
         return new FloatNumber(Math.pow(arg.value, exp.value))
     }
     visit_AbsNode(node, ctx) {
         const arg =  this.visit(node.arg, ctx)
         if (!(arg instanceof BaseNumber)) {
-            this.error(`Argument must be a number (ABS(${arg.value}))`, node.position)
+            this.error(`Argument must be a number: ABS(${arg.value})`, node.position)
         }
         return new IntNumber(Math.abs(arg.value))
     }
@@ -131,7 +131,7 @@ class Interpreter {
     visit_InputNode(node, ctx) {
         const prompt = this.visit(node.prompt, ctx)
         if (!(prompt instanceof DTString)) {
-            this.error(`Prompt must be a String (INPUT(${prompt.str()}))`, node.position)
+            this.error(`Prompt must be a String: INPUT(${prompt.str()})`, node.position)
         }
         let input = window.prompt(prompt.value)
         if (typeof input !== "string") {
@@ -139,12 +139,30 @@ class Interpreter {
         }
         return new DTString(input)
     }
+    visit_AscNode(node, ctx) {
+        const str = this.visit(node.str, ctx)
+        if (str instanceof BaseNumber) {
+            return new IntNumber(str.value.charCodeAt(0) !== "NaN" ? str.value.charCodeAt(0) : 0)
+        } else {
+            this.error(`Must be a string: ASC(${str.str()})`, node.position)
+        }
+        return new DTNull()
+    }
+    visit_CharNode(node, ctx) {
+        const num = this.visit(node.num, ctx)
+        if (num instanceof BaseNumber) {
+            return new DTString(String.fromCharCode(num.value))
+        } else {
+            this.error(`Must be a number: CHAR(${num.str()})`, node.position)
+        }
+        return new DTNull()
+    }
     visit_LeftNode(node, ctx) {
         const str = this.visit(node.str, ctx)
         const num = this.visit(node.num, ctx)
         if (str instanceof DTString && num instanceof BaseNumber) {
             if (num.value < 0 || str.getLen() < num.value) {
-                this.error(`Illegal quantity (LEFT(${str.str()}, ${num.str()}))`, node.position)
+                this.error(`Illegal quantity: LEFT(${str.str()}, ${num.str()})`, node.position)
             } else {
                 return new DTString(str.value.substring(0, num.value))
             }
@@ -158,7 +176,7 @@ class Interpreter {
         const num = this.visit(node.num, ctx)
         if (str instanceof DTString && num instanceof BaseNumber) {
             if (num. value < 0 || str.getLen() < num.value) {
-                this.error(`Illegal quantity (RIGHT(${str.str()}, ${num.str()}))`, node.position)
+                this.error(`Illegal quantity: RIGHT(${str.str()}, ${num.str()})`, node.position)
             } else {
                 return new DTString(str.value.substr(-num.value))
             }
@@ -173,7 +191,7 @@ class Interpreter {
         const amount = this.visit(node.amount, ctx)
         if (str instanceof DTString && num instanceof BaseNumber && amount instanceof BaseNumber) {
             if (num.value < 0 || amount.value < 0 || str.getLen() < num.value + amount.value - 1) {
-                this.error(`Illegal quantity (MID(${str.str()}, ${num.str()}, ${amount.str()}))`, node.position)
+                this.error(`Illegal quantity: MID(${str.str()}, ${num.str()}, ${amount.str()})`, node.position)
             } else {
                 return new DTString(str.value.substr(num.value - 1, amount.value))
             }
@@ -191,7 +209,7 @@ class Interpreter {
     visit_LineWidthNode(node, ctx) {
         const width = this.visit(node.args[0], ctx)
         if (!(width instanceof BaseNumber)) {
-            this.error(`Argument must be a number (STROKE)`, node.position)
+            this.error(`Argument must be a number: STROKE`, node.position)
         }
         this.gfx.lineWidth = `${width.value}`
     }
@@ -200,10 +218,10 @@ class Interpreter {
         const green = this.visit(node.args[1], ctx)
         const blue = this.visit(node.args[2], ctx)
         if (!(red instanceof BaseNumber) || !(green instanceof BaseNumber) || !(blue instanceof BaseNumber)) {
-            this.error(`Arguments must be numbers (COLOR)`, node.position)
+            this.error(`Arguments must be numbers: COLOR`, node.position)
         }
         if (red.value > 255 || red.value < 0 || green.value < 0 || green.value > 255 || blue.value < 0 || blue.value > 255) {
-            this.error(`Illegal quantity, must be in 0..255 (COLOR ${red.value}, ${green.value}, ${blue.value})`, node.position)
+            this.error(`Illegal quantity, must be in 0..255: COLOR ${red.value}, ${green.value}, ${blue.value}`, node.position)
         }
         this.gfx.strokeStyle = `rgb(${red.value}, ${green.value}, ${blue.value})`
     }
@@ -212,10 +230,10 @@ class Interpreter {
         const green = this.visit(node.args[1], ctx)
         const blue = this.visit(node.args[2], ctx)
         if (!(red instanceof BaseNumber) || !(green instanceof BaseNumber) || !(blue instanceof BaseNumber)) {
-            this.error(`Arguments must be numbers (FILLCOLOR)`, node.position)
+            this.error(`Arguments must be numbers: FILLCOLOR`, node.position)
         }
         if (red.value > 255 || red.value < 0 || green.value < 0 || green.value > 255 || blue.value < 0 || blue.value > 255) {
-            this.error(`Illegal quantity, must be in 0..255 (FILLCOLOR ${red.value}, ${green.value}, ${blue.value})`, node.position)
+            this.error(`Illegal quantity, must be in 0..255: FILLCOLOR ${red.value}, ${green.value}, ${blue.value}`, node.position)
         }
         this.gfx.fillStyle = `rgb(${red.value}, ${green.value}, ${blue.value})`
     }
@@ -223,7 +241,7 @@ class Interpreter {
         const xc = this.visit(node.args[0], ctx)
         const yc = this.visit(node.args[1], ctx)
         if (!(xc instanceof BaseNumber) || !(yc instanceof BaseNumber)) {
-            this.error(`Arguments must be numbers (POINT)`, node.position)
+            this.error(`Arguments must be numbers: POINT`, node.position)
         }
         const oldLineWidth = this.gfx.lineWidth
         this.gfx.lineWidth = "1"
@@ -236,7 +254,7 @@ class Interpreter {
         const xcEnd = this.visit(node.args[2], ctx)
         const ycEnd = this.visit(node.args[3], ctx)
         if (!(xcStart instanceof BaseNumber) || !(ycStart instanceof BaseNumber) || !(xcEnd instanceof BaseNumber) || !(ycEnd instanceof BaseNumber)) {
-            this.error(`Arguments must be numbers (LINE)`, node.position)
+            this.error(`Arguments must be numbers: LINE`, node.position)
         }
         this.gfx.beginPath()
         this.gfx.moveTo(xcStart.value, ycStart.value)
@@ -250,7 +268,7 @@ class Interpreter {
         const rectHeight = this.visit(node.args[3], ctx)
         const fillFlag = this.visit(node.args[4], ctx)
         if (!(xcStart instanceof BaseNumber) || !(ycStart instanceof BaseNumber) || !(rectWidth instanceof BaseNumber) || !(rectHeight instanceof BaseNumber)) {
-            this.error(`Arguments must be numbers (RECT)`, node.position)
+            this.error(`Arguments must be numbers: RECT`, node.position)
         }
         if (fillFlag.value !== 0) {
             this.gfx.fillRect(xcStart.value, ycStart.value, rectWidth.value, rectHeight.value)
@@ -301,10 +319,10 @@ class Interpreter {
         const forEnd = this.visit(node.forEnd, ctx)
         const forStep = this.visit(node.forStep, ctx)
         if (!(forStart instanceof FloatNumber) || !(forEnd instanceof FloatNumber) || !(forStep instanceof FloatNumber)) {
-            this.error(`Arguments must be floats (FOR)`, node.position)
+            this.error(`Arguments must be floats: FOR`, node.position)
         }
         if (forStep.value === 0) {
-            this.error(`Step can't be zero (FOR)`, node.position)
+            this.error(`Step can't be zero: FOR`, node.position)
         }
         if (ctx.symbolTable.setVar(forIdentifier, forStart) === undefined) {
             this.error(`Undeclared variable: ${forIdentifier}`, node.position)
@@ -355,6 +373,9 @@ class Interpreter {
                 this.error(`Redeclaration of ${node.identifier}`, node.position)
             }
         }
+    }
+    visit_DeclareIfUndeclaredIdentifierNode(node, ctx) {
+        ctx.symbolTable.declareVar(node.identifier)
     }
     visit_IdentifierNode(node, ctx) {
         if (ctx.symbolTable.testVar(node.identifier)) {

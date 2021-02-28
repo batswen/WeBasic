@@ -360,7 +360,20 @@ class Parser {
                     this.eat(TokenType.RPAREN, this.token.position)
                     return new SignNode(token.position, args[0])
                     break
-
+                case "ASC":
+                    this.eatKeyword("ASC", token.position)
+                    this.eat(TokenType.LPAREN, this.token.position)
+                    args = this.getNumArgList(token, 1)
+                    this.eat(TokenType.RPAREN, this.token.position)
+                    return new AscNode(token.position, args[0])
+                    break
+                case "CHAR":
+                    this.eatKeyword("CHAR", token.position)
+                    this.eat(TokenType.LPAREN, this.token.position)
+                    args = this.getNumArgList(token, 1)
+                    this.eat(TokenType.RPAREN, this.token.position)
+                    return new CharNode(token.position, args[0])
+                    break
             }
         } else {
             this.error(`Number, Identifier, String, '[', '(', '+', or '-' expected (${this.token.tokentype})`, token.position)
@@ -480,7 +493,7 @@ class Parser {
                     break
                 case "FOR":
                     this.eatKeyword("FOR", token.position)
-                    const forIdentifier = new DeclareIdentifierNode(this.token.position, this.token.value, undefined)
+                    const forIdentifier = new DeclareIfUndeclaredIdentifierNode(this.token.position, this.token.value)
                     this.eat(TokenType.IDENTIFIER, token.position)
                     let forStep
                     this.eat(TokenType.ASSIGN, token.position)

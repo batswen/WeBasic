@@ -45,7 +45,7 @@ const KEYWORDS = [
     "LEFT", "RIGHT", "MID",
     "INT", "FLOAT", "STRING",
     "ISINT", "ISFLOAT", "ISSTRING",
-    "LEN",
+    "LEN", "ASC", "CHAR",
     "SQRT", "ABS", "SIN", "COS", "TAN", "ROUND", "CEIL", "FLOOR",
     "LOG", "POWER", "SIGN",
     "INPUT",

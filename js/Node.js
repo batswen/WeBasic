@@ -167,6 +167,13 @@ class DeclareIdentifierNode extends Node {
     }
 }
 
+class DeclareIfUndeclaredIdentifierNode extends Node {
+    constructor(position, identifier) {
+        super(position)
+        this.identifier = identifier
+    }
+}
+
 class FuncDefNode extends Node {
     constructor(position, identifier, prog, args) {
         super(position)
@@ -234,6 +241,20 @@ class PrintNode extends Node {
     constructor(position, args) {
         super(position)
         this.args = args
+    }
+}
+
+class AscNode extends Node {
+    constructor(position, str) {
+        super(position)
+        this.str = str
+    }
+}
+
+class CharNode extends Node {
+    constructor(position, num) {
+        super(position)
+        this.num = num
     }
 }
 
