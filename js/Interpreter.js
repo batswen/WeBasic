@@ -42,7 +42,9 @@ class Interpreter {
             }
         }
         this.visit(func.prog, context)
-        return this.return ? this.return : new DTNull()
+        const returnValue = this.return ? this.return : new DTNull()
+        this.return = undefined
+        return returnValue
     }
     visit_ReturnNode(node, ctx) {
         this.return = node.value ? this.visit(node.value, ctx) : undefined

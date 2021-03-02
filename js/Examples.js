@@ -8,7 +8,7 @@ const examples = {
     "List": `cls\nvar a, b, x, z, az, bz, cz, dz\na = []\na = [3, "Abc", 1] + [4]:a[2] = 9\nz=[10, 11, 12][-1]\nb = 0:x = [5, 0, -5, "Hallo"][b]\nb = 3:x = [5, 0, -5, "Hallo"][b]:dump\nprintln ["Ja", "Nein"][0]\nprintln a[0], ", ", a[3]\naz=[[5,4,3],[],"Test", [1,2,3]]:bz=az[0]:cz=az[-1]:dz=bz[2]:dump`,
     "Namespaces": `var a\ncls:a = 5:dump\n\nnamespace abc\nvar a:println "in 'abc'"\na = pi:dump\nendnamespace\nprintln "after 'abc'"\ndump`,
     "Function": `cls\nvar a\nfunction test()\n  var a\n  println "Hallo"\n  a = 5:dump\nendfunction\na = test()\ntest()`,
-    "Function2": `cls\nvar a, b, x\na=345:x=789\ndump\nfunction test(a, b, c)\n  b = x\n  dump\nendfunction\ntest(a * 5, 2, "Test")\ndump`,
+    "Function2": `cls\nfunction test(f)\n  return f()\nendfunction\nfunction abc()\n  return "Yes"\nendfunction\nprintln test(abc)`,
     "Graphic": `var x\ncolor 200, 80, 255\nfor x = 10.0 to 100.0 step 5.0 do point x, 10\ncolor 20, 20, 80:line 20, 20, 80, 80`,
     "Error": `a=1a`,
     "Text-Apfelmännchen": `# Taken from Rosetta Code
