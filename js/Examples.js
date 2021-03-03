@@ -1,5 +1,5 @@
 const examples = {
-    "Assignment": `;pi is predefined\nvar a,b,a0_A,cc,xcv,aäßé_µµ\ncls\na=3<5-2\nb="a"=="a":a0_A = 3 * -5\ncc = 15 and 7:xcv = "\q\\\\\a"\naäßé_µµ=5\ndump`,
+    "Assignment": `var a,b,a0_A,cc,xcv,aäßé_µµ\ncls\na=3<5-2\nb="a"=="a":a0_A = 3 * -5\ncc = 15 and 7:xcv = "\q\\\\\a"\naäßé_µµ=5\ndump`,
     "Print": `cls:println "🍕" * 20 + "!"\nprintln "🔥"\nprintln "\\q\\\\\\a"\nvar k:k=9:println "abc", 2, "rr" ,k\n\nprint "Hello ":println "World!"\nprintln ---3 * 2.5\n\n; cprint writes to the js console\ncprint "console.log emulation"`,
     "IfThen1": `var a, a_cond, result\ncls\na = 5:if a > 0 then a_cond = "Ja"\nif a == 0 then result = "true" else result = "false"\ndump\nif 0 then print "Yes":print "Always"`,
     "IfThen2": `cls\nif 0 then print "true" else print "false"\nif 1 then print "true" else print "false"\nif 0\n print "true"\nelse\n print "false"\nendif\nif 1\n print "true"\nelse\n print "false"\nendif\n`,
@@ -14,10 +14,11 @@ const examples = {
     "Text-Apfelmännchen": `# Taken from Rosetta Code
 # http://rosettacode.org/wiki/Compiler/Sample_programs#Ascii_Mandlebrot
 
-# Core i7-870 / 8 GB / Win 10 (64 Bit)
-# Firefox (86.0):          1705 ms
-# Chrome (88.0.4324.190):  3871 ms
-# Edge (88.0.705.81):      4588 ms
+# Core i7-870 / 8 GB / Win 10 (64 Bit) 
+# Average after 10 times:
+# Firefox (86.0):          1560 ms
+# Chrome (88.0.4324.190):  2661 ms
+# Edge (88.0.705.81):      3474 ms
 
 var left_edge, right_edge, top_edge, bottom_edge
 var x_step, y_step, max_iter

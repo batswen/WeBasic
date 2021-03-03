@@ -42,9 +42,9 @@ function go() {
             } else {
                 if (ast && error === undefined) {
                     const startTime = new Date().getTime()
-                    error = new Interpreter(ast).interpret()
+                        error = new Interpreter(ast).interpret()
                     const endTime = new Date().getTime()
-                    console.log(endTime - startTime, "ms")
+                    console.log((endTime - startTime) / 10, "ms")
                 }
                 if (error) {
                     showError("Interpreter", error)
