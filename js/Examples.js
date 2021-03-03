@@ -14,6 +14,11 @@ const examples = {
     "Text-Apfelmännchen": `# Taken from Rosetta Code
 # http://rosettacode.org/wiki/Compiler/Sample_programs#Ascii_Mandlebrot
 
+# Core i7-870 / 8 GB / Win 10 (64 Bit)
+# Firefox (86.0):          1705 ms
+# Chrome (88.0.4324.190):  3871 ms
+# Edge (88.0.705.81):      4588 ms
+
 var left_edge, right_edge, top_edge, bottom_edge
 var x_step, y_step, max_iter
 var x0, y0, x, y, i, x_x, y_y
