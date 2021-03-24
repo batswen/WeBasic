@@ -580,8 +580,8 @@ class Parser {
                         }
                     }
                     break
-                case "COLOR":
-                    this.eatKeyword("COLOR", token.position)
+                case "STROKECOLOR":
+                    this.eatKeyword("STROKECOLOR", token.position)
                     args = this.getNumArgList(token, 3)
                     return new ColorNode(token.position, args)
                     break
@@ -629,6 +629,10 @@ class Parser {
                 case "CDUMP":
                     this.eatKeyword("CDUMP", token.position)
                     return new CDumpNode(token.position)
+                    break
+                case "CLEAR":
+                    this.eatKeyword("CLEAR", token.position)
+                    return new ClearNode(token.position)
                     break
                 case "VAR":
                     this.eatKeyword("VAR", token.position)

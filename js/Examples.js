@@ -9,7 +9,7 @@ const examples = {
     //"Namespaces": `var a\ncls:a = 5:dump\n\nnamespace abc\nvar a:println "in 'abc'"\na = pi:dump\nendnamespace\nprintln "after 'abc'"\ndump`,
     "Function": `cls\nvar a\nfunction test()\n  var a\n  println "Hallo"\n  a = 5:dump\nendfunction\na = test()\ntest()`,
     "Function2": `cls\nfunction test(f)\n  return f()\nendfunction\nfunction abc()\n  return "Yes"\nendfunction\nprintln test(abc)`,
-    "Graphic": `var x\ncolor 200, 80, 255\nfor x = 10.0 to 100.0 step 5.0 do point x, 10\ncolor 20, 20, 80:line 20, 20, 80, 80`,
+    "Graphic": `var x\nclear\n\nstrokecolor 200, 80, 255\nfor x = 10.0 to 100.0 step 5.0 do point x, 10\nstrokecolor 20, 20, 80:line 20, 20, 80, 80`,
     "Error": `a=1a`,
     "Text-Apfelmännchen": `# Taken from Rosetta Code
 # http://rosettacode.org/wiki/Compiler/Sample_programs#Ascii_Mandlebrot

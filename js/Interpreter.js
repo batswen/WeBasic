@@ -7,6 +7,7 @@ class Interpreter {
         this.gfx.fillStyle = 'rgb(0, 0, 0)'
         this.gfx.strokeStyle = 'rgb(0, 0, 0)'
         this.gfx.lineWidth = '1'
+        this.gfx.clearRect(0, 0, this.gfx.width, this.gfx.height)
     }
     error(msg, position, details = undefined) {
         this.errorMsg = { msg, position, details }
@@ -283,6 +284,9 @@ class Interpreter {
         } else {
             this.gfx.strokeRect(xcStart.value, ycStart.value, rectWidth.value, rectHeight.value)
         }
+    }
+    visit_ClearNode(node, ctx) {
+        this.gfx.clearRect(0, 0, this.gfx.width, this.gfx.height)
     }
     visit_NamespaceNode(node, ctx) {
         const context = new Context(node.namespace, ctx)

@@ -346,6 +346,12 @@ class DumpNode extends Node {
     }
 }
 
+class ClearNode extends Node {
+    constructor(position) {
+        super(position)
+    }
+}
+
 class DateNode extends Node {
     constructor(position) {
         super(position)
