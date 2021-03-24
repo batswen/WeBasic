@@ -2,7 +2,6 @@ class Interpreter {
     constructor(ast) {
         this.ast = ast
         this.output = document.getElementById("output")
-        this.return = undefined
         this.errorMsg = undefined
         this.gfx = document.getElementById("gfxoutput").getContext("2d")
         this.gfx.fillStyle = 'rgb(0, 0, 0)'
@@ -17,10 +16,9 @@ class Interpreter {
         if (ctx.symbolTable.declareVar(node.identifier) === undefined) {
             this.error(`Redeclaration of ${node.identifier}`, node.position)
         }
-        ctx.symbolTable.setVar(node.identifier, new DefFunction(node.identifier, node.prog, node.args))
+        ctx.symbolTable.setVar(node.identifier, new DefFunction(node.identifier, node.prog, node.args, node.retvalue))
     }
     visit_FuncCallNode(node, ctx) {
-        this.return = undefined
         const func = ctx.symbolTable.getVar(node.identifier)
         if (!func) {
             this.error(`Unknown function ${node.identifier}`, node.position)
@@ -36,19 +34,20 @@ class Interpreter {
             func.params.forEach(e => { this.visit(e, context) })
             // Fill with args
             for (let i = 0; i < func.params.length; i++) {
-                if (context.symbolTable.setVar(func.params[i].identifier, this.visit(node.args[i], ctx)) === undefined) {
+                if (context.symbolTable.setVar(func.params[i].identifier, this.visit(node.args[i], context)) === undefined) {
                     this.error(`Undeclared variable ${func.params[i].identifier}`, node.position)
                 }
             }
         }
-        this.visit(func.prog, context)
-        const returnValue = this.return ? this.return : new DTNull()
-        this.return = undefined
+        if (func.prog) {
+            this.visit(func.prog, context)
+        }
+        const returnValue = func.retvalue ? this.visit(func.retvalue, context) : new DTNull()
         return returnValue
     }
-    visit_ReturnNode(node, ctx) {
-        this.return = node.value ? this.visit(node.value, ctx) : undefined
-    }
+    // visit_ReturnNode(node, ctx) {
+    //     this.return = node.value ? this.visit(node.value, ctx) : undefined
+    // }
     visit_LenNode(node, ctx) {
         const arg =  this.visit(node.len, ctx)
         if (!(arg instanceof DTString || arg instanceof DTList)) {
@@ -651,7 +650,7 @@ class Interpreter {
 
     }
     visit(node, ctx) {
-        // console.log(node.constructor.name)
+        // console.log(node)
         if (this.errorMsg === undefined) {
             return this[`visit_${node.constructor.name}`](node, ctx)
         }

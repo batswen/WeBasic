@@ -432,7 +432,7 @@ class Parser {
     }
     statement() {
         const token = this.token
-        let condition, elseprog = undefined, identifier, prog, args, stmt, access
+        let condition, elseprog = undefined, identifier, prog, args, stmt, access, retvalue
         if (token.tokentype === TokenType.IDENTIFIER) { // Variable
             this.eat(TokenType.IDENTIFIER, token.position)
             if (this.token.tokentype === TokenType.ASSIGN) {
@@ -548,8 +548,14 @@ class Parser {
                     }
                     this.eat(TokenType.RPAREN, token.position)
                     prog = this.program()
+                    retvalue = undefined
+                    if (this.token.tokentype === TokenType.KEYWORD && this.token.value === "RETURN") {
+                        this.eatKeyword("RETURN", token.position)
+                        retvalue = this.orexpr()
+                        this.eat(TokenType.COLON, token.position)
+                    }
                     this.eatKeyword("ENDFUNCTION", token.position)
-                    return new FuncDefNode(token.position, identifier, prog, args)
+                    return new FuncDefNode(token.position, identifier, prog, args, retvalue)
                     break
                 case "PRINT":
                 case "PRINTLN":
@@ -604,14 +610,14 @@ class Parser {
                     args = this.getNumArgList(token, 5)
                     return new RectNode(token.position, args)
                     break
-                case "RETURN":
-                    this.eatKeyword("RETURN", token.position)
-                    if (this.token.tokentype === TokenType.COLON) {
-                        return new ReturnNode(token.position, undefined)
-                    } else {
-                        return new ReturnNode(token.position, this.orexpr())
-                    }
-                    break
+                // case "RETURN":
+                //     this.eatKeyword("RETURN", token.position)
+                //     if (this.token.tokentype === TokenType.COLON) {
+                //         return new ReturnNode(token.position, undefined)
+                //     } else {
+                //         return new ReturnNode(token.position, this.orexpr())
+                //     }
+                //     break
                 case "DUMP":
                     this.eatKeyword("DUMP", token.position)
                     return new DumpNode(token.position)

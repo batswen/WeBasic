@@ -14,10 +14,11 @@ class BaseFunction extends DataType {
 }
 
 class DefFunction extends BaseFunction {
-    constructor(identifier, prog, params) {
+    constructor(identifier, prog, params, retvalue) {
         super(identifier)
         this.prog = prog
         this.params = params
+        this.retvalue = retvalue
     }
 }
 

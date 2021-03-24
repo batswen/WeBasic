@@ -15,8 +15,7 @@ statement:          "VAR" identifier ("," identifier)*
                     "DUMP"
                     "CDUMP"
                     "NAMESPACE" identifier lf program lf "ENDNAMESPACE"
-                    "FUNCTION" identifier "(" (identifier ("," identifier)*)? ")" lf program lf "ENDFUNCTION"
-                    "RETURN" (orexpr)?
+                    "FUNCTION" identifier "(" (identifier ("," identifier)*)? ")" lf program lf ("RETURN" orexpr)? lf "ENDFUNCTION"
                     "COLOR" orexpr "," orexpr "," orexpr
                     "FILLCOLOR" orexpr "," orexpr "," orexpr
                     "POINT" orexpr "," orexpr

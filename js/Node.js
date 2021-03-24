@@ -182,11 +182,12 @@ class DeclareIfUndeclaredIdentifierNode extends Node {
 }
 
 class FuncDefNode extends Node {
-    constructor(position, identifier, prog, args) {
+    constructor(position, identifier, prog, args, retvalue) {
         super(position)
         this.identifier = identifier
         this.prog = prog
         this.args = args
+        this.retvalue = retvalue
     }
 }
 
