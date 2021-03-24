@@ -2,19 +2,14 @@
 
 A BASIC interpreter for websites
 
-Very early stage
 
-No documentation, look in grammar.txt
+No documentation yet, look in grammar.txt
 
-Blog: [webasiclang.blogspot.com](https://webasiclang.blogspot.com/)
-
-Live demo: [WeBasic.bplaced.net](http://webasic.bplaced.net)
+Live demo: [batswen.github.io](http://batswen.github.io)
 
 ### Known bugs
 * List access (r/w) isn't recursive
 * Namespaces can be declared but not accessed
-
-
 
 ### Variable assignment
 var = value
