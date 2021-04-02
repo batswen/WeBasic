@@ -150,8 +150,8 @@ class Interpreter {
     }
     visit_AscNode(node, ctx) {
         const str = this.visit(node.str, ctx)
-        if (str instanceof BaseNumber) {
-            return new IntNumber(str.value.charCodeAt(0) !== "NaN" ? str.value.charCodeAt(0) : 0)
+        if (str instanceof DTString) {
+            return new IntNumber(str.value.length === 0 ? 0 : str.value.charCodeAt(0) !== "NaN" ? str.value.charCodeAt(0) : 0)
         } else {
             this.error(`Must be a string: ASC(${str.str()})`, node.position)
         }
