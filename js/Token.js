@@ -1,4 +1,4 @@
-const TokenType = {
+export const TokenType = {
     "EOF": "EOF",
     "INT": "INT",
     "FLOAT": "FLOAT",
@@ -28,7 +28,7 @@ const TokenType = {
     "KEYWORD": "KEYWORD"
 }
 
-const KEYWORDS = [
+export const KEYWORDS = [
     "VAR",
     "AND", "OR", "NOT",
     "IF", "THEN", "ELSE", "ENDIF",
@@ -52,7 +52,7 @@ const KEYWORDS = [
     "DATE", "TIME"
 ]
 
-class Token {
+export default class Token {
     constructor(tokentype, value, position) {
         this.tokentype = tokentype
         this.value = value

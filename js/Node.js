@@ -1,10 +1,10 @@
-class Node {
+export class Node {
     constructor(position) {
         this.position = position
     }
 }
 
-class StatementNode extends Node {
+export class StatementNode extends Node {
     constructor(position, left, right) {
         super(position)
         this.left = left
@@ -12,7 +12,7 @@ class StatementNode extends Node {
     }
 }
 
-class IdentifierNode extends Node {
+export class IdentifierNode extends Node {
     constructor(position, identifier, access) {
         super(position)
         this.identifier = identifier
@@ -20,84 +20,84 @@ class IdentifierNode extends Node {
     }
 }
 
-class ReturnNode extends Node {
+export class ReturnNode extends Node {
     constructor(position, value) {
         super(position)
         this.value = value
     }
 }
 
-class IntConvNode extends Node {
+export class IntConvNode extends Node {
     constructor(position, value) {
         super(position)
         this.value = value
     }
 }
 
-class FloatConvNode extends Node {
+export class FloatConvNode extends Node {
     constructor(position, value) {
         super(position)
         this.value = value
     }
 }
 
-class StringConvNode extends Node {
+export class StringConvNode extends Node {
     constructor(position, value) {
         super(position)
         this.value = value
     }
 }
 
-class IntTestNode extends Node {
+export class IntTestNode extends Node {
     constructor(position, value) {
         super(position)
         this.value = value
     }
 }
 
-class FloatTestNode extends Node {
+export class FloatTestNode extends Node {
     constructor(position, value) {
         super(position)
         this.value = value
     }
 }
 
-class StringTestNode extends Node {
+export class StringTestNode extends Node {
     constructor(position, value) {
         super(position)
         this.value = value
     }
 }
 
-class SinNode extends Node {
+export class SinNode extends Node {
     constructor(position, arg) {
         super(position)
         this.arg = arg
     }
 }
 
-class CosNode extends Node {
+export class CosNode extends Node {
     constructor(position, arg) {
         super(position)
         this.arg = arg
     }
 }
 
-class TanNode extends Node {
+export class TanNode extends Node {
     constructor(position, arg) {
         super(position)
         this.arg = arg
     }
 }
 
-class AbsNode extends Node {
+export class AbsNode extends Node {
     constructor(position, arg) {
         super(position)
         this.arg = arg
     }
 }
 
-class RoundNode extends Node {
+export class RoundNode extends Node {
     constructor(position, arg) {
         super(position)
         this.arg = arg
@@ -105,42 +105,42 @@ class RoundNode extends Node {
 }
 
 
-class CeilNode extends Node {
+export class CeilNode extends Node {
     constructor(position, arg) {
         super(position)
         this.arg = arg
     }
 }
 
-class FloorNode extends Node {
+export class FloorNode extends Node {
     constructor(position, arg) {
         super(position)
         this.arg = arg
     }
 }
 
-class LogNode extends Node {
+export class LogNode extends Node {
     constructor(position, arg) {
         super(position)
         this.arg = arg
     }
 }
 
-class ExpNode extends Node {
+export class ExpNode extends Node {
     constructor(position, arg) {
         super(position)
         this.arg = arg
     }
 }
 
-class SignNode extends Node {
+export class SignNode extends Node {
     constructor(position, arg) {
         super(position)
         this.arg = arg
     }
 }
 
-class PowerNode extends Node {
+export class PowerNode extends Node {
     constructor(position, arg, exp) {
         super(position)
         this.arg = arg
@@ -148,14 +148,14 @@ class PowerNode extends Node {
     }
 }
 
-class InputNode extends Node {
+export class InputNode extends Node {
     constructor(position, prompt) {
         super(position)
         this.prompt = prompt
     }
 }
 
-class ForNode extends Node {
+export class ForNode extends Node {
     constructor(position, forIdentifier, forStart, forEnd, forStep, forProg) {
         super(position)
         this.forIdentifier = forIdentifier
@@ -166,7 +166,7 @@ class ForNode extends Node {
     }
 }
 
-class DeclareIdentifierNode extends Node {
+export class DeclareIdentifierNode extends Node {
     constructor(position, identifier, access) {
         super(position)
         this.identifier = identifier
@@ -174,14 +174,14 @@ class DeclareIdentifierNode extends Node {
     }
 }
 
-class DeclareIfUndeclaredIdentifierNode extends Node {
+export class DeclareIfUndeclaredIdentifierNode extends Node {
     constructor(position, identifier) {
         super(position)
         this.identifier = identifier
     }
 }
 
-class FuncDefNode extends Node {
+export class FuncDefNode extends Node {
     constructor(position, identifier, prog, args, retvalue) {
         super(position)
         this.identifier = identifier
@@ -191,7 +191,7 @@ class FuncDefNode extends Node {
     }
 }
 
-class FuncCallNode extends Node {
+export class FuncCallNode extends Node {
     constructor(position, identifier, args) {
         super(position)
         this.identifier = identifier
@@ -199,7 +199,7 @@ class FuncCallNode extends Node {
     }
 }
 
-class NamespaceNode extends Node {
+export class NamespaceNode extends Node {
     constructor(position, namespace, prog) {
         super(position)
         this.namespace = namespace
@@ -207,7 +207,7 @@ class NamespaceNode extends Node {
     }
 }
 
-class AssignNode extends Node {
+export class AssignNode extends Node {
     constructor(position, name, value, writeAccess) {
         super(position)
         this.name = name
@@ -216,28 +216,28 @@ class AssignNode extends Node {
     }
 }
 
-class StringNode extends Node {
+export class StringNode extends Node {
     constructor(position, value) {
         super(position)
         this.value = value
     }
 }
 
-class IntNode extends Node {
+export class IntNode extends Node {
     constructor(position, value) {
         super(position)
         this.value = value
     }
 }
 
-class FloatNode extends Node {
+export class FloatNode extends Node {
     constructor(position, value) {
         super(position)
         this.value = value
     }
 }
 
-class ListNode extends Node {
+export class ListNode extends Node {
     constructor(position, args, access) {
         super(position)
         this.args = args
@@ -245,28 +245,28 @@ class ListNode extends Node {
     }
 }
 
-class PrintNode extends Node {
+export class PrintNode extends Node {
     constructor(position, args) {
         super(position)
         this.args = args
     }
 }
 
-class AscNode extends Node {
+export class AscNode extends Node {
     constructor(position, str) {
         super(position)
         this.str = str
     }
 }
 
-class CharNode extends Node {
+export class CharNode extends Node {
     constructor(position, num) {
         super(position)
         this.num = num
     }
 }
 
-class LeftNode extends Node {
+export class LeftNode extends Node {
     constructor(position, str, num) {
         super(position)
         this.str = str
@@ -274,7 +274,7 @@ class LeftNode extends Node {
     }
 }
 
-class RightNode extends Node {
+export class RightNode extends Node {
     constructor(position, str, num) {
         super(position)
         this.str = str
@@ -282,7 +282,7 @@ class RightNode extends Node {
     }
 }
 
-class MidNode extends Node {
+export class MidNode extends Node {
     constructor(position, str, num, amount) {
         super(position)
         this.str = str
@@ -291,99 +291,99 @@ class MidNode extends Node {
     }
 }
 
-class ColorNode extends Node {
+export class ColorNode extends Node {
     constructor(position, args) {
         super(position)
         this.args = args
     }
 }
 
-class FillColorNode extends Node {
+export class FillColorNode extends Node {
     constructor(position, args) {
         super(position)
         this.args = args
     }
 }
 
-class LineWidthNode extends Node {
+export class LineWidthNode extends Node {
     constructor(position, args) {
         super(position)
         this.args = args
     }
 }
 
-class PointNode extends Node {
+export class PointNode extends Node {
     constructor(position, args) {
         super(position)
         this.args = args
     }
 }
 
-class LineNode extends Node {
+export class LineNode extends Node {
     constructor(position, args) {
         super(position)
         this.args = args
     }
 }
 
-class RectNode extends Node {
+export class RectNode extends Node {
     constructor(position, args) {
         super(position)
         this.args = args
     }
 }
 
-class PrintLNNode extends Node {
+export class PrintLNNode extends Node {
     constructor(position, args) {
         super(position)
         this.args = args
     }
 }
 
-class DumpNode extends Node {
+export class DumpNode extends Node {
     constructor(position) {
         super(position)
     }
 }
 
-class ClearNode extends Node {
+export class ClearNode extends Node {
     constructor(position) {
         super(position)
     }
 }
 
-class DateNode extends Node {
+export class DateNode extends Node {
     constructor(position) {
         super(position)
     }
 }
 
-class TimeNode extends Node {
+export class TimeNode extends Node {
     constructor(position) {
         super(position)
     }
 }
 
-class RandomNode extends Node {
+export class RandomNode extends Node {
     constructor(position) {
         super(position)
     }
 }
 
-class CPrintNode extends Node {
+export class CPrintNode extends Node {
     constructor(position, value) {
         super(position)
         this.value = value
     }
 }
 
-class CDumpNode extends Node {
+export class CDumpNode extends Node {
     constructor(position) {
         super(position)
     }
 }
 
-class BinOpNode extends Node {
+export class BinOpNode extends Node {
     constructor(position, left, operator, right) {
         super(position)
         this.left = left
@@ -392,7 +392,7 @@ class BinOpNode extends Node {
     }
 }
 
-class UnOpNode extends Node {
+export class UnOpNode extends Node {
     constructor(position, left, operator) {
         super(position)
         this.left = left
@@ -400,14 +400,14 @@ class UnOpNode extends Node {
     }
 }
 
-class DTListNode extends Node {
+export class DTListNode extends Node {
     constructor(position, list) {
         super(position)
         this.list = list
     }
 }
 
-class WhileNode extends Node {
+export class WhileNode extends Node {
     constructor(position, condition, whiledo) {
         super(position)
         this.condition = condition
@@ -415,7 +415,7 @@ class WhileNode extends Node {
     }
 }
 
-class IfNode extends Node {
+export class IfNode extends Node {
     constructor(position, condition, ifthen, ifelse) {
         super(position)
         this.condition = condition
@@ -424,7 +424,7 @@ class IfNode extends Node {
     }
 }
 
-class ClsNode extends Node {
+export class ClsNode extends Node {
     constructor(position) {
         super(position)
     }

@@ -1,4 +1,6 @@
-class Context {
+import { DTNull } from "./Datatype.js"
+
+export class Context {
     constructor(context = "<anonymous>", parentContext = undefined) {
         if (parentContext) {
             context = `${parentContext.context}.${context}`
@@ -9,7 +11,7 @@ class Context {
     }
 }
 
-class SymbolTable {
+export class SymbolTable {
     constructor(context, parentContext) {
         this.context = context
         this.parentContext = parentContext

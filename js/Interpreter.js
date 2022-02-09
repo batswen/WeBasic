@@ -1,4 +1,8 @@
-class Interpreter {
+import { Context, SymbolTable } from "./Context.js"
+import { DTNull, DTList, DTString, DefFunction, BaseNumber, IntNumber, FloatNumber } from "./Datatype.js"
+import { TokenType } from "./Token.js"
+
+export default class Interpreter {
     constructor(ast) {
         this.ast = ast
         this.output = document.getElementById("output")

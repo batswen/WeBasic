@@ -1,4 +1,15 @@
-class Parser {
+import { TokenType } from "./Token.js"
+import {
+    ClsNode, StringNode, PrintLNNode, StatementNode, IdentifierNode, ReturnNode,
+    IntConvNode, FloatConvNode, StringConvNode, IntTestNode, FloatTestNode, StringTestNode,
+    SinNode, CosNode, TanNode, AbsNode, RoundNode, CeilNode, FloorNode, LogNode, ExpNode, SignNode, PowerNode,
+    InputNode, ForNode, DeclareIdentifierNode, DeclareIfUndeclaredIdentifierNode, FuncDefNode,
+    FuncCallNode, NamespaceNode, AssignNode, IntNode, FloatNode, ListNode, PrintNode, AscNode,
+    CharNode, LeftNode, RightNode, MidNode, ColorNode, FillColorNode, PointNode, LineNode, RectNode,
+    DumpNode, ClearNode, DateNode, TimeNode, RandomNode, CPrintNode, CDumpNode, BinOpNode, UnOpNode,
+    DTListNode, WhileNode, IfNode
+} from "./Node.js"
+export default class Parser {
     constructor(tokens) {
         this.tokens = tokens
         this.pos = -1

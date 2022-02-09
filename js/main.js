@@ -1,3 +1,9 @@
+import Lexer from "./Lexer.js"
+import Parser from "./Parser.js"
+import Interpreter from "./Interpreter.js"
+import { examples } from "./Examples.js"
+import { DTNull } from "./Datatype.js"
+
 const prog = document.getElementById("input")
 const select = document.getElementById("select")
 const modal = document.querySelector(".modal")
@@ -42,7 +48,7 @@ function go() {
             } else {
                 if (ast && error === undefined) {
                     const startTime = new Date().getTime()
-                        error = new Interpreter(ast).interpret()
+                    error = new Interpreter(ast).interpret()
                     const endTime = new Date().getTime()
                     console.log((endTime - startTime), "ms")
                 }
@@ -63,5 +69,7 @@ function go() {
 select.addEventListener("change", e =>
     prog.value = examples[select.value]
 )
+
+document.getElementById("run").addEventListener("click", go)
 
 document.getElementById("modal-close").addEventListener("click", e => modal.style.display = "none")

@@ -1,9 +1,9 @@
-class DataType {
+export class DataType {
     constructor() {
     }
 }
 
-class BaseFunction extends DataType {
+export class BaseFunction extends DataType {
     constructor(identifier) {
         super()
         this.identifier = identifier
@@ -13,7 +13,7 @@ class BaseFunction extends DataType {
     }
 }
 
-class DefFunction extends BaseFunction {
+export class DefFunction extends BaseFunction {
     constructor(identifier, prog, params, retvalue) {
         super(identifier)
         this.prog = prog
@@ -22,7 +22,7 @@ class DefFunction extends BaseFunction {
     }
 }
 
-class DTNull extends DataType {
+export class DTNull extends DataType {
     constructor() {
         super()
     }
@@ -31,7 +31,7 @@ class DTNull extends DataType {
     }
 }
 
-class DTList extends DataType {
+export class DTList extends DataType {
     constructor(v) {
         super()
         if (v instanceof DTList) {
@@ -81,7 +81,7 @@ class DTList extends DataType {
     }
 }
 
-class DTString extends DataType {
+export class DTString extends DataType {
     constructor(v) {
         super()
         if (v instanceof DTString) {
@@ -134,7 +134,7 @@ class DTString extends DataType {
     }
 }
 
-class BaseNumber extends DataType {
+export class BaseNumber extends DataType {
     constructor(v) {
         super()
         if (v instanceof BaseNumber) {
@@ -148,7 +148,7 @@ class BaseNumber extends DataType {
     }
 }
 
-class IntNumber extends BaseNumber {
+export class IntNumber extends BaseNumber {
     constructor(value) {
         super(value)
     }
@@ -221,7 +221,7 @@ class IntNumber extends BaseNumber {
     }
 }
 
-class FloatNumber extends BaseNumber {
+export class FloatNumber extends BaseNumber {
     constructor(value) {
         super(value)
     }

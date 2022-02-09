@@ -1,4 +1,7 @@
-class Lexer {
+import Position from "./Position.js"
+import Token, { KEYWORDS, TokenType } from "./Token.js"
+
+export default class Lexer {
     constructor(source) {
         this.source = source
         this.position = new Position(-1, 1, 0)

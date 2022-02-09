@@ -1,4 +1,4 @@
-class Position {
+export default class Position {
     constructor(pos, line, col) {
         this.pos = pos
         this.line = line

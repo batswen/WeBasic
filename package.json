@@ -1,0 +1,24 @@
+{
+  "name": "WeBasic",
+  "version": "1.0.0",
+  "description": "A BASIC interpreter for websites",
+  "main": "index.js",
+  "scripts": {
+    "test": "jasmine"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/batswen/WeBasic.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/batswen/WeBasic/issues"
+  },
+  "homepage": "https://github.com/batswen/WeBasic#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "jasmine": "^4.0.2"
+  }
+}
