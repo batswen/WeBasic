@@ -5,8 +5,6 @@ A BASIC interpreter for websites
 
 No documentation yet, look in grammar.txt
 
-Live demo: [batswen.github.io](http://batswen.github.io)
-
 ### Known bugs
 * List access (r/w) isn't recursive
 * Namespaces can be declared but not accessed
